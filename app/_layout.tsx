@@ -1,37 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React from "react";
+import AuthLayout from "./auth/_layout";
+import { Stack } from "expo-router";
+import { useAuthStore } from "@/store";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const RootLayout = () => {
+  const { user } = useAuthStore();
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+  if (user?.isLogin) {
+    return (
+      <Stack initialRouteName="(tab)" screenOptions={{ headerShown: false, animation: "ios" }}>
+        <Stack.Screen name="(tab)" />
+        <Stack.Screen name="profile/EditProfile" />
+        <Stack.Screen name="Settings" />
+        <Stack.Screen name="PasswordDetail" />
       </Stack>
-    </ThemeProvider>
-  );
-}
+    );
+  } else {
+    return (
+      <Stack screenOptions={{ headerShown: false, animation: "ios" }}>
+        <Stack.Screen name="auth" />
+      </Stack>
+    );
+  }
+};
+
+export default RootLayout;
