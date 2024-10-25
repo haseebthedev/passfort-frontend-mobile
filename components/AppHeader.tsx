@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { wp } from "@/utils";
 import { AppText } from "./AppText";
-import { iconSize, LayoutStyles } from "@/styles/styles";
+import { iconSize, LayoutStyles, Spacing } from "@/styles";
 
 interface AppHeaderI {
   title?: string;
@@ -46,5 +45,9 @@ export const AppHeader = ({
 };
 
 const styles = StyleSheet.create({
-  leftContainer: { flexDirection: "row", alignItems: "center", gap: wp(2) },
+  leftContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+  },
 });

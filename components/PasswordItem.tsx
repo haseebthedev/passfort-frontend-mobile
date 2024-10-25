@@ -18,11 +18,11 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
   const onVisiblityPress = () => setPasswordVisible((prev) => !prev);
 
   return (
-    <TouchableOpacity style={styles.passwordItemCard} onPress={() => router.push("/PasswordDetail")}>
+    <TouchableOpacity style={styles.passwordItemCard} onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
       <View style={styles.passwordInfoContainer}>
         <Image source={item.icon} style={LayoutStyles.cardIcon} />
         <View style={styles.spacing}>
-          <AppText text={item.title} type="subHeading" style={styles.subHeading} numberOfLines={1} />
+          <AppText text={item.type} type="subHeading" style={styles.subHeading} numberOfLines={1} />
           <AppText
             text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
             style={styles.passwordText}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,
-    backgroundColor: colorPalette.primaryBg.LightGreenBg,
+    backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
     padding: Spacing.xxs,
   },
   passwordInfoContainer: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: Fonts.size.md,
     width: wp(50),
   },
-  spacing: { marginTop: Spacing.xxs },
+  spacing: { marginTop: Spacing.xxs, gap: wp(1) },
   subHeading: {
     color: colorPalette.primaryBg.primaryGrey,
     fontSize: Fonts.size.sm,

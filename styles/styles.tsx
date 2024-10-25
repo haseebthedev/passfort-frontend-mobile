@@ -12,10 +12,11 @@ export const colorPalette = {
     primaryGrey: "rgba(255, 255, 255, 0.3)",
     secondayGrey: "#949494",
 
-    // gradient
     borderColor1: "#1A291D",
-    LightGreenBg: "rgba(126, 244, 150, 0.05)",
     borderColor2: "#2C5235",
+
+    primaryLightGreenBg: "rgba(126, 244, 150, 0.05)",
+    secondaryLightGreenBg: "rgba(218, 255, 225, 0.05)",
   },
 
   gradientBg: {
@@ -151,6 +152,7 @@ export const LayoutStyles = StyleSheet.create({
   headerNavContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginVertical: Spacing.md,
   },
   headerIcon: {
     color: colorPalette.primaryBg.primaryWhite,

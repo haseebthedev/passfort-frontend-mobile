@@ -13,7 +13,7 @@ const TabLayout = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
-          paddingVertical: hp(1.2),
+          paddingVertical: hp(1.4),
           height: hp(10),
           borderTopWidth: 0,
         },

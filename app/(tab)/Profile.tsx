@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   personalInfoContainer: {
-    backgroundColor: colorPalette.primaryBg.LightGreenBg,
+    backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
     padding: Spacing.md,
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,

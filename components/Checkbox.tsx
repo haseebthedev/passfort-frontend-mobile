@@ -23,7 +23,7 @@ export const Checkbox = ({ label, checked = false, onChange, containerStyle, lab
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <TouchableOpacity onPress={handlePress} activeOpacity={0.7} style={styles.spacing}>
+      <TouchableOpacity onPress={handlePress} style={styles.spacing}>
         <MaterialIcons
           name={isChecked ? "check-box" : "check-box-outline-blank"}
           size={24}

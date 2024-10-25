@@ -1,8 +1,8 @@
-import { StyleProp, Text, type TextProps, TextStyle, TouchableOpacity } from "react-native";
+import { StyleProp, Text, type TextProps, TextStyle } from "react-native";
 import { Typography } from "@/styles/styles";
 
 export type AppTextI = TextProps & {
-  text: string;
+  text?: string;
   type?:
     | "default"
     | "title"

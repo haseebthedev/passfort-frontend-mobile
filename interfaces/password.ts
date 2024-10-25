@@ -9,7 +9,11 @@ export type PasswordCardType = {
 
 export type PasswordItemType = {
   id: string;
-  icon?: ImageSourcePropType;
-  title: string;
+  type: "Social" | "App" | "Wallet";
+  username?: string;
+  email?: string;
+  address?: string;
+  platform?: string;
   passwordText: string;
+  icon?: ImageSourcePropType;
 };

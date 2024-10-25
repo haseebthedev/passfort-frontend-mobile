@@ -1,17 +1,18 @@
-import { FlatList, StyleSheet } from "react-native";
 import React from "react";
-import { LayoutStyles, Spacing } from "@/styles";
+import { FlatList, StyleSheet } from "react-native";
+import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
-import { AppText, GradientWrapper, PasswordItem } from "@/components";
+import { LayoutStyles, Spacing } from "@/styles";
+import { AppHeader, GradientWrapper, PasswordItem } from "@/components";
 
 const Password = () => {
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppText text="Your Passwords" type="heading" style={styles.heading} />
+      <AppHeader title="Your Passwords" />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={PasswordItem_Data}
-        renderItem={({ item }) => <PasswordItem item={item} />}
+        renderItem={({ item }: { item: PasswordItemType }) => <PasswordItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
       />
     </GradientWrapper>
@@ -22,6 +23,6 @@ export default Password;
 
 const styles = StyleSheet.create({
   heading: {
-    marginVertical: Spacing.md,
+    marginBottom: Spacing.md,
   },
 });
