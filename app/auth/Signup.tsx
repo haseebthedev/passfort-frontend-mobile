@@ -1,13 +1,13 @@
 import React from "react";
 import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppLogo, AppText, GradientWrapper, TextInput } from "@/components";
 import { router } from "expo-router";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { AppButton, AppLogo, AppText, GradientWrapper, TextInput } from "@/components";
 
 const Signup = () => {
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollViewStyle}
           keyboardShouldPersistTaps="handled"
@@ -48,6 +48,7 @@ const Signup = () => {
 export default Signup;
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
   scrollViewStyle: { flexGrow: 1, paddingTop: Spacing.sm },
   title: {
     paddingVertical: Spacing.md,

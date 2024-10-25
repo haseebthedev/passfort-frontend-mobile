@@ -22,7 +22,7 @@ const EditProfile = () => {
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Edit Profile" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
-        <View style={{ alignItems: "center" }}>
+        <View style={styles.alignCenter}>
           <Image source={profilePicture} style={styles.profilePicture} />
           <TouchableOpacity style={styles.changePicture}>
             <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: Spacing.lg,
   },
+  alignCenter: { alignItems: "center" },
   profilePicture: {
     width: wp(35),
     height: wp(35),

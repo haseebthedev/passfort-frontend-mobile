@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { router } from "expo-router";
 import { useAuthStore } from "@/store";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, TextInput } from "@/components";
 
 const Signin = () => {
@@ -31,14 +31,13 @@ const Signin = () => {
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollViewStyle}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           <AppLogo />
-
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <View style={styles.title}>
@@ -76,6 +75,7 @@ const Signin = () => {
 export default Signin;
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
   scrollViewStyle: {
     flexGrow: 1,
     paddingTop: Spacing.sm,

@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { iconSize, LayoutStyles } from "@/styles/styles";
-import { wp } from "@/utils";
 
 interface AppHeaderI {
   title?: string;
@@ -26,7 +26,7 @@ export const AppHeader = ({
 }: AppHeaderI) => {
   return (
     <View style={[LayoutStyles.headerNavContainer, containerStyle]}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: wp(2) }}>
+      <View style={styles.leftContainer}>
         {leftIconName && (
           <TouchableOpacity onPress={onLeftIconPress}>
             <Ionicons name={leftIconName} style={LayoutStyles.headerIcon} size={iconSize} />
@@ -44,3 +44,7 @@ export const AppHeader = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  leftContainer: { flexDirection: "row", alignItems: "center", gap: wp(2) },
+});

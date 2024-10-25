@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { hp, wp } from "@/utils";
+import { wp } from "@/utils";
 import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
@@ -11,27 +11,15 @@ const HeaderComponent = () => {
       <View style={styles.greetingContainer}>
         <View>
           <AppText text="Hello Username" type="heading" />
-          <AppText
-            text="Welcome to Password Manager"
-            type="regularSubHeading"
-            style={{ marginTop: Spacing.xxs, color: colorPalette.primaryBg.secondayGrey }}
-          />
+          <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
         </View>
-
         <AppLogo style={styles.appLogo} />
       </View>
 
       <View style={styles.passwordCards}>
         <View style={styles.passwordsHeader}>
           <View>
-            <AppText
-              text="Manage"
-              type="label"
-              style={{
-                marginBottom: Spacing.xxs,
-                color: colorPalette.primaryBg.secondayGrey,
-              }}
-            />
+            <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
           <RoundButton />
@@ -71,6 +59,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  welcomeText: {
+    marginTop: Spacing.xxs,
+    color: colorPalette.primaryBg.secondayGrey,
+  },
+  label: {
+    marginBottom: Spacing.xxs,
+    color: colorPalette.primaryBg.secondayGrey,
   },
   passwordsHeader: {
     flexDirection: "row",

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import { AppText } from "./AppText";
-import { hp, maskPassword, wp } from "@/utils";
-import { PasswordItemType } from "@/interfaces";
-import { Entypo, Ionicons } from "@expo/vector-icons";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 import { router } from "expo-router";
+import { Entypo, Ionicons } from "@expo/vector-icons";
+import { AppText } from "./AppText";
+import { maskPassword, wp } from "@/utils";
+import { PasswordItemType } from "@/interfaces";
+import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 
 interface PasswordItemI {
   item: PasswordItemType;
@@ -19,15 +19,10 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
 
   return (
     <TouchableOpacity style={styles.passwordItemCard} onPress={() => router.push("/PasswordDetail")}>
-      <View style={{ flexDirection: "row", alignItems: "center", flex: 1, gap: Spacing.xxs }}>
+      <View style={styles.passwordInfoContainer}>
         <Image source={item.icon} style={LayoutStyles.cardIcon} />
-        <View style={{ marginTop: Spacing.xxs }}>
-          <AppText
-            text={item.title}
-            type="subHeading"
-            style={{ color: colorPalette.primaryBg.primaryGrey, fontSize: Fonts.size.sm }}
-            numberOfLines={1}
-          />
+        <View style={styles.spacing}>
+          <AppText text={item.title} type="subHeading" style={styles.subHeading} numberOfLines={1} />
           <AppText
             text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
             style={styles.passwordText}
@@ -65,9 +60,20 @@ const styles = StyleSheet.create({
     backgroundColor: colorPalette.primaryBg.LightGreenBg,
     padding: Spacing.xxs,
   },
+  passwordInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    gap: Spacing.xxs,
+  },
   passwordText: {
     fontSize: Fonts.size.md,
     width: wp(50),
+  },
+  spacing: { marginTop: Spacing.xxs },
+  subHeading: {
+    color: colorPalette.primaryBg.primaryGrey,
+    fontSize: Fonts.size.sm,
   },
   actionButtons: {
     flexDirection: "row",

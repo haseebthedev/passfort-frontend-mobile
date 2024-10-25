@@ -1,9 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { hp, wp } from "@/utils";
+import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { PasswordCardType } from "@/interfaces";
-import { colorPalette, Fonts, LayoutStyles, Spacing, Typography } from "@/styles";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 
 interface PasswordCardI {
   item: PasswordCardType;
@@ -14,12 +14,7 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
     <TouchableOpacity style={styles.card}>
       <Image source={item.icon} style={LayoutStyles.cardIcon} />
       <AppText text={item.title} type="subHeading" numberOfLines={1} />
-      <AppText
-        text={item.subtitle}
-        type="description"
-        style={{ color: colorPalette.primaryBg.secondayGrey }}
-        numberOfLines={1}
-      />
+      <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
     </TouchableOpacity>
   );
 };
@@ -36,4 +31,5 @@ const styles = StyleSheet.create({
     width: wp(90) / 3.25,
     paddingHorizontal: Spacing.sm,
   },
+  subTitle: { color: colorPalette.primaryBg.secondayGrey },
 });
