@@ -4,23 +4,17 @@ import { StyleSheet } from "react-native";
 
 export const colorPalette = {
   primaryBg: {
-    shade00: "#ffffff",
-    shade01: "#7EF496",
-    shade02: "#1A291D", // bg
-    shade03: "#2C523583", //border
-    shade04: "#FFFFFF4D",
-    shade05: "#232428FF",
-    primaryLight: "#7EF4960D",
-
-    primaryDarkGreen: "#0A140C", // bd fill + btn Text
-    primaryLightGreen: "#48FF6D", // round btn
+    primaryDarkGreen: "#0A140C",
+    secondaryDarkGreen: "rgba(16, 31, 18, .5)",
+    primaryLightGreen: "#48FF6D",
     secondaryLightGreen: "#7EF496",
-    white: "#ffffff",
-    grey: "#D7D7D7",
-    strokeColor: "#1A291D",
+    primaryWhite: "#ffffff",
+    primaryGrey: "rgba(255, 255, 255, 0.3)",
+    secondayGrey: "#949494",
 
     // gradient
     borderColor1: "#1A291D",
+    LightGreenBg: "rgba(126, 244, 150, 0.05)",
     borderColor2: "#2C5235",
   },
 
@@ -43,12 +37,14 @@ export const Spacing = {
 
 export const Fonts: FontsType = {
   size: {
-    xs: hp(1.6),
-    sm: hp(2.1),
-    md: hp(2.5),
-    lg: hp(3.5),
-    xl: hp(4),
-    xxl: hp(4.5),
+    xs: hp(1.65),
+    sm: hp(1.93),
+    md: hp(2.2),
+    lg: hp(2.48),
+    xl: hp(2.75),
+    xxl: hp(3.03),
+    heading: hp(4.45),
+    display: hp(3.4),
   },
   weight: {
     xs: "200",
@@ -57,10 +53,77 @@ export const Fonts: FontsType = {
     lg: "600",
     xl: "700",
     xxl: "bold",
+    heading: "bold",
+    display: "bold",
   },
 };
 
-export const iconSize = wp(7);
+export const Typography = StyleSheet.create({
+  default: {
+    fontSize: Fonts.size.sm,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  title: {
+    fontSize: Fonts.size.display,
+    fontWeight: Fonts.weight.xl,
+    letterSpacing: -0.02,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  primaryTitle: {
+    fontSize: Fonts.size.heading,
+    fontWeight: Fonts.weight.xl,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  label: {
+    fontSize: Fonts.size.md,
+    fontWeight: Fonts.weight.md,
+    letterSpacing: 0.1,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  heading: {
+    fontSize: Fonts.size.xl,
+    fontWeight: Fonts.weight.md,
+    letterSpacing: 0.1,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  primaryHeading: {
+    fontSize: Fonts.size.md,
+    fontWeight: Fonts.weight.md,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  regularSubHeading: {
+    fontSize: Fonts.size.sm,
+    fontWeight: Fonts.weight.md,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  subHeading: {
+    fontSize: Fonts.size.sm,
+    fontWeight: "500",
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  description: {
+    fontSize: Fonts.size.xs,
+    fontWeight: Fonts.weight.md,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  detail: {
+    fontSize: Fonts.size.lg,
+    fontWeight: Fonts.weight.md,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  buttonTitle: {
+    fontSize: Fonts.size.lg,
+    fontWeight: Fonts.weight.xl,
+    color: colorPalette.primaryBg.primaryDarkGreen,
+  },
+  passwordText: {
+    fontSize: Fonts.size.xxl,
+    fontWeight: Fonts.weight.lg,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+});
+
+export const iconSize = wp(6);
 
 export const FormsStyle = StyleSheet.create({
   formControl: {
@@ -69,61 +132,14 @@ export const FormsStyle = StyleSheet.create({
     gap: Spacing.md,
     borderRadius: wp(5),
     borderWidth: wp(0.1),
-    color: colorPalette.primaryBg.shade00,
-    borderColor: colorPalette.primaryBg.shade03,
-    backgroundColor: colorPalette.primaryBg.shade02,
-    opacity: 0.5,
-    // fontFamily: AppFont.regular,
+    color: colorPalette.primaryBg.primaryWhite,
+    borderColor: colorPalette.primaryBg.borderColor2,
+    backgroundColor: colorPalette.primaryBg.secondaryDarkGreen,
   },
   formLabel: {
-    color: colorPalette.primaryBg.shade00,
-    fontSize: Fonts.size.sm,
-    fontWeight: Fonts.weight.sm,
     marginVertical: hp(1),
-    // fontFamily: AppFont.medium,
   },
 });
-
-export const Typography = StyleSheet.create({
-  default: {
-    fontSize: Fonts.size.sm,
-    color: colorPalette.primaryBg.shade00,
-  },
-  defaultSemiBold: {
-    fontSize: Fonts.size.md,
-    fontWeight: Fonts.weight.lg,
-    color: colorPalette.primaryBg.shade00,
-  },
-  title: {
-    fontSize: Fonts.size.lg,
-    fontWeight: Fonts.weight.xxl,
-    textAlign: "center",
-    color: colorPalette.primaryBg.shade00,
-  },
-  lgTitle: {
-    fontSize: Fonts.size.xxl,
-    fontWeight: Fonts.weight.xxl,
-    textAlign: "center",
-    color: colorPalette.primaryBg.shade00,
-  },
-  subtitle: {
-    fontSize: Fonts.size.md,
-    fontWeight: Fonts.weight.xxl,
-    color: colorPalette.primaryBg.shade04,
-  },
-  link: {
-    fontSize: Fonts.size.sm,
-    color: colorPalette.primaryBg.shade01,
-    textDecorationLine: "underline",
-    fontWeight: Fonts.weight.md,
-  },
-  lightSubTitle: {
-    fontSize: Fonts.size.sm,
-    color: colorPalette.primaryBg.shade04,
-  },
-});
-
-// border-image-source: linear-gradient(268.8deg, #1A291D -23.49%, #2C5235 98.98%);
 
 export const GradientColors = [colorPalette.primaryBg.primaryDarkGreen, colorPalette.primaryBg.borderColor2];
 
@@ -137,12 +153,12 @@ export const LayoutStyles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerIcon: {
-    color: colorPalette.primaryBg.shade00,
+    color: colorPalette.primaryBg.primaryWhite,
     resizeMode: "contain",
   },
   cardIcon: {
-    width: wp(20),
-    height: wp(20),
+    width: wp(14.5),
+    height: wp(14.5),
   },
   horizontalSpacing: {
     paddingHorizontal: Spacing.md,

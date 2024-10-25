@@ -10,7 +10,7 @@ interface GradientWrapperI {
 
 export const GradientWrapper = ({ children, style }: GradientWrapperI) => {
   return (
-    <LinearGradient colors={GradientColors} style={[LayoutStyles.pageContainer, style]} locations={[0.53, 2.98]}>
+    <LinearGradient colors={GradientColors} style={[LayoutStyles.pageContainer, style]} locations={[0.53, 1]}>
       {children}
     </LinearGradient>
   );

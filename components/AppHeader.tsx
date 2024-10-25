@@ -33,7 +33,7 @@ export const AppHeader = ({
           </TouchableOpacity>
         )}
 
-        <AppText text={title ? title : ""} style={titleStyle} type="defaultSemiBold" />
+        <AppText text={title ? title : ""} style={titleStyle} type="heading" />
       </View>
 
       {rightIconName && (

@@ -22,6 +22,24 @@ export const PasswordCard_Data: PasswordCardType[] = [
     subtitle: "10 Passwords",
     icon: wallet,
   },
+  {
+    id: "4",
+    title: "Social",
+    subtitle: "10 Passwords",
+    icon: social,
+  },
+  {
+    id: "5",
+    title: "Apps",
+    subtitle: "10 Passwords",
+    icon: apps,
+  },
+  {
+    id: "6",
+    title: "Wallets",
+    subtitle: "10 Passwords",
+    icon: wallet,
+  },
 ];
 
 export const PasswordItem_Data: PasswordItemType[] = [
@@ -45,6 +63,24 @@ export const PasswordItem_Data: PasswordItemType[] = [
   },
   {
     id: "4",
+    title: "Facebook",
+    passwordText: "Password4",
+    icon: social,
+  },
+  {
+    id: "5",
+    title: "Instagram",
+    passwordText: "Password2",
+    icon: social,
+  },
+  {
+    id: "6",
+    title: "Figma",
+    passwordText: "Password3",
+    icon: apps,
+  },
+  {
+    id: "7",
     title: "Facebook",
     passwordText: "Password4",
     icon: social,

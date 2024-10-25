@@ -18,9 +18,9 @@ export const RoundButton = ({ onPress }: RoundButtonI) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: colorPalette.primaryBg.shade01,
-    width: wp(12),
-    height: wp(12),
+    backgroundColor: colorPalette.primaryBg.primaryLightGreen,
+    width: wp(10),
+    height: wp(10),
     borderRadius: wp(6),
     alignItems: "center",
     justifyContent: "center",

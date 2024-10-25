@@ -56,15 +56,15 @@ const Signin = () => {
               <AppButton text="Sign In" onPress={onSigninPress} style={styles.buttonContainer} />
 
               <View style={styles.linkRow}>
-                <AppText text="Don’t have an account?" type="default" />
+                <AppText text="Don’t have an account?" type="label" />
                 <AppButton text="Sign Up" onPress={() => router.push("/auth/Signup")} preset="link" />
               </View>
             </View>
 
             <View style={styles.termsAndConditions}>
-              <AppText text="Terms & Conditions" style={styles.conditions} />
-              <AppText text=" and " style={styles.defaultText} />
-              <AppText text="Privacy policy" style={styles.policy} />
+              <AppText text="Terms & Conditions" style={styles.conditions} type="subHeading" />
+              <AppText text=" and " style={styles.defaultText} type="subHeading" />
+              <AppText text="Privacy policy" style={styles.policy} type="subHeading" />
             </View>
           </View>
         </ScrollView>
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingVertical: Spacing.md,
+    alignSelf: "center",
   },
   form: {
     flex: 1,
@@ -97,9 +98,6 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     marginBottom: Spacing.md,
   },
-  btnText: {
-    color: colorPalette.primaryBg.shade05,
-  },
   linkRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -109,21 +107,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    color: colorPalette.primaryBg.shade00,
+    color: colorPalette.primaryBg.primaryWhite,
     marginBottom: Spacing.sm,
   },
   conditions: {
     textDecorationLine: "underline",
-    fontSize: Fonts.size.xs,
-    color: colorPalette.primaryBg.shade00,
+    fontWeight: "400",
+    // fontSize: Fonts.size.xs,
   },
   defaultText: {
-    fontSize: Fonts.size.xs,
-    color: colorPalette.primaryBg.shade00,
+    fontWeight: "400",
   },
   policy: {
     textDecorationLine: "underline",
-    fontSize: Fonts.size.xs,
-    color: colorPalette.primaryBg.shade00,
+    fontWeight: "400",
   },
 });

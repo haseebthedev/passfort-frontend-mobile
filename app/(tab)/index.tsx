@@ -1,17 +1,21 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { wp } from "@/utils";
-import { Spacing } from "@/styles";
+import { hp, wp } from "@/utils";
+import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
 
-const Home = () => {
+const HeaderComponent = () => {
   return (
-    <GradientWrapper>
+    <View>
       <View style={styles.greetingContainer}>
         <View>
-          <AppText text="Hello Username" type="defaultSemiBold" />
-          <AppText text="Welcome to Password Manager" type="lightSubTitle" />
+          <AppText text="Hello Username" type="heading" />
+          <AppText
+            text="Welcome to Password Manager"
+            type="regularSubHeading"
+            style={{ marginTop: Spacing.xxs, color: colorPalette.primaryBg.secondayGrey }}
+          />
         </View>
 
         <AppLogo style={styles.appLogo} />
@@ -20,8 +24,15 @@ const Home = () => {
       <View style={styles.passwordCards}>
         <View style={styles.passwordsHeader}>
           <View>
-            <AppText text="Manage" type="lightSubTitle" />
-            <AppText text="Your Passwords" type="defaultSemiBold" />
+            <AppText
+              text="Manage"
+              type="label"
+              style={{
+                marginBottom: Spacing.xxs,
+                color: colorPalette.primaryBg.secondayGrey,
+              }}
+            />
+            <AppText text="Your Passwords" type="heading" />
           </View>
           <RoundButton />
         </View>
@@ -34,12 +45,19 @@ const Home = () => {
           contentContainerStyle={styles.passwordCardsContainer}
         />
       </View>
-      <AppText text="RecentlyAdded" type="defaultSemiBold" style={styles.heading} />
+      <AppText text="Recently Added" type="primaryHeading" style={styles.heading} />
+    </View>
+  );
+};
+
+const Home = () => {
+  return (
+    <GradientWrapper>
       <FlatList
-        showsVerticalScrollIndicator={false}
         data={PasswordItem_Data}
         renderItem={({ item }) => <PasswordItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={() => <HeaderComponent />}
         contentContainerStyle={styles.passwordItemsContainer}
       />
     </GradientWrapper>
@@ -53,28 +71,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: Spacing.md,
   },
   passwordsHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: Spacing.lg,
-    paddingHorizontal: Spacing.md,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   appLogo: {
-    width: wp(20),
-    height: wp(20),
+    width: wp(17),
+    height: wp(17),
   },
   passwordCards: {},
   passwordCardsContainer: {
     marginBottom: Spacing.lg,
     gap: Spacing.md,
-    paddingHorizontal: Spacing.md,
   },
   heading: {
     marginBottom: Spacing.md,
-    paddingHorizontal: Spacing.md,
   },
   passwordItemsContainer: {
     paddingHorizontal: Spacing.md,

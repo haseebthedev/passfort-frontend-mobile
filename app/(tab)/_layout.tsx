@@ -2,23 +2,24 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { hp } from "@/utils";
-import { colorPalette, iconSize } from "@/styles";
+import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
 
 const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colorPalette.primaryBg.shade01,
-        tabBarInactiveTintColor: colorPalette.primaryBg.shade04,
+        tabBarActiveTintColor: colorPalette.primaryBg.secondaryLightGreen,
+        tabBarInactiveTintColor: colorPalette.primaryBg.primaryGrey,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colorPalette.primaryBg.shade02,
-          paddingVertical: hp(0.5),
-          height: hp(8),
+          backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
+          paddingVertical: hp(1.2),
+          height: hp(10),
           borderTopWidth: 0,
         },
         tabBarLabelStyle: {
-          marginBottom: hp(1),
+          marginBottom: Spacing.sm,
+          fontSize: Fonts.size.sm,
         },
       }}
     >

@@ -62,7 +62,7 @@ export function AppButton(props: ButtonProps) {
       {(state) => (
         <>
           {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} pressableState={state} />}
-          <AppText text={text} style={getTextStyle(state)} />
+          <AppText text={text} style={getTextStyle(state)} type="buttonTitle" />
           {RightAccessory && <RightAccessory style={rightAccessoryStyle} pressableState={state} />}
         </>
       )}
@@ -83,9 +83,7 @@ const baseViewStyle: ViewStyle = {
 };
 
 const baseTextStyle: TextStyle = {
-  fontSize: Fonts.size.sm,
-  color: colorPalette.primaryBg.shade04,
-  fontWeight: Fonts.weight.xxl,
+  color: colorPalette.primaryBg.primaryDarkGreen,
   textAlign: "center",
 };
 
@@ -97,20 +95,25 @@ const viewPresets = {
     baseViewStyle,
     {
       borderWidth: 1,
-      borderColor: colorPalette.primaryBg.shade01,
-      backgroundColor: colorPalette.primaryBg.shade01,
+      borderColor: colorPalette.primaryBg.secondaryLightGreen,
+      backgroundColor: colorPalette.primaryBg.secondaryLightGreen,
     },
   ] as StyleProp<ViewStyle>,
-  filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.shade01 }] as StyleProp<ViewStyle>,
+  filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.secondaryLightGreen }] as StyleProp<ViewStyle>,
   link: [{ marginHorizontal: Spacing.xxs }] as StyleProp<ViewStyle>,
 };
 
 const textPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: [baseTextStyle, { color: colorPalette.primaryBg.shade02 }],
-  filled: [baseTextStyle, { color: colorPalette.primaryBg.shade02 }],
+  default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1 }],
+  filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1 }],
   link: [
     baseTextStyle,
-    { textDecorationLine: "underline", color: colorPalette.primaryBg.shade01, fontWeight: Fonts.weight.md },
+    {
+      textDecorationLine: "underline",
+      color: colorPalette.primaryBg.secondaryLightGreen,
+      fontWeight: Fonts.weight.md,
+      fontSize: 16,
+    },
   ],
 };
 

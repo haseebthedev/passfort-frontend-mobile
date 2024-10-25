@@ -8,6 +8,6 @@ interface LoadingIndicatorI {
   color?: string;
 }
 
-export const LoadingIndicator = ({ size = 24, color = colorPalette.primaryBg.shade00 }: LoadingIndicatorI) => {
+export const LoadingIndicator = ({ size = 24, color = colorPalette.primaryBg.primaryWhite }: LoadingIndicatorI) => {
   return <ActivityIndicator color={color} size={size} />;
 };

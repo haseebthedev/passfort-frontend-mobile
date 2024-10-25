@@ -1,10 +1,10 @@
 import React from "react";
 import { View, StyleSheet, Image, FlatList } from "react-native";
 import { router } from "expo-router";
-import { hp, wp } from "@/utils";
+import { capitalize, hp, wp } from "@/utils";
 import { UserInfo_Data } from "@/constants/auth";
 import { PasswordCard_Data } from "@/constants";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
 import profilePicture from "../../assets/images/Profile10.png";
 
@@ -12,7 +12,7 @@ const Profile = () => {
   const onEditProfilePress = () => router.push("/profile/EditProfile");
 
   return (
-    <GradientWrapper>
+    <GradientWrapper style={styles.mainContainer}>
       <AppHeader
         title="Profile"
         rightIconName="settings"
@@ -22,7 +22,7 @@ const Profile = () => {
 
       <View style={styles.container}>
         <Image source={profilePicture} style={styles.profilePicture} />
-        <AppText text="User Name" type="defaultSemiBold" />
+        <AppText text="User Name" type="heading" />
         <AppButton text="Edit profile" preset="link" style={styles.editButton} onPress={onEditProfilePress} />
         <FlatList
           horizontal
@@ -36,30 +36,11 @@ const Profile = () => {
       <View style={styles.personalInfoContainer}>
         {Object.entries(UserInfo_Data).map(([key, value]) => (
           <View key={key}>
-            <AppText text={key} type="subtitle" style={styles.infoHeading} />
-            <AppText text={value} type="defaultSemiBold" style={styles.infoText} />
+            <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
+            <AppText text={value} type="detail" style={styles.infoText} numberOfLines={1} />
           </View>
         ))}
       </View>
-
-      {/* 
-        <View style={styles.personalInfoContainer}>
-        <View>
-          <AppText text={"Name"} type="subtitle" style={styles.infoHeading} />
-          <AppText text={UserInfo_Data.name} type="defaultSemiBold" style={styles.infoText} />
-        </View>
-
-        <View>
-          <AppText text={"Email"} type="subtitle" style={styles.infoHeading} />
-          <AppText text={UserInfo_Data.email} type="defaultSemiBold" style={styles.infoText} />
-        </View>
-
-        <View>
-          <AppText text={"Phone Number"} type="subtitle" style={styles.infoHeading} />
-          <AppText text={UserInfo_Data.number} type="defaultSemiBold" style={styles.infoText} />
-        </View> 
-        </View>
-        */}
     </GradientWrapper>
   );
 };
@@ -67,39 +48,38 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    paddingHorizontal: Spacing.md,
+  },
   container: {
     alignItems: "center",
   },
   profilePicture: {
-    width: wp(35),
-    height: wp(35),
-    marginVertical: Spacing.lg,
+    width: wp(26),
+    height: wp(26),
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   editButton: {
     marginVertical: Spacing.xs,
+    fontSize: 14,
   },
   passwordCardsContainer: {
     marginVertical: Spacing.md,
     gap: Spacing.md,
-    paddingHorizontal: Spacing.md,
   },
   personalInfoContainer: {
-    backgroundColor: colorPalette.primaryBg.shade03,
+    backgroundColor: colorPalette.primaryBg.LightGreenBg,
     padding: Spacing.md,
     borderWidth: wp(0.1),
-    borderColor: colorPalette.primaryBg.shade01,
+    borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: Spacing.xs,
     marginVertical: Spacing.xs,
-    marginHorizontal: wp(5),
     gap: Spacing.md,
   },
   infoHeading: {
-    fontSize: Fonts.size.sm,
-    fontWeight: Fonts.weight.md,
+    color: colorPalette.primaryBg.primaryGrey,
     marginBottom: hp(0.5),
   },
-  infoText: {
-    fontSize: Fonts.size.sm,
-    fontWeight: Fonts.weight.md,
-  },
+  infoText: {},
 });

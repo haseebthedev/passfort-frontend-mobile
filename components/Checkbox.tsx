@@ -27,10 +27,10 @@ export const Checkbox = ({ label, checked = false, onChange, containerStyle, lab
         <MaterialIcons
           name={isChecked ? "check-box" : "check-box-outline-blank"}
           size={24}
-          color={colorPalette.primaryBg.shade01}
+          color={colorPalette.primaryBg.secondaryLightGreen}
         />
       </TouchableOpacity>
-      {label && <AppText text={label} style={labelStyle} type="default" />}
+      {label && <AppText text={label} style={labelStyle} type="label" />}
     </View>
   );
 };

@@ -1,9 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { wp } from "@/utils";
+import { hp, wp } from "@/utils";
 import { AppText } from "./AppText";
 import { PasswordCardType } from "@/interfaces";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, Fonts, LayoutStyles, Spacing, Typography } from "@/styles";
 
 interface PasswordCardI {
   item: PasswordCardType;
@@ -13,22 +13,27 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
     <TouchableOpacity style={styles.card}>
       <Image source={item.icon} style={LayoutStyles.cardIcon} />
-      <AppText text={item.title} type="default" />
-      <AppText text={item.subtitle} type="lightSubTitle" style={styles.subTitle} />
+      <AppText text={item.title} type="subHeading" numberOfLines={1} />
+      <AppText
+        text={item.subtitle}
+        type="description"
+        style={{ color: colorPalette.primaryBg.secondayGrey }}
+        numberOfLines={1}
+      />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colorPalette.primaryBg.shade03,
-    padding: Spacing.md,
+    paddingTop: Spacing.xs,
+    paddingBottom: Spacing.sm,
     alignItems: "center",
     borderWidth: wp(0.1),
-    borderColor: colorPalette.primaryBg.shade01,
-    // marginRight: Spacing.md,
+    backgroundColor: "rgba(126, 244, 150, 0.05)",
+    borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: Spacing.md,
-    width: wp(90) / 3,
+    width: wp(90) / 3.25,
+    paddingHorizontal: Spacing.sm,
   },
-  subTitle: { fontSize: Fonts.size.xs },
 });

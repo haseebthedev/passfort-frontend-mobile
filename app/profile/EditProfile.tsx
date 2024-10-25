@@ -25,7 +25,7 @@ const EditProfile = () => {
         <View style={{ alignItems: "center" }}>
           <Image source={profilePicture} style={styles.profilePicture} />
           <TouchableOpacity style={styles.changePicture}>
-            <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.shade01} />
+            <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
           </TouchableOpacity>
         </View>
         <View style={styles.form}>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cancelButtonText: {
-    color: colorPalette.primaryBg.shade00,
+    color: colorPalette.primaryBg.primaryWhite,
     textDecorationLine: "none",
   },
   spacing: {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   changePicture: {
     width: wp(10),
     height: wp(10),
-    backgroundColor: colorPalette.primaryBg.shade02,
+    backgroundColor: colorPalette.primaryBg.borderColor1,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: wp(5),

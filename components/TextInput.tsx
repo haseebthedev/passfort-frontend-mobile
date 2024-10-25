@@ -14,7 +14,8 @@ import {
 import { Entypo } from "@expo/vector-icons";
 
 import { wp } from "@/utils";
-import { colorPalette, FormsStyle, iconSize, Spacing } from "@/styles";
+import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
+import { AppText } from "./AppText";
 
 interface TextInputI extends TextInputProps {
   label?: string;
@@ -45,11 +46,11 @@ export const TextInput: React.FC<TextInputI> = ({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={FormsStyle.formLabel}>{label}</Text>}
+      {label && <AppText text={label} style={[FormsStyle.formLabel, Typography.label]} />}
       <View style={styles.inputWrapper}>
         <InputText
           style={[FormsStyle.formControl, inputStyle]}
-          placeholderTextColor={colorPalette.primaryBg.shade04}
+          placeholderTextColor={colorPalette.primaryBg.primaryGrey}
           secureTextEntry={secureInput && !isPasswordVisible}
           {...props}
         />
@@ -58,7 +59,7 @@ export const TextInput: React.FC<TextInputI> = ({
             <Entypo
               name={isPasswordVisible ? "eye" : "eye-with-line"}
               size={iconSize}
-              color={colorPalette.primaryBg.shade04}
+              color={colorPalette.primaryBg.primaryGrey}
             />
           </TouchableOpacity>
         )}

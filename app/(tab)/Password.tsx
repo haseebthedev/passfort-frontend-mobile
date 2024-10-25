@@ -7,7 +7,7 @@ import { AppText, GradientWrapper, PasswordItem } from "@/components";
 const Password = () => {
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppText text="Your Passwords" type="defaultSemiBold" style={styles.heading} />
+      <AppText text="Your Passwords" type="heading" style={styles.heading} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={PasswordItem_Data}
