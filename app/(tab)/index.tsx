@@ -4,6 +4,7 @@ import { wp } from "@/utils";
 import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
+import { AppFont } from "@/utils";
 
 const HeaderComponent = () => {
   return (
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginBottom: Spacing.md,
+    fontFamily: AppFont.semi_bold,
   },
   passwordItemsContainer: {
     paddingHorizontal: Spacing.md,

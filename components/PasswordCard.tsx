@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import { wp } from "@/utils";
+import { hp, wp } from "@/utils";
 import { AppText } from "./AppText";
 import { PasswordCardType } from "@/interfaces";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
@@ -24,7 +24,7 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
 const styles = StyleSheet.create({
   card: {
     paddingTop: Spacing.xs,
-    paddingBottom: Spacing.sm,
+    paddingBottom: Spacing.md,
     alignItems: "center",
     borderWidth: wp(0.1),
     backgroundColor: "rgba(126, 244, 150, 0.05)",
@@ -33,5 +33,8 @@ const styles = StyleSheet.create({
     width: wp(90) / 3.25,
     paddingHorizontal: Spacing.xs,
   },
-  subTitle: { color: colorPalette.primaryBg.secondayGrey },
+  subTitle: {
+    color: colorPalette.primaryBg.secondayGrey,
+    paddingTop: hp(0.4),
+  },
 });

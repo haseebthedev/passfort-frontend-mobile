@@ -1,7 +1,7 @@
 import { StyleProp, Text, type TextProps, TextStyle } from "react-native";
-import { Typography } from "@/styles/styles";
 import { useFonts } from "expo-font";
-import { AppFont, loadFonts } from "@/utils/fonts";
+import { Typography } from "@/styles";
+import { AppFont, loadFonts } from "@/utils";
 
 export type AppTextI = TextProps & {
   text?: string;
@@ -32,8 +32,8 @@ export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) =>
           fontsLoaded && { fontFamily: AppFont.regular },
           type === "default" ? Typography.default : undefined,
           type === "title" ? Typography.title : undefined,
-          type === "heading" ? Typography.heading : undefined,
-          type === "subHeading" ? Typography.subHeading : undefined,
+          type === "heading" ? [Typography.heading, { fontFamily: AppFont.semi_bold }] : undefined,
+          type === "subHeading" ? [Typography.subHeading, { fontFamily: AppFont.semi_bold }] : undefined,
           type === "regularSubHeading" ? Typography.regularSubHeading : undefined,
           type === "primaryHeading" ? Typography.primaryHeading : undefined,
           type === "label" ? Typography.label : undefined,

@@ -1,10 +1,10 @@
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
+import { hp } from "@/utils";
+import { LayoutStyles } from "@/styles";
 import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
-import { LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, GradientWrapper, PasswordItem } from "@/components";
-import { hp } from "@/utils";
 
 const Password = () => {
   return (
@@ -24,6 +24,6 @@ export default Password;
 
 const styles = StyleSheet.create({
   heading: {
-    marginBottom: hp(3),
+    marginBottom: hp(2.9),
   },
 });

@@ -1,7 +1,6 @@
-import { FontsType } from "@/interfaces";
-import { hp, wp } from "@/utils";
-import { AppFont, loadFonts } from "@/utils/fonts";
 import { StyleSheet } from "react-native";
+import { FontsType } from "@/interfaces";
+import { AppFont, hp, wp } from "@/utils";
 
 export const colorPalette = {
   primaryBg: {
@@ -43,8 +42,8 @@ export const Fonts: FontsType = {
     xs: hp(1.65),
     sm: hp(1.93),
     md: hp(2.2),
-    lg: hp(2.48),
-    xl: hp(2.75),
+    lg: hp(2.28),
+    xl: hp(2.5),
     xxl: hp(3.03),
     heading: hp(4.45),
     display: hp(3.4),
@@ -85,7 +84,6 @@ export const Typography = StyleSheet.create({
   },
   heading: {
     fontSize: Fonts.size.xl,
-    fontWeight: Fonts.weight.xl,
     letterSpacing: 0.1,
     color: colorPalette.primaryBg.primaryWhite,
   },
@@ -101,8 +99,8 @@ export const Typography = StyleSheet.create({
   },
   subHeading: {
     fontSize: Fonts.size.sm,
-    fontWeight: "600",
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.medium,
   },
   description: {
     fontSize: Fonts.size.xs,

@@ -43,7 +43,7 @@ const Profile = () => {
         {Object.entries(UserInfo_Data).map(([key, value]) => (
           <View key={key}>
             <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
-            <AppText text={value} type="detail" style={styles.infoText} numberOfLines={1} />
+            <AppText text={value} type="detail" numberOfLines={1} />
           </View>
         ))}
       </View>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.xs,
   },
   editButtonText: {
-    fontSize: 14,
+    fontSize: hp(1.8),
   },
   passwordCardsContainer: {
     marginVertical: Spacing.md,
@@ -90,5 +90,4 @@ const styles = StyleSheet.create({
     marginBottom: hp(0.5),
     fontWeight: "500",
   },
-  infoText: {},
 });
