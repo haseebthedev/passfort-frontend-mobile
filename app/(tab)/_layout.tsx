@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { hp } from "@/utils";
+import { hp, wp } from "@/utils";
 import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
 
 const TabLayout = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { PasswordCardType } from "@/interfaces";
@@ -11,11 +11,13 @@ interface PasswordCardI {
 
 export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
-    <TouchableOpacity style={styles.card}>
-      <Image source={item.icon} style={LayoutStyles.cardIcon} />
-      <AppText text={item.title} type="subHeading" numberOfLines={1} />
-      <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={() => {}}>
+      <View style={styles.card}>
+        <Image source={item.icon} style={LayoutStyles.cardIcon} />
+        <AppText text={item.title} type="subHeading" numberOfLines={1} />
+        <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: Spacing.md,
     width: wp(90) / 3.25,
-    paddingHorizontal: Spacing.sm,
+    paddingHorizontal: Spacing.xs,
   },
   subTitle: { color: colorPalette.primaryBg.secondayGrey },
 });

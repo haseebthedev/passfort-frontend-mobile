@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
-import { maskPassword, wp } from "@/utils";
+import { hp, maskPassword, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 
@@ -18,33 +18,35 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
   const onVisiblityPress = () => setPasswordVisible((prev) => !prev);
 
   return (
-    <TouchableOpacity style={styles.passwordItemCard} onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
-      <View style={styles.passwordInfoContainer}>
-        <Image source={item.icon} style={LayoutStyles.cardIcon} />
-        <View style={styles.spacing}>
-          <AppText text={item.type} type="subHeading" style={styles.subHeading} numberOfLines={1} />
-          <AppText
-            text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
-            style={styles.passwordText}
-            type="passwordText"
-            numberOfLines={1}
-          />
+    <TouchableWithoutFeedback onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
+      <View style={styles.passwordItemCard}>
+        <View style={styles.passwordInfoContainer}>
+          <Image source={item.icon} style={LayoutStyles.cardIcon} />
+          <View style={styles.spacing}>
+            <AppText text={item.type} type="subHeading" style={styles.subHeading} numberOfLines={1} />
+            <AppText
+              text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
+              style={passwordVisible ? styles.passwordText : styles.astericPasswordText}
+              type="passwordText"
+              numberOfLines={1}
+            />
+          </View>
+        </View>
+
+        <View style={styles.actionButtons}>
+          <TouchableWithoutFeedback onPress={onCopyPasswordPress}>
+            <Ionicons name="copy-outline" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onVisiblityPress}>
+            <Entypo
+              name={passwordVisible ? "eye-with-line" : "eye"}
+              size={wp(5)}
+              color={colorPalette.primaryBg.primaryWhite}
+            />
+          </TouchableWithoutFeedback>
         </View>
       </View>
-
-      <View style={styles.actionButtons}>
-        <TouchableOpacity onPress={onCopyPasswordPress}>
-          <Ionicons name="copy-outline" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onVisiblityPress}>
-          <Entypo
-            name={passwordVisible ? "eye-with-line" : "eye"}
-            size={wp(5)}
-            color={colorPalette.primaryBg.primaryWhite}
-          />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -67,8 +69,13 @@ const styles = StyleSheet.create({
     gap: Spacing.xxs,
   },
   passwordText: {
-    fontSize: Fonts.size.md,
+    fontSize: Fonts.size.lg,
     width: wp(50),
+  },
+  astericPasswordText: {
+    fontSize: Fonts.size.lg,
+    width: wp(50),
+    letterSpacing: wp(0.3),
   },
   spacing: { marginTop: Spacing.xxs, gap: wp(1) },
   subHeading: {

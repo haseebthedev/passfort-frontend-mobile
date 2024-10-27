@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { capitalize, hp, wp } from "@/utils";
 import { UserInfo_Data } from "@/constants/auth";
 import { PasswordCard_Data } from "@/constants";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
 import profilePicture from "../../assets/images/Profile10.png";
 
@@ -23,7 +23,13 @@ const Profile = () => {
       <View style={styles.container}>
         <Image source={profilePicture} style={styles.profilePicture} />
         <AppText text="User Name" type="heading" />
-        <AppButton text="Edit profile" preset="link" style={styles.editButton} onPress={onEditProfilePress} />
+        <AppButton
+          text="Edit profile"
+          preset="link"
+          style={styles.editButton}
+          textStyle={styles.editButtonText}
+          onPress={onEditProfilePress}
+        />
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -62,6 +68,8 @@ const styles = StyleSheet.create({
   },
   editButton: {
     marginVertical: Spacing.xs,
+  },
+  editButtonText: {
     fontSize: 14,
   },
   passwordCardsContainer: {
@@ -80,6 +88,7 @@ const styles = StyleSheet.create({
   infoHeading: {
     color: colorPalette.primaryBg.primaryGrey,
     marginBottom: hp(0.5),
+    fontWeight: "500",
   },
   infoText: {},
 });

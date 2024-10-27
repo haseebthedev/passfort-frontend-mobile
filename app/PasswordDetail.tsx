@@ -8,7 +8,7 @@ import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
 import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 
-const iconSize = wp(5);
+const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
   const { id } = useLocalSearchParams();
@@ -60,7 +60,7 @@ const PasswordDetail = () => {
 
         <View style={styles.passwordActionContainer}>
           <AppText text={passwordDetails.passwordText} style={styles.passwordText} />
-          <AppButton text="Copy" />
+          <AppButton text="Copy" style={styles.copyButton} />
 
           <View style={styles.buttonsContainer}>
             <TouchableWithoutFeedback onPress={() => console.log("Trash icon pressed")}>
@@ -94,7 +94,7 @@ export default PasswordDetail;
 const styles = StyleSheet.create({
   container: {
     height: hp(85),
-    borderWidth: wp(0.1),
+    borderWidth: wp(0.2),
     backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
     borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: hp(2),
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     height: hp(57),
-    borderWidth: wp(0.1),
+    borderWidth: wp(0.2),
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
     borderRadius: hp(2.1),
@@ -132,12 +132,18 @@ const styles = StyleSheet.create({
     borderRadius: wp(5),
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: wp(0.1),
+    borderWidth: wp(0.2),
     backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
     borderColor: colorPalette.primaryBg.borderColor2,
   },
   passwordText: {
     fontSize: hp(3.4),
     fontWeight: Fonts.weight.md,
+  },
+  copyButton: {
+    paddingVertical: 0,
+    width: wp(40),
+    height: hp(5.8),
+    borderRadius: hp(2),
   },
 });

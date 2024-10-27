@@ -1,8 +1,8 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { wp } from "@/utils";
 import { colorPalette, iconSize } from "@/styles";
-import { AntDesign } from "@expo/vector-icons";
 
 interface RoundButtonI {
   onPress?: () => void;
@@ -10,9 +10,11 @@ interface RoundButtonI {
 
 export const RoundButton = ({ onPress }: RoundButtonI) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={onPress} activeOpacity={0.7}>
-      <AntDesign name="plus" size={iconSize} />
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.buttonContainer}>
+        <AntDesign name="plus" size={iconSize} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

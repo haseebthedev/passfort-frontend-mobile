@@ -1,8 +1,7 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { router } from "expo-router";
-
-import { wp } from "@/utils";
+import { hp, wp } from "@/utils";
 import { OnboardingData } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
@@ -25,20 +24,17 @@ const Onboarding = () => {
   return (
     <GradientWrapper style={[LayoutStyles.horizontalSpacing, styles.container]}>
       <Image source={OnboardingData[currentIndex].image} style={styles.image} />
-
       <AppText text={OnboardingData[currentIndex].title} type="primaryTitle" />
       <AppText text={OnboardingData[currentIndex].subtitle} type="label" style={styles.textStyle} />
 
-      <View style={styles.buttonContainer}>
-        <AppButton text={currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"} onPress={handleNext} />
-        <AppButton
-          text="Skip"
-          onPress={handleSkip}
-          preset="link"
-          style={styles.skipButton}
-          textStyle={styles.skipButtonText}
-        />
-      </View>
+      <AppButton text={currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"} onPress={handleNext} />
+      <AppButton
+        text="Skip"
+        onPress={handleSkip}
+        preset="link"
+        style={styles.skipButton}
+        textStyle={styles.skipButtonText}
+      />
     </GradientWrapper>
   );
 };
@@ -56,13 +52,11 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     textAlign: "center",
-    marginTop: Spacing.md,
-  },
-  buttonContainer: {
-    marginVertical: Spacing.xl,
+    marginTop: Spacing.sm,
+    marginBottom: hp(3.6),
   },
   skipButton: {
-    marginTop: Spacing.lg,
+    marginTop: Spacing.xl,
   },
   skipButtonText: {
     color: colorPalette.primaryBg.primaryWhite,

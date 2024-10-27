@@ -9,13 +9,12 @@ import {
   TextStyle,
   TextInputProps,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
-
 import { Entypo } from "@expo/vector-icons";
-
 import { wp } from "@/utils";
-import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
 import { AppText } from "./AppText";
+import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
 
 interface TextInputI extends TextInputProps {
   label?: string;
@@ -55,13 +54,15 @@ export const TextInput: React.FC<TextInputI> = ({
           {...props}
         />
         {secureInput && (
-          <TouchableOpacity onPress={handleIconPress} style={styles.iconWrapper}>
-            <Entypo
-              name={isPasswordVisible ? "eye" : "eye-with-line"}
-              size={iconSize}
-              color={colorPalette.primaryBg.primaryGrey}
-            />
-          </TouchableOpacity>
+          <TouchableWithoutFeedback onPress={handleIconPress}>
+            <View style={styles.iconWrapper}>
+              <Entypo
+                name={isPasswordVisible ? "eye" : "eye-with-line"}
+                size={iconSize}
+                color={colorPalette.primaryBg.primaryGrey}
+              />
+            </View>
+          </TouchableWithoutFeedback>
         )}
       </View>
       {error && <Text style={styles.error}>{error}</Text>}

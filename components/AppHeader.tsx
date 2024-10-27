@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { iconSize, LayoutStyles, Spacing } from "@/styles";
@@ -27,18 +27,18 @@ export const AppHeader = ({
     <View style={[LayoutStyles.headerNavContainer, containerStyle]}>
       <View style={styles.leftContainer}>
         {leftIconName && (
-          <TouchableOpacity onPress={onLeftIconPress}>
+          <TouchableWithoutFeedback onPress={onLeftIconPress}>
             <Ionicons name={leftIconName} style={LayoutStyles.headerIcon} size={iconSize} />
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
         )}
 
         <AppText text={title ? title : ""} style={titleStyle} type="heading" />
       </View>
 
       {rightIconName && (
-        <TouchableOpacity onPress={onRightIconPress}>
+        <TouchableWithoutFeedback onPress={onRightIconPress}>
           <Ionicons name={rightIconName} style={LayoutStyles.headerIcon} size={iconSize} />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       )}
     </View>
   );

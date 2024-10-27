@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { wp } from "@/utils";
@@ -24,9 +24,11 @@ const EditProfile = () => {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
         <View style={styles.alignCenter}>
           <Image source={profilePicture} style={styles.profilePicture} />
-          <TouchableOpacity style={styles.changePicture}>
-            <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
-          </TouchableOpacity>
+          <TouchableWithoutFeedback>
+            <View style={styles.changePicture}>
+              <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.form}>
           <TextInput label="Name" placeholder="Enter Your Name" />

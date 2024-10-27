@@ -1,5 +1,6 @@
 import { FontsType } from "@/interfaces";
 import { hp, wp } from "@/utils";
+import { AppFont, loadFonts } from "@/utils/fonts";
 import { StyleSheet } from "react-native";
 
 export const colorPalette = {
@@ -31,6 +32,7 @@ export const Spacing = {
   xs: hp(1),
   sm: hp(1.5),
   md: hp(2),
+  smd: hp(2.5),
   lg: hp(3),
   xl: hp(5),
   xxl: hp(6),
@@ -77,13 +79,13 @@ export const Typography = StyleSheet.create({
   },
   label: {
     fontSize: Fonts.size.md,
-    fontWeight: Fonts.weight.md,
+    fontWeight: Fonts.weight.lg,
     letterSpacing: 0.1,
     color: colorPalette.primaryBg.primaryWhite,
   },
   heading: {
     fontSize: Fonts.size.xl,
-    fontWeight: Fonts.weight.md,
+    fontWeight: Fonts.weight.xl,
     letterSpacing: 0.1,
     color: colorPalette.primaryBg.primaryWhite,
   },
@@ -99,7 +101,7 @@ export const Typography = StyleSheet.create({
   },
   subHeading: {
     fontSize: Fonts.size.sm,
-    fontWeight: "500",
+    fontWeight: "600",
     color: colorPalette.primaryBg.primaryWhite,
   },
   description: {
@@ -142,7 +144,12 @@ export const FormsStyle = StyleSheet.create({
   },
 });
 
-export const GradientColors = [colorPalette.primaryBg.primaryDarkGreen, colorPalette.primaryBg.borderColor2];
+export const GradientColors = [
+  colorPalette.primaryBg.primaryDarkGreen,
+  colorPalette.primaryBg.primaryDarkGreen,
+  "#132617FF",
+  "#1D3D24FF",
+];
 
 export const LayoutStyles = StyleSheet.create({
   pageContainer: {

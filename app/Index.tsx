@@ -11,7 +11,7 @@ import passfortIcon from "../assets/Icons/passfortIcon.png";
 export default function Index() {
   const router = useRouter();
   const [fontsLoaded] = useFonts({
-    regular: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    regular: require("../assets/fonts/Mulish-Regular.ttf"),
   });
 
   const redirectUser = async () => {
@@ -41,9 +41,7 @@ export default function Index() {
 
   return (
     <GradientWrapper style={styles.container}>
-      {/* <View style={styles.container}> */}
       <Image source={passfortIcon} style={styles.icon} />
-      {/* </View> */}
     </GradientWrapper>
   );
 }

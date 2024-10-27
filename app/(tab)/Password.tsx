@@ -4,11 +4,12 @@ import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
 import { LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, GradientWrapper, PasswordItem } from "@/components";
+import { hp } from "@/utils";
 
 const Password = () => {
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Your Passwords" />
+      <AppHeader title="Your Passwords" containerStyle={styles.heading} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={PasswordItem_Data}
@@ -23,6 +24,6 @@ export default Password;
 
 const styles = StyleSheet.create({
   heading: {
-    marginBottom: Spacing.md,
+    marginBottom: hp(3),
   },
 });
