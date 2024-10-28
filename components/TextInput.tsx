@@ -14,15 +14,17 @@ import { Entypo } from "@expo/vector-icons";
 import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
+import { ErrorMessage } from "./ErrorMessage";
 
 interface TextInputI extends TextInputProps {
   label?: string;
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
-  error?: string;
   icon?: string;
   onIconPress?: () => void;
   secureInput?: boolean;
+  error?: string;
+  visible?: boolean;
 }
 
 export const TextInput: React.FC<TextInputI> = ({
@@ -33,6 +35,7 @@ export const TextInput: React.FC<TextInputI> = ({
   icon,
   onIconPress,
   secureInput = false,
+  visible = false,
   ...props
 }) => {
   const [isPasswordVisible, setPasswordVisible] = useState<boolean>(!secureInput);
@@ -64,15 +67,16 @@ export const TextInput: React.FC<TextInputI> = ({
           </TouchableWithoutFeedback>
         )}
 
-        {icon && (
+        {/* {icon && (
           <TouchableWithoutFeedback onPress={() => {}}>
             <View style={styles.iconWrapper}>
               <Entypo name={icon} size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
             </View>
           </TouchableWithoutFeedback>
-        )}
+        )} */}
       </View>
-      {error && <Text style={styles.error}>{error}</Text>}
+
+      {error && visible && <ErrorMessage error={error} visible={visible} />}
     </View>
   );
 };

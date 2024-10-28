@@ -73,14 +73,12 @@ const styles = StyleSheet.create({
     width: wp(50),
   },
   astericPasswordText: {
-    fontSize: Fonts.size.lg,
     width: wp(50),
-    letterSpacing: wp(0.3),
+    letterSpacing: wp(0.2),
   },
-  spacing: { marginTop: Spacing.xxs, gap: wp(1) },
+  spacing: { marginTop: Spacing.xxs },
   subHeading: {
     color: colorPalette.primaryBg.primaryGrey,
-    fontSize: Fonts.size.sm,
   },
   actionButtons: {
     flexDirection: "row",

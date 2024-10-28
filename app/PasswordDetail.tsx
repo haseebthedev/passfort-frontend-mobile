@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp(0.7),
   },
   infoHeading: {
-    color: colorPalette.primaryBg.primaryGrey,
+    color: colorPalette.primaryBg.secondayGrey,
   },
   passwordActionContainer: {
     padding: Spacing.lg,

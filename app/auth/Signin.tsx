@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from "react-native";
 import { router } from "expo-router";
+import { SigninI } from "@/interfaces";
 import { useAuthStore } from "@/store";
+import { useFormikHook } from "@/hooks";
+import { signinValidationSchema } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, TextInput } from "@/components";
 
@@ -9,25 +12,41 @@ const Signin = () => {
   const { login } = useAuthStore();
   const [isFirstSignIn, setIsFirstSignIn] = useState<boolean>(true);
 
-  const onSigninPress = () => {
-    login({
-      id: "123",
-      email: "john.doe@example.com",
-      first_name: "John",
-      last_name: "Doe",
-      picture: "https://via.placeholder.com/150",
-      location: "New York, USA",
-      isFirstSignIn,
-      isLogin: true,
-    });
+  const validationSchema = signinValidationSchema;
+  const initialValues: SigninI = { email: "", password: "" };
 
-    if (isFirstSignIn) {
-      setIsFirstSignIn(!isFirstSignIn);
-      router.push("/auth/Onboarding");
-    } else {
-      router.push("/(tab)/");
+  const submit = async ({ email, password }: SigninI) => {
+    try {
+      console.log(email, password);
+      Keyboard.dismiss();
+      console.log("ok");
+      login({
+        id: "123",
+        email,
+        first_name: "John",
+        last_name: "Doe",
+        picture: "https://via.placeholder.com/150",
+        location: "New York, USA",
+        isFirstSignIn,
+        isLogin: true,
+      });
+
+      if (isFirstSignIn) {
+        setIsFirstSignIn(!isFirstSignIn);
+        router.push("/auth/Onboarding");
+      } else {
+        router.push("/(tab)/");
+      }
+    } catch (err) {
+      console.log("error === ", err);
     }
   };
+
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
+    submit,
+    validationSchema,
+    initialValues
+  );
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -44,15 +63,32 @@ const Signin = () => {
                 <AppText text="Sign In" type="title" />
               </View>
 
-              <TextInput label="Email Address" placeholder="Enter Your Email Address" />
-              <TextInput label="Password" placeholder="Enter Your Password" secureInput={true} />
+              <TextInput
+                label="Email Address"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                placeholder="Enter Your Email Address"
+                onBlur={() => setFieldTouched("email")}
+                error={typeof errors.email === "string" ? errors.email : undefined}
+                visible={typeof touched.email === "boolean" ? touched.email : undefined}
+              />
+              <TextInput
+                label="Password"
+                value={values.password}
+                onChangeText={handleChange("password")}
+                placeholder="Enter Your Password"
+                secureInput={true}
+                onBlur={() => setFieldTouched("password")}
+                error={typeof errors.password === "string" ? errors.password : undefined}
+                visible={typeof touched.password === "boolean" ? touched.password : undefined}
+              />
 
               <View style={styles.actionGroup}>
                 <Checkbox label="Remember me" />
                 <AppButton text="Forget Password?" onPress={() => {}} preset="link" />
               </View>
 
-              <AppButton text="Sign In" onPress={onSigninPress} style={styles.buttonContainer} />
+              <AppButton text="Sign In" onPress={handleSubmit} style={styles.buttonContainer} />
 
               <View style={styles.linkRow}>
                 <AppText text="Don’t have an account?" type="label" />

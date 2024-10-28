@@ -1,19 +1,43 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import { wp } from "@/utils";
+import { EditProfileI } from "@/interfaces";
 import { useAuthStore } from "@/store";
+import { editProfileValidationSchema, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, GradientWrapper, TextInput } from "@/components";
 import profilePicture from "../../assets/images/Profile10.png";
+import { useFormikHook } from "@/hooks";
 
 const EditProfile = () => {
-  const { reset } = useAuthStore();
+  const { reset, user } = useAuthStore();
 
-  const onCancelPress = () => router.back();
+  const validationSchema = editProfileValidationSchema;
+  const initialValues: EditProfileI = {
+    name: user?.first_name || user?.last_name ? `${user.first_name} ${user.last_name}` : "",
+    email: user?.email ?? "",
+    phoneNumber: "",
+  };
 
-  const onSavePress = () => {
+  const submit = async ({ email, name, phoneNumber }: EditProfileI) => {
+    try {
+      console.log(email, name, phoneNumber);
+      Keyboard.dismiss();
+      reset();
+      router.back();
+    } catch (err) {
+      console.log("error === ", err);
+    }
+  };
+
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
+    submit,
+    validationSchema,
+    initialValues
+  );
+
+  const onCancelPress = () => {
     reset();
     router.push("/auth/Signin");
   };
@@ -31,10 +55,33 @@ const EditProfile = () => {
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.form}>
-          <TextInput label="Name" placeholder="Enter Your Name" />
-          <TextInput label="Email Address" placeholder="Enter Your Email Address" />
-          <TextInput label="Phone Number" placeholder="Enter Your Phone Number" />
-          <AppButton text="Save" onPress={onSavePress} preset="filled" />
+          <TextInput
+            label="Name"
+            placeholder="Enter Your Name"
+            value={values.name}
+            onChangeText={handleChange("name")}
+            onBlur={() => setFieldTouched("name")}
+            error={typeof errors.name === "string" ? errors.name : undefined}
+            visible={typeof touched.name === "boolean" ? touched.name : undefined}
+          />
+          <TextInput
+            label="Email Address"
+            placeholder="Enter Your Email Address"
+            value={user?.email ?? values.email}
+            onChangeText={handleChange("email")}
+            onBlur={() => setFieldTouched("email")}
+            editable={false}
+          />
+          <TextInput
+            label="Phone Number"
+            placeholder="Enter Your Phone Number"
+            value={values.phoneNumber}
+            onChangeText={handleChange("phoneNumber")}
+            onBlur={() => setFieldTouched("phoneNumber")}
+            error={typeof errors.phoneNumber === "string" ? errors.phoneNumber : undefined}
+            visible={typeof touched.phoneNumber === "boolean" ? touched.phoneNumber : undefined}
+          />
+          <AppButton text="Save" onPress={handleSubmit} preset="filled" />
           <AppButton
             text="Cancel"
             preset="link"

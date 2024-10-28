@@ -19,6 +19,8 @@ export const colorPalette = {
     secondaryLightGreenBg: "rgba(218, 255, 225, 0.05)",
 
     buttonText: "#101F12",
+
+    primaryRed: "#FD2828FF",
   },
 
   gradientBg: {
@@ -116,18 +118,23 @@ export const Typography = StyleSheet.create({
   },
   buttonTitle: {
     fontSize: Fonts.size.lg,
-    fontWeight: Fonts.weight.xl,
     color: colorPalette.primaryBg.primaryDarkGreen,
+    fontFamily: AppFont.bold,
   },
   astericPasswordText: {
     fontSize: Fonts.size.xxl,
-    fontWeight: Fonts.weight.lg,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.semi_bold,
   },
   passwordText: {
     fontSize: hp(3.3),
     fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
+  },
+  errorText: {
+    fontSize: Fonts.size.sm,
+    fontFamily: AppFont.regular,
+    color: colorPalette.primaryBg.primaryRed,
   },
 });
 
@@ -177,5 +184,9 @@ export const LayoutStyles = StyleSheet.create({
   },
   horizontalSpacing: {
     paddingHorizontal: Spacing.md,
+  },
+  positionCenter: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

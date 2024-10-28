@@ -87,6 +87,7 @@ const baseViewStyle: ViewStyle = {
 const baseTextStyle: TextStyle = {
   color: colorPalette.primaryBg.primaryDarkGreen,
   textAlign: "center",
+  fontFamily: AppFont.bold,
 };
 
 const rightAccessoryStyle: ViewStyle = { marginStart: Spacing.xs, zIndex: 1 };

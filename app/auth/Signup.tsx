@@ -1,10 +1,32 @@
 import React from "react";
-import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from "react-native";
 import { router } from "expo-router";
+import { SignupI } from "@/interfaces";
+import { useFormikHook } from "@/hooks";
+import { signupValidationSchema } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, GradientWrapper, TextInput } from "@/components";
 
 const Signup = () => {
+  const validationSchema = signupValidationSchema;
+  const initialValues: SignupI = { name: "", email: "", password: "" };
+
+  const submit = async ({ name, email, password }: SignupI) => {
+    try {
+      Keyboard.dismiss();
+      console.log(name, email, password);
+      router.push("/(tab)/");
+    } catch (err) {
+      console.log("error === ", err);
+    }
+  };
+
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
+    submit,
+    validationSchema,
+    initialValues
+  );
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
@@ -21,11 +43,36 @@ const Signup = () => {
                 <AppText text="Sign Up" type="title" />
               </View>
 
-              <TextInput label="Name" placeholder="Enter Your Name" />
-              <TextInput label="Email Address" placeholder="Enter Your Email Address" />
-              <TextInput label="Password" placeholder="Enter Your Password" secureInput={true} />
+              <TextInput
+                label="Name"
+                placeholder="Enter Your Name"
+                value={values.name}
+                onChangeText={handleChange("name")}
+                onBlur={() => setFieldTouched("name")}
+                error={typeof errors.name === "string" ? errors.name : undefined}
+                visible={typeof touched.name === "boolean" ? touched.name : undefined}
+              />
+              <TextInput
+                label="Email Address"
+                placeholder="Enter Your Email Address"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={() => setFieldTouched("email")}
+                error={typeof errors.email === "string" ? errors.email : undefined}
+                visible={typeof touched.email === "boolean" ? touched.email : undefined}
+              />
+              <TextInput
+                label="Password"
+                placeholder="Enter Your Password"
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={() => setFieldTouched("password")}
+                error={typeof errors.password === "string" ? errors.password : undefined}
+                visible={typeof touched.password === "boolean" ? touched.password : undefined}
+                secureInput={true}
+              />
 
-              <AppButton text="Sign Up" onPress={() => {}} style={styles.buttonContainer} />
+              <AppButton text="Sign Up" onPress={handleSubmit} style={styles.buttonContainer} />
 
               <View style={styles.linkRow}>
                 <AppText text="Already have an account?" type="label" />
