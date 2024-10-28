@@ -34,7 +34,7 @@ const EditProfile = () => {
           <TextInput label="Name" placeholder="Enter Your Name" />
           <TextInput label="Email Address" placeholder="Enter Your Email Address" />
           <TextInput label="Phone Number" placeholder="Enter Your Phone Number" />
-          <AppButton text="Save" onPress={onSavePress} />
+          <AppButton text="Save" onPress={onSavePress} preset="filled" />
           <AppButton
             text="Cancel"
             preset="link"

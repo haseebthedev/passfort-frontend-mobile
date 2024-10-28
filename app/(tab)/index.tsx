@@ -5,13 +5,14 @@ import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
 import { AppFont } from "@/utils";
+import { router } from "expo-router";
 
 const HeaderComponent = () => {
   return (
     <View>
       <View style={styles.greetingContainer}>
         <View>
-          <AppText text="Hello Username" type="heading" />
+          <AppText text="Hello Username" type="heading" numberOfLines={1} style={styles.username} />
           <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
         </View>
         <AppLogo style={styles.appLogo} />
@@ -23,7 +24,7 @@ const HeaderComponent = () => {
             <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
-          <RoundButton />
+          <RoundButton onPress={() => router.push("/CreatePassword")} />
         </View>
         <FlatList
           horizontal
@@ -61,6 +62,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: Spacing.xxs,
+  },
+  username: {
+    width: wp(65),
   },
   welcomeText: {
     marginTop: Spacing.xxs,

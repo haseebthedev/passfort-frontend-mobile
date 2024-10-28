@@ -8,7 +8,6 @@ import {
   ViewStyle,
   TextStyle,
   TextInputProps,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
@@ -31,7 +30,7 @@ export const TextInput: React.FC<TextInputI> = ({
   containerStyle,
   inputStyle,
   error,
-  icon = "eye",
+  icon,
   onIconPress,
   secureInput = false,
   ...props
@@ -61,6 +60,14 @@ export const TextInput: React.FC<TextInputI> = ({
                 size={iconSize}
                 color={colorPalette.primaryBg.primaryGrey}
               />
+            </View>
+          </TouchableWithoutFeedback>
+        )}
+
+        {icon && (
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View style={styles.iconWrapper}>
+              <Entypo name={icon} size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
             </View>
           </TouchableWithoutFeedback>
         )}

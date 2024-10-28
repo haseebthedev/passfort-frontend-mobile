@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import { hp, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
-import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const iconSize = wp(5.5);
 
@@ -59,7 +59,7 @@ const PasswordDetail = () => {
         </View>
 
         <View style={styles.passwordActionContainer}>
-          <AppText text={passwordDetails.passwordText} style={styles.passwordText} />
+          <AppText text={passwordDetails.passwordText} type="passwordText" />
           <AppButton text="Copy" style={styles.copyButton} />
 
           <View style={styles.buttonsContainer}>
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: hp(2),
     padding: Spacing.xs,
+    marginTop: Spacing.xs,
   },
   innerContainer: {
     height: hp(57),
@@ -135,10 +136,6 @@ const styles = StyleSheet.create({
     borderWidth: wp(0.2),
     backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
     borderColor: colorPalette.primaryBg.borderColor2,
-  },
-  passwordText: {
-    fontSize: hp(3.4),
-    fontWeight: Fonts.weight.md,
   },
   copyButton: {
     paddingVertical: 0,

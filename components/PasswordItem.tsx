@@ -3,7 +3,7 @@ import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native"
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
-import { hp, maskPassword, wp } from "@/utils";
+import { maskPassword, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 
@@ -27,7 +27,7 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
             <AppText
               text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
               style={passwordVisible ? styles.passwordText : styles.astericPasswordText}
-              type="passwordText"
+              type="astericPasswordText"
               numberOfLines={1}
             />
           </View>

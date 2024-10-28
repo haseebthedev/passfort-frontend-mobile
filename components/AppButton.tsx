@@ -8,9 +8,10 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { hp, wp } from "@/utils";
+import { AppFont, hp, loadFonts, wp } from "@/utils";
 import { AppText } from "./AppText";
 import { colorPalette, Fonts, Spacing } from "@/styles";
+import { useFonts } from "expo-font";
 
 type Presets = keyof typeof viewPresets;
 
@@ -54,6 +55,7 @@ export function AppButton(props: ButtonProps) {
   const getTextStyle = ({ pressed }: PressableStateCallbackType) => [
     textPresets[preset],
     textStyle,
+    // { fontFamily: AppFont.medium },
     pressed && pressedTextPresets[preset],
   ];
 
@@ -104,11 +106,12 @@ const viewPresets = {
 };
 
 const textPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1 }],
-  filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1 }],
+  default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
+  filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
   link: [
     baseTextStyle,
     {
+      fontFamily: AppFont.regular,
       textDecorationLine: "underline",
       color: colorPalette.primaryBg.secondaryLightGreen,
       fontWeight: Fonts.weight.md,

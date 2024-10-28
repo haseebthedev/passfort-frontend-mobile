@@ -17,6 +17,8 @@ export const colorPalette = {
 
     primaryLightGreenBg: "rgba(126, 244, 150, 0.05)",
     secondaryLightGreenBg: "rgba(218, 255, 225, 0.05)",
+
+    buttonText: "#101F12",
   },
 
   gradientBg: {
@@ -45,7 +47,7 @@ export const Fonts: FontsType = {
     lg: hp(2.28),
     xl: hp(2.5),
     xxl: hp(3.03),
-    heading: hp(4.45),
+    heading: hp(4),
     display: hp(3.4),
   },
   weight: {
@@ -67,14 +69,13 @@ export const Typography = StyleSheet.create({
   },
   title: {
     fontSize: Fonts.size.display,
-    fontWeight: Fonts.weight.xl,
-    letterSpacing: -0.02,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.bold,
   },
   primaryTitle: {
     fontSize: Fonts.size.heading,
-    fontWeight: Fonts.weight.xl,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.bold,
   },
   label: {
     fontSize: Fonts.size.md,
@@ -86,30 +87,31 @@ export const Typography = StyleSheet.create({
     fontSize: Fonts.size.xl,
     letterSpacing: 0.1,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.semi_bold,
   },
   primaryHeading: {
     fontSize: Fonts.size.md,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   regularSubHeading: {
     fontSize: Fonts.size.sm,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   subHeading: {
     fontSize: Fonts.size.sm,
     color: colorPalette.primaryBg.primaryWhite,
-    fontFamily: AppFont.medium,
+    fontFamily: AppFont.semi_bold,
   },
   description: {
     fontSize: Fonts.size.xs,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   detail: {
     fontSize: Fonts.size.lg,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   buttonTitle: {
@@ -117,9 +119,14 @@ export const Typography = StyleSheet.create({
     fontWeight: Fonts.weight.xl,
     color: colorPalette.primaryBg.primaryDarkGreen,
   },
-  passwordText: {
+  astericPasswordText: {
     fontSize: Fonts.size.xxl,
     fontWeight: Fonts.weight.lg,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  passwordText: {
+    fontSize: hp(3.3),
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
 });
@@ -129,13 +136,14 @@ export const iconSize = wp(6);
 export const FormsStyle = StyleSheet.create({
   formControl: {
     flex: 1,
-    padding: Spacing.md,
+    padding: Spacing.sm,
     gap: Spacing.md,
-    borderRadius: wp(5),
+    borderRadius: wp(4),
     borderWidth: wp(0.1),
     color: colorPalette.primaryBg.primaryWhite,
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.secondaryDarkGreen,
+    fontFamily: AppFont.regular,
   },
   formLabel: {
     marginVertical: hp(1),

@@ -10,3 +10,4 @@ export * from "./LoadingIndicator";
 
 export * from "./PasswordCard";
 export * from "./PasswordItem";
+export * from "./PasswordStatCard";

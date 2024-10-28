@@ -17,28 +17,28 @@ export type AppTextI = TextProps & {
     | "primaryTitle"
     | "label"
     | "description"
+    | "astericPasswordText"
     | "passwordText"
     | "detail";
   style?: StyleProp<TextStyle>;
 };
 
 export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) => {
-  const [fontsLoaded] = useFonts(loadFonts());
-
   return (
     <>
       <Text
         style={[
-          fontsLoaded && { fontFamily: AppFont.regular },
+          { fontFamily: AppFont.regular },
           type === "default" ? Typography.default : undefined,
           type === "title" ? Typography.title : undefined,
-          type === "heading" ? [Typography.heading, { fontFamily: AppFont.semi_bold }] : undefined,
-          type === "subHeading" ? [Typography.subHeading, { fontFamily: AppFont.semi_bold }] : undefined,
+          type === "heading" ? Typography.heading : undefined,
+          type === "subHeading" ? Typography.subHeading : undefined,
           type === "regularSubHeading" ? Typography.regularSubHeading : undefined,
           type === "primaryHeading" ? Typography.primaryHeading : undefined,
           type === "label" ? Typography.label : undefined,
           type === "buttonTitle" ? Typography.buttonTitle : undefined,
           type === "primaryTitle" ? Typography.primaryTitle : undefined,
+          type === "astericPasswordText" ? Typography.astericPasswordText : undefined,
           type === "passwordText" ? Typography.passwordText : undefined,
           type === "description" ? Typography.description : undefined,
           type === "detail" ? Typography.detail : undefined,

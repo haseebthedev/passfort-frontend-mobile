@@ -1,21 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { Href, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 
-import { wp } from "@/utils";
-import { GradientWrapper } from "@/components";
+import { AppFont, loadFonts, wp } from "@/utils";
+import { GradientWrapper, LoadingIndicator } from "@/components";
 import passfortIcon from "../assets/Icons/passfortIcon.png";
 
 export default function Index() {
   const router = useRouter();
-  const [fontsLoaded] = useFonts({
-    regular: require("../assets/fonts/Mulish-Regular.ttf"),
-  });
+  const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
 
   const redirectUser = async () => {
-    if (true) {
+    if (fontsLoaded) {
       setTimeout(() => {
         router.push("/auth/Signin" as Href<string>);
       }, 3000);
@@ -25,6 +23,8 @@ export default function Index() {
   useEffect(() => {
     async function prepare() {
       try {
+        await loadFonts();
+        setFontsLoaded(true);
         await SplashScreen.preventAutoHideAsync();
         if (fontsLoaded) {
           redirectUser();
@@ -38,6 +38,10 @@ export default function Index() {
 
     prepare();
   }, [router, fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <GradientWrapper style={styles.container}>
