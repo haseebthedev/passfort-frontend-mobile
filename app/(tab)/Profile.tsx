@@ -7,8 +7,10 @@ import { PasswordCard_Data } from "@/constants";
 import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
 import profilePicture from "../../assets/images/Profile10.png";
+import { useAuthStore } from "@/store";
 
 const Profile = () => {
+  const { user } = useAuthStore();
   const onEditProfilePress = () => router.push("/profile/EditProfile");
 
   return (
@@ -22,7 +24,7 @@ const Profile = () => {
 
       <View style={styles.container}>
         <Image source={profilePicture} style={styles.profilePicture} />
-        <AppText text="User Name" type="heading" />
+        <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
         <AppButton
           text="Edit profile"
           preset="link"

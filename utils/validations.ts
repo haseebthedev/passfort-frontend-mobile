@@ -32,6 +32,7 @@ export const editProfileValidationSchema = yup.object().shape({
   email: yup.string().required("Email address is required!").email("Please enter a valid email").label("Email Address"),
   phoneNumber: yup
     .string()
+    .optional()
     .required("Phone number is required!")
     .matches(
       /^\+?[\d\s()-]{7,15}$/,

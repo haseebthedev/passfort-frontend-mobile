@@ -4,18 +4,18 @@ import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { EditProfileI } from "@/interfaces";
 import { useAuthStore } from "@/store";
+import { useFormikHook } from "@/hooks";
 import { editProfileValidationSchema, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, GradientWrapper, TextInput } from "@/components";
 import profilePicture from "../../assets/images/Profile10.png";
-import { useFormikHook } from "@/hooks";
 
 const EditProfile = () => {
   const { reset, user } = useAuthStore();
 
   const validationSchema = editProfileValidationSchema;
   const initialValues: EditProfileI = {
-    name: user?.first_name || user?.last_name ? `${user.first_name} ${user.last_name}` : "",
+    name: user?.name ?? "",
     email: user?.email ?? "",
     phoneNumber: "",
   };
@@ -24,7 +24,6 @@ const EditProfile = () => {
     try {
       console.log(email, name, phoneNumber);
       Keyboard.dismiss();
-      reset();
       router.back();
     } catch (err) {
       console.log("error === ", err);
@@ -37,10 +36,7 @@ const EditProfile = () => {
     initialValues
   );
 
-  const onCancelPress = () => {
-    reset();
-    router.push("/auth/Signin");
-  };
+  const onCancelPress = () => router.back();
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>

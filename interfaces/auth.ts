@@ -1,8 +1,7 @@
 export type UserI = {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  name: string;
   picture: string | null;
   location: string | null;
   isFirstSignIn: boolean;
@@ -26,5 +25,5 @@ export type SigninI = Pick<SignupI, "email" | "password">;
 export interface EditProfileI {
   name: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
 }

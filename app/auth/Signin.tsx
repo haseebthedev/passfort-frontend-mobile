@@ -23,8 +23,7 @@ const Signin = () => {
       login({
         id: "123",
         email,
-        first_name: "John",
-        last_name: "Doe",
+        name: "John Doe",
         picture: "https://via.placeholder.com/150",
         location: "New York, USA",
         isFirstSignIn,

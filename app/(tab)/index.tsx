@@ -6,13 +6,20 @@ import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
 import { AppFont } from "@/utils";
 import { router } from "expo-router";
+import { useAuthStore } from "@/store";
 
 const HeaderComponent = () => {
+  const { user } = useAuthStore();
   return (
     <View>
       <View style={styles.greetingContainer}>
         <View>
-          <AppText text="Hello Username" type="heading" numberOfLines={1} style={styles.username} />
+          <AppText
+            text={`Hello ${user?.name ?? "Username"}`}
+            type="heading"
+            numberOfLines={1}
+            style={styles.username}
+          />
           <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
         </View>
         <AppLogo style={styles.appLogo} />
@@ -45,6 +52,7 @@ const Home = () => {
     <GradientWrapper>
       <FlatList
         data={PasswordItem_Data}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <PasswordItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => <HeaderComponent />}

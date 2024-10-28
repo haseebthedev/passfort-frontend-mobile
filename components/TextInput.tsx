@@ -35,7 +35,7 @@ export const TextInput: React.FC<TextInputI> = ({
   icon,
   onIconPress,
   secureInput = false,
-  visible = false,
+  visible,
   ...props
 }) => {
   const [isPasswordVisible, setPasswordVisible] = useState<boolean>(!secureInput);
