@@ -1,17 +1,8 @@
 import React, { ComponentType } from "react";
-import {
-  Pressable,
-  PressableProps,
-  PressableStateCallbackType,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
-import { AppFont, hp, loadFonts, wp } from "@/utils";
+import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
+import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
-import { useFonts } from "expo-font";
 
 type Presets = keyof typeof viewPresets;
 

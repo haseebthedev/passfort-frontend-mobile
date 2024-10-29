@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -6,60 +6,51 @@ import { hp, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, SmallAppButton } from "@/components";
+import { AppHeader, AppText, GradientWrapper, SmallAppButton } from "@/components";
 
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
   const { id } = useLocalSearchParams();
-  const [passwordDetails, setPasswordDetails] = useState<PasswordItemType>({
-    icon: undefined,
-    username: "",
-    email: "",
-    id: "",
-    passwordText: "",
-    type: "App",
-    platform: "",
-    address: "",
-  });
+  const [passwordDetails, setPasswordDetails] = useState<PasswordItemType | null>(null);
 
   useEffect(() => {
     const password = PasswordItem_Data.find((item) => item.id === id);
-    if (password) {
-      setPasswordDetails(password);
-    }
-  }, []);
+    setPasswordDetails(password ?? null);
+  }, [id]);
+
+  const handleBackPress = useCallback(() => router.back(), []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Password Details" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+      <AppHeader title="Password Details" leftIconName="chevron-back" onLeftIconPress={handleBackPress} />
 
       <View style={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.infoContainer}>
             <AppText text="Type" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.type} type="default" />
+            <AppText text={passwordDetails?.type ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.platform} type="default" />
+            <AppText text={passwordDetails?.platform ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.address} type="default" />
+            <AppText text={passwordDetails?.address ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Usermame" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.username} type="default" />
+            <AppText text={passwordDetails?.username ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Email" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.email} type="default" />
+            <AppText text={passwordDetails?.email ?? ""} type="default" />
           </View>
         </View>
 
         <View style={styles.passwordActionContainer}>
-          <AppText text={passwordDetails.passwordText} type="passwordText" />
+          <AppText text={passwordDetails?.passwordText ?? ""} type="passwordText" />
           <SmallAppButton text="Copy" />
 
           <View style={styles.buttonsContainer}>
