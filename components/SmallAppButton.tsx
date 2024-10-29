@@ -115,7 +115,7 @@ const textPresets: Record<Presets, StyleProp<TextStyle>> = {
       textDecorationLine: "underline",
       color: colorPalette.primaryBg.secondaryLightGreen,
       fontWeight: Fonts.weight.md,
-      fontSize: 16,
+      fontSize: Fonts.size.sm,
     },
   ],
 };

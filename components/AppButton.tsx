@@ -1,8 +1,8 @@
 import React, { ComponentType } from "react";
-import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
 import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
+import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 
 type Presets = keyof typeof viewPresets;
 
@@ -92,7 +92,7 @@ const viewPresets = {
     },
   ] as StyleProp<ViewStyle>,
   filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.secondaryLightGreen }] as StyleProp<ViewStyle>,
-  link: [{ marginHorizontal: Spacing.xxs }] as StyleProp<ViewStyle>,
+  link: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
 };
 
 const textPresets: Record<Presets, StyleProp<TextStyle>> = {
@@ -105,7 +105,7 @@ const textPresets: Record<Presets, StyleProp<TextStyle>> = {
       textDecorationLine: "underline",
       color: colorPalette.primaryBg.secondaryLightGreen,
       fontWeight: Fonts.weight.md,
-      fontSize: 16,
+      fontSize: Fonts.size.sm,
     },
   ],
 };

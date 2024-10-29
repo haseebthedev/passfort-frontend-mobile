@@ -1,20 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
+import { Password_Type } from "@/constants";
 import { AppFont, hp, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  Dropdown,
+  GradientWrapper,
+  KeyboardResponsiveHOC,
+  TextInput,
+} from "@/components";
 
 const CreatePassword = () => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<string | null>(null);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+      <AppHeader title="New Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
       <KeyboardResponsiveHOC>
-        <AppHeader title="New Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
         <View style={styles.container}>
           <AppText text="Credentials" type="label" style={styles.heading} />
           <AppText text="Type" type="subHeading" style={styles.infoHeading} />
-          <TextInput placeholder="Select" />
+          <Dropdown open={open} value={value} items={Password_Type} setOpen={setOpen} setValue={setValue} />
 
           <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
           <TextInput placeholder="Enter Your Platform" />

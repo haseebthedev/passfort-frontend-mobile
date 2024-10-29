@@ -17,6 +17,7 @@ export type AppTextI = TextProps & {
     | "description"
     | "astericPasswordText"
     | "passwordText"
+    | "passwordLength"
     | "errorText"
     | "detail";
   style?: StyleProp<TextStyle>;
@@ -37,6 +38,7 @@ const typeStyles: Record<NonNullable<AppTextI["type"]>, TextStyle | undefined> =
   passwordText: Typography.passwordText,
   errorText: Typography.errorText,
   detail: Typography.detail,
+  passwordLength: Typography.passwordLength,
 };
 
 export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) => {

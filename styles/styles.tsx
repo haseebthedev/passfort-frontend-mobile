@@ -132,6 +132,11 @@ export const Typography = StyleSheet.create({
     fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
+  passwordLength: {
+    fontSize: hp(8.6),
+    fontFamily: AppFont.bold,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
   errorText: {
     fontSize: Fonts.size.sm,
     fontFamily: AppFont.regular,
@@ -154,7 +159,7 @@ export const FormsStyle = StyleSheet.create({
     fontFamily: AppFont.regular,
   },
   formLabel: {
-    marginVertical: hp(1),
+    marginVertical: Spacing.xs,
   },
 });
 

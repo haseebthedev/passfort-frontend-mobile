@@ -31,7 +31,7 @@ const GeneratedPassword = () => {
 
           <View style={styles.passwordDetails}>
             <AppText text="Characters" style={styles.passwordDetailLabel} type="label" />
-            <AppText text="20" style={styles.lengthOfPassword} />
+            <AppText text="20" type="passwordLength" />
 
             <View style={styles.arrowButtons}>
               <TouchableWithoutFeedback>
@@ -115,10 +115,6 @@ const styles = StyleSheet.create({
   },
   passwordDetailLabel: {
     fontFamily: AppFont.semiBold,
-  },
-  lengthOfPassword: {
-    fontSize: hp(8.6),
-    fontFamily: AppFont.bold,
   },
   arrowButtons: {
     flexDirection: "row",

@@ -2,8 +2,8 @@ import React from "react";
 import { Image, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import { EditProfileI } from "@/interfaces";
 import { useAuthStore } from "@/store";
+import { EditProfileI } from "@/interfaces";
 import { useFormikHook } from "@/hooks";
 import { profilePicture } from "@/assets";
 import { editProfileValidationSchema, wp } from "@/utils";
@@ -38,13 +38,18 @@ const EditProfile = () => {
 
   const onCancelPress = () => router.back();
 
+  const onEditPicturePress = () => {
+    Keyboard.dismiss();
+    console.log("okwww");
+  };
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Edit Profile" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
         <View style={styles.alignCenter}>
           <Image source={profilePicture} style={styles.profilePicture} />
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onEditPicturePress}>
             <View style={styles.changePicture}>
               <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
             </View>

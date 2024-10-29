@@ -30,10 +30,9 @@ const Signup = () => {
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <KeyboardResponsiveHOC containerStyle={styles.container} scrollViewStyle={styles.scrollViewStyle}>
-        <AppLogo />
-
+      <KeyboardResponsiveHOC containerStyle={styles.container}>
         <View style={styles.form}>
+          <AppLogo />
           <View style={styles.inputContainer}>
             <View style={styles.title}>
               <AppText text="Sign Up" type="title" />
@@ -75,14 +74,13 @@ const Signup = () => {
               <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="link" />
             </View>
           </View>
-
-          <View style={styles.termsAndConditions}>
-            <AppText text="Terms & Conditions" style={styles.conditions} type="subHeading" />
-            <AppText text=" and " style={styles.defaultText} type="subHeading" />
-            <AppText text="Privacy policy" style={styles.policy} type="subHeading" />
-          </View>
         </View>
       </KeyboardResponsiveHOC>
+      <View style={styles.termsAndConditions}>
+        <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
+        <AppText text=" and " type="default" />
+        <AppText text="Privacy policy" style={styles.policy} type="default" />
+      </View>
     </GradientWrapper>
   );
 };
@@ -93,19 +91,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollViewStyle: {
-    flexGrow: 1,
-    paddingTop: Spacing.sm,
-  },
   title: {
     paddingVertical: Spacing.md,
     alignSelf: "center",
   },
   form: {
-    flex: 1,
+    paddingTop: Spacing.sm,
     justifyContent: "space-between",
   },
-  inputContainer: {},
+  inputContainer: {
+    flexGrow: 1,
+  },
   actionGroup: {
     flexDirection: "row",
     alignItems: "center",
@@ -126,11 +122,8 @@ const styles = StyleSheet.create({
   },
   conditions: {
     textDecorationLine: "underline",
-    fontWeight: "400",
   },
-  defaultText: { fontWeight: "400" },
   policy: {
     textDecorationLine: "underline",
-    fontWeight: "400",
   },
 });

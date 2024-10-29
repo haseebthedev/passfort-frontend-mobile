@@ -1,4 +1,4 @@
-import { PasswordCardType, PasswordItemType } from "@/interfaces";
+import { itemI, PasswordCardType, PasswordItemType } from "@/interfaces";
 import { apps, social, wallets } from "@/assets";
 
 export const PasswordCard_Data: PasswordCardType[] = [
@@ -111,4 +111,11 @@ export const PasswordItem_Data: PasswordItemType[] = [
     passwordText: "LinkedInPass!",
     icon: social,
   },
+];
+
+export const Password_Type: itemI[] = [
+  { label: "Type 1", value: "Type 1" },
+  { label: "Type 2", value: "Type 2" },
+  { label: "Type 3", value: "Type 3" },
+  { label: "Type 4", value: "Type 4" },
 ];

@@ -5,8 +5,8 @@ import { Screens } from "@/enums";
 import { SigninI } from "@/interfaces";
 import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
-import { signinValidationSchema } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { AppFont, signinValidationSchema } from "@/utils";
+import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
 
 const Signin = () => {
@@ -51,50 +51,48 @@ const Signin = () => {
       <KeyboardResponsiveHOC containerStyle={styles.container} scrollViewStyle={styles.scrollViewStyle}>
         <AppLogo />
         <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <View style={styles.title}>
-              <AppText text="Sign In" type="title" />
-            </View>
+          <View style={styles.title}>
+            <AppText text="Sign In" type="title" />
+          </View>
 
-            <TextInput
-              label="Email Address"
-              value={values.email}
-              onChangeText={handleChange("email")}
-              placeholder="Enter Your Email Address"
-              onBlur={() => setFieldTouched("email")}
-              error={typeof errors.email === "string" ? errors.email : undefined}
-              visible={typeof touched.email === "boolean" ? touched.email : undefined}
-            />
-            <TextInput
-              label="Password"
-              value={values.password}
-              onChangeText={handleChange("password")}
-              placeholder="Enter Your Password"
-              secureInput={true}
-              onBlur={() => setFieldTouched("password")}
-              error={typeof errors.password === "string" ? errors.password : undefined}
-              visible={typeof touched.password === "boolean" ? touched.password : undefined}
-            />
+          <TextInput
+            label="Email Address"
+            value={values.email}
+            onChangeText={handleChange("email")}
+            placeholder="Enter Your Email Address"
+            onBlur={() => setFieldTouched("email")}
+            error={typeof errors.email === "string" ? errors.email : undefined}
+            visible={typeof touched.email === "boolean" ? touched.email : undefined}
+          />
+          <TextInput
+            label="Password"
+            value={values.password}
+            onChangeText={handleChange("password")}
+            placeholder="Enter Your Password"
+            secureInput={true}
+            onBlur={() => setFieldTouched("password")}
+            error={typeof errors.password === "string" ? errors.password : undefined}
+            visible={typeof touched.password === "boolean" ? touched.password : undefined}
+          />
 
-            <View style={styles.actionGroup}>
-              <Checkbox label="Remember me" />
-              <AppButton text="Forget Password?" onPress={() => {}} preset="link" />
-            </View>
+          <View style={styles.actionGroup}>
+            <Checkbox label="Remember me" />
+            <AppButton text="Forget Password?" onPress={() => {}} preset="link" />
+          </View>
 
-            <AppButton text="Sign In" onPress={handleSubmit} />
+          <AppButton text="Sign In" onPress={handleSubmit} />
 
-            <View style={styles.linkRow}>
-              <AppText text="Don’t have an account?" type="label" />
-              <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="link" />
-            </View>
+          <View style={styles.linkRow}>
+            <AppText text="Don’t have an account?" type="label" />
+            <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="link" />
           </View>
         </View>
-        <View style={styles.termsAndConditions}>
-          <AppText text="Terms & Conditions" style={styles.conditions} type="subHeading" />
-          <AppText text=" and " style={styles.defaultText} type="subHeading" />
-          <AppText text="Privacy policy" style={styles.policy} type="subHeading" />
-        </View>
       </KeyboardResponsiveHOC>
+      <View style={styles.termsAndConditions}>
+        <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
+        <AppText text=" and " type="default" />
+        <AppText text="Privacy policy" style={styles.policy} type="default" />
+      </View>
     </GradientWrapper>
   );
 };
@@ -114,10 +112,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   form: {
-    flex: 1,
+    // flexGrow: 1,
     justifyContent: "space-between",
   },
-  inputContainer: {},
   actionGroup: {
     flexDirection: "row",
     alignItems: "center",
@@ -138,13 +135,8 @@ const styles = StyleSheet.create({
   },
   conditions: {
     textDecorationLine: "underline",
-    fontWeight: "400",
-  },
-  defaultText: {
-    fontWeight: "400",
   },
   policy: {
     textDecorationLine: "underline",
-    fontWeight: "400",
   },
 });

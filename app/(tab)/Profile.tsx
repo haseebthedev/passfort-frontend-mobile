@@ -1,13 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Image, FlatList } from "react-native";
 import { router } from "expo-router";
+import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
 import { profilePicture } from "@/assets";
 import { capitalize, hp, wp } from "@/utils";
 import { PasswordCard_Data, UserInfo_Data } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
-import { Screens } from "@/enums";
 
 const Profile = () => {
   const { user } = useAuthStore();
@@ -25,13 +25,7 @@ const Profile = () => {
       <View style={styles.container}>
         <Image source={profilePicture} style={styles.profilePicture} />
         <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
-        <AppButton
-          text="Edit profile"
-          preset="link"
-          style={styles.editButton}
-          textStyle={styles.editButtonText}
-          onPress={onEditProfilePress}
-        />
+        <AppButton text="Edit profile" preset="link" onPress={onEditProfilePress} />
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -68,12 +62,6 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
     marginBottom: Spacing.md,
   },
-  editButton: {
-    marginVertical: Spacing.xs,
-  },
-  editButtonText: {
-    fontSize: hp(1.8),
-  },
   passwordCardsContainer: {
     marginVertical: Spacing.md,
     gap: Spacing.md,
@@ -89,7 +77,7 @@ const styles = StyleSheet.create({
   },
   infoHeading: {
     color: colorPalette.primaryBg.primaryGrey,
-    marginBottom: hp(0.5),
+    marginBottom: Spacing.xxs,
     fontWeight: "500",
   },
 });
