@@ -1,7 +1,5 @@
 import { PasswordCardType, PasswordItemType } from "@/interfaces";
-import apps from "../assets/Icons/apps.png";
-import social from "../assets/Icons/social.png";
-import wallet from "../assets/Icons/wallets.png";
+import { apps, social, wallets } from "@/assets";
 
 export const PasswordCard_Data: PasswordCardType[] = [
   {
@@ -20,7 +18,7 @@ export const PasswordCard_Data: PasswordCardType[] = [
     id: "3",
     title: "Wallets",
     subtitle: "10 Passwords",
-    icon: wallet,
+    icon: wallets,
   },
   {
     id: "4",
@@ -38,7 +36,7 @@ export const PasswordCard_Data: PasswordCardType[] = [
     id: "6",
     title: "Wallets",
     subtitle: "10 Passwords",
-    icon: wallet,
+    icon: wallets,
   },
 ];
 

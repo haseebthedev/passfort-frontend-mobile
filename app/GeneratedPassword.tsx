@@ -3,16 +3,16 @@ import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { AppFont, hp, wp } from "@/utils";
-import { colorPalette, Fonts, iconSize, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, PasswordStatCard } from "@/components";
+import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { AppHeader, AppText, GradientWrapper, PasswordStatCard, SmallAppButton } from "@/components";
 
 const GeneratedPassword = () => {
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Generate" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+
       <View style={styles.headingContainer}>
         <AppText text="New Password" type="label" style={styles.heading} />
-
         <TouchableWithoutFeedback onPress={() => {}}>
           <View style={styles.reGenerateIcon}>
             <Entypo name="cycle" size={iconSize} />
@@ -30,7 +30,7 @@ const GeneratedPassword = () => {
           <View style={styles.graph}></View>
 
           <View style={styles.passwordDetails}>
-            <AppText text="Characters" style={{ fontFamily: AppFont.semi_bold }} type="label" />
+            <AppText text="Characters" style={styles.passwordDetailLabel} type="label" />
             <AppText text="20" style={styles.lengthOfPassword} />
 
             <View style={styles.arrowButtons}>
@@ -55,7 +55,7 @@ const GeneratedPassword = () => {
         </View>
 
         <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
-        <AppButton text="Copy" style={styles.copyButton} />
+        <SmallAppButton text="Copy" />
       </View>
     </GradientWrapper>
   );
@@ -84,19 +84,13 @@ const styles = StyleSheet.create({
   heading: {
     color: colorPalette.primaryBg.secondayGrey,
   },
-  copyButton: {
-    paddingVertical: 0,
-    width: wp(40),
-    height: hp(5.8),
-    borderRadius: hp(2),
-  },
   passwordTypeContainer: {
     borderWidth: wp(0.2),
     borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: wp(10),
     paddingVertical: Spacing.xs,
     paddingHorizontal: Spacing.md,
-    backgroundColor: colorPalette.primaryBg.buttonText,
+    backgroundColor: colorPalette.primaryBg.primaryText,
   },
   passwordTypeText: {
     color: colorPalette.primaryBg.secondaryLightGreen,
@@ -119,6 +113,9 @@ const styles = StyleSheet.create({
     right: 0,
     top: 30,
   },
+  passwordDetailLabel: {
+    fontFamily: AppFont.semiBold,
+  },
   lengthOfPassword: {
     fontSize: hp(8.6),
     fontFamily: AppFont.bold,
@@ -135,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: wp(0.2),
     borderColor: colorPalette.primaryBg.borderColor2,
-    backgroundColor: colorPalette.primaryBg.buttonText,
+    backgroundColor: colorPalette.primaryBg.primaryText,
   },
   passwordStatCards: {
     flexDirection: "row",

@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { Screens } from "@/enums";
 import { LayoutStyles } from "@/styles";
 import { useAuthStore } from "@/store";
 import { AppButton, AppHeader, GradientWrapper } from "@/components";
@@ -10,7 +11,7 @@ const Settings = () => {
 
   const onLogoutPress = () => {
     reset();
-    router.push("/auth/Signin");
+    router.push(Screens.Signin);
   };
 
   return (

@@ -3,7 +3,6 @@ import {
   StyleSheet,
   TextInput as InputText,
   View,
-  Text,
   StyleProp,
   ViewStyle,
   TextStyle,
@@ -11,10 +10,9 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { wp } from "@/utils";
 import { AppText } from "./AppText";
-import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
 import { ErrorMessage } from "./ErrorMessage";
+import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
 
 interface TextInputI extends TextInputProps {
   label?: string;
@@ -66,14 +64,6 @@ export const TextInput: React.FC<TextInputI> = ({
             </View>
           </TouchableWithoutFeedback>
         )}
-
-        {/* {icon && (
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <View style={styles.iconWrapper}>
-              <Entypo name={icon} size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
-            </View>
-          </TouchableWithoutFeedback>
-        )} */}
       </View>
 
       {error && visible && <ErrorMessage error={error} visible={visible} />}
@@ -91,13 +81,8 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     position: "absolute",
-    right: wp(3),
-    paddingHorizontal: 8,
-  },
-  error: {
-    marginTop: 4,
-    color: "red",
-    fontSize: 12,
+    right: Spacing.sm,
+    padding: Spacing.xs,
   },
 });
 

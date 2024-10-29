@@ -20,7 +20,7 @@ export const PasswordStatCard = ({ label, number }: PasswordStatCardProps) => {
 const styles = StyleSheet.create({
   card: {
     borderWidth: wp(0.2),
-    backgroundColor: colorPalette.primaryBg.buttonText,
+    backgroundColor: colorPalette.primaryBg.primaryText,
     borderColor: colorPalette.primaryBg.borderColor2,
     padding: Spacing.sm,
     borderRadius: hp(2.5),
@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
     color: colorPalette.primaryBg.secondayGrey,
   },
   length: {
-    fontFamily: AppFont.semi_bold,
+    fontFamily: AppFont.semiBold,
   },
 });

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
-import { Href, useRouter } from "expo-router";
-import { useFonts } from "expo-font";
-
-import { AppFont, loadFonts, wp } from "@/utils";
+import { useRouter } from "expo-router";
+import { Screens } from "@/enums";
+import { passfortIcon } from "@/assets";
+import { loadFonts, wp } from "@/utils";
 import { GradientWrapper, LoadingIndicator } from "@/components";
-import passfortIcon from "../assets/Icons/passfortIcon.png";
 
 export default function Index() {
   const router = useRouter();
@@ -15,7 +14,7 @@ export default function Index() {
   const redirectUser = async () => {
     if (fontsLoaded) {
       setTimeout(() => {
-        router.push("/auth/Signin" as Href<string>);
+        router.push(Screens.Signin);
       }, 3000);
     }
   };

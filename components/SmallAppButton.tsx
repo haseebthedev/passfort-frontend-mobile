@@ -32,7 +32,7 @@ interface ButtonProps extends PressableProps {
   onPress?: () => void;
 }
 
-export function AppButton(props: ButtonProps) {
+export function SmallAppButton(props: ButtonProps) {
   const {
     text,
     style,
@@ -72,12 +72,13 @@ export function AppButton(props: ButtonProps) {
 }
 
 const baseViewStyle: ViewStyle = {
+  width: wp(41.5),
+  height: hp(5.8),
+  borderRadius: hp(2),
   flexDirection: "row",
-  alignSelf: "stretch",
-  borderRadius: hp(2.5),
+  alignSelf: "center",
   justifyContent: "center",
   alignItems: "center",
-  paddingVertical: Spacing.md,
   marginVertical: Spacing.md,
   overflow: "hidden",
 };

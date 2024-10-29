@@ -18,7 +18,7 @@ export const colorPalette = {
     primaryLightGreenBg: "rgba(126, 244, 150, 0.05)",
     secondaryLightGreenBg: "rgba(218, 255, 225, 0.05)",
 
-    buttonText: "#101F12",
+    primaryText: "#101F12",
 
     primaryRed: "#FD2828FF",
   },
@@ -68,6 +68,7 @@ export const Typography = StyleSheet.create({
   default: {
     fontSize: Fonts.size.sm,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.regular,
   },
   title: {
     fontSize: Fonts.size.display,
@@ -89,7 +90,7 @@ export const Typography = StyleSheet.create({
     fontSize: Fonts.size.xl,
     letterSpacing: 0.1,
     color: colorPalette.primaryBg.primaryWhite,
-    fontFamily: AppFont.semi_bold,
+    fontFamily: AppFont.semiBold,
   },
   primaryHeading: {
     fontSize: Fonts.size.md,
@@ -104,7 +105,7 @@ export const Typography = StyleSheet.create({
   subHeading: {
     fontSize: Fonts.size.sm,
     color: colorPalette.primaryBg.primaryWhite,
-    fontFamily: AppFont.semi_bold,
+    fontFamily: AppFont.semiBold,
   },
   description: {
     fontSize: Fonts.size.xs,
@@ -124,7 +125,7 @@ export const Typography = StyleSheet.create({
   astericPasswordText: {
     fontSize: Fonts.size.xxl,
     color: colorPalette.primaryBg.primaryWhite,
-    fontFamily: AppFont.semi_bold,
+    fontFamily: AppFont.semiBold,
   },
   passwordText: {
     fontSize: hp(3.3),

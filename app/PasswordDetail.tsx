@@ -6,7 +6,7 @@ import { hp, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
+import { AppButton, AppHeader, AppText, GradientWrapper, SmallAppButton } from "@/components";
 
 const iconSize = wp(5.5);
 
@@ -60,7 +60,7 @@ const PasswordDetail = () => {
 
         <View style={styles.passwordActionContainer}>
           <AppText text={passwordDetails.passwordText} type="passwordText" />
-          <AppButton text="Copy" style={styles.copyButton} />
+          <SmallAppButton text="Copy" />
 
           <View style={styles.buttonsContainer}>
             <TouchableWithoutFeedback onPress={() => console.log("Trash icon pressed")}>
@@ -136,11 +136,5 @@ const styles = StyleSheet.create({
     borderWidth: wp(0.2),
     backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
     borderColor: colorPalette.primaryBg.borderColor2,
-  },
-  copyButton: {
-    paddingVertical: 0,
-    width: wp(40),
-    height: hp(5.8),
-    borderRadius: hp(2),
   },
 });

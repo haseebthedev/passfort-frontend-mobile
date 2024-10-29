@@ -1,12 +1,13 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import { router } from "expo-router";
 import { wp } from "@/utils";
+import { Screens } from "@/enums";
+import { AppFont } from "@/utils";
+import { useAuthStore } from "@/store";
 import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
-import { AppFont } from "@/utils";
-import { router } from "expo-router";
-import { useAuthStore } from "@/store";
 
 const HeaderComponent = () => {
   const { user } = useAuthStore();
@@ -31,7 +32,7 @@ const HeaderComponent = () => {
             <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
-          <RoundButton onPress={() => router.push("/CreatePassword")} />
+          <RoundButton onPress={() => router.push(Screens.CreatePassword)} />
         </View>
         <FlatList
           horizontal
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginBottom: Spacing.md,
-    fontFamily: AppFont.semi_bold,
+    fontFamily: AppFont.semiBold,
   },
   passwordItemsContainer: {
     paddingHorizontal: Spacing.md,

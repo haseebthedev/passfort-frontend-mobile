@@ -5,13 +5,13 @@ import { Feather } from "@expo/vector-icons";
 import { EditProfileI } from "@/interfaces";
 import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
+import { profilePicture } from "@/assets";
 import { editProfileValidationSchema, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, GradientWrapper, TextInput } from "@/components";
-import profilePicture from "../../assets/images/Profile10.png";
 
 const EditProfile = () => {
-  const { reset, user } = useAuthStore();
+  const { user } = useAuthStore();
 
   const validationSchema = editProfileValidationSchema;
   const initialValues: EditProfileI = {

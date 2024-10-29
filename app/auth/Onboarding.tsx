@@ -2,6 +2,7 @@ import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { hp, wp } from "@/utils";
+import { Screens } from "@/enums";
 import { OnboardingData } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
@@ -13,12 +14,12 @@ const Onboarding = () => {
     if (currentIndex < OnboardingData.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.push("/(tab)/");
+      router.push(Screens.Home);
     }
   };
 
   const handleSkip = () => {
-    router.push("/(tab)/");
+    router.push(Screens.Home);
   };
 
   return (

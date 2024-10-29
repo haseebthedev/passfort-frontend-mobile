@@ -1,17 +1,15 @@
 import { StyleProp, Text, type TextProps, TextStyle } from "react-native";
-import { useFonts } from "expo-font";
+import { AppFont } from "@/utils";
 import { Typography } from "@/styles";
-import { AppFont, loadFonts } from "@/utils";
 
 export type AppTextI = TextProps & {
-  text?: string;
+  text: string;
   type?:
     | "default"
     | "title"
     | "heading"
     | "subHeading"
     | "regularSubHeading"
-    | "secondaryHeading"
     | "primaryHeading"
     | "buttonTitle"
     | "primaryTitle"
@@ -24,33 +22,29 @@ export type AppTextI = TextProps & {
   style?: StyleProp<TextStyle>;
 };
 
-export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) => {
-  return (
-    <>
-      <Text
-        style={[
-          { fontFamily: AppFont.regular },
-          type === "default" ? Typography.default : undefined,
-          type === "title" ? Typography.title : undefined,
-          type === "heading" ? Typography.heading : undefined,
-          type === "subHeading" ? Typography.subHeading : undefined,
-          type === "regularSubHeading" ? Typography.regularSubHeading : undefined,
-          type === "primaryHeading" ? Typography.primaryHeading : undefined,
-          type === "label" ? Typography.label : undefined,
-          type === "buttonTitle" ? Typography.buttonTitle : undefined,
-          type === "primaryTitle" ? Typography.primaryTitle : undefined,
-          type === "astericPasswordText" ? Typography.astericPasswordText : undefined,
-          type === "passwordText" ? Typography.passwordText : undefined,
-          type === "description" ? Typography.description : undefined,
-          type === "detail" ? Typography.detail : undefined,
-          type === "errorText" ? Typography.errorText : undefined,
+const typeStyles: Record<NonNullable<AppTextI["type"]>, TextStyle | undefined> = {
+  default: Typography.default,
+  title: Typography.title,
+  heading: Typography.heading,
+  subHeading: Typography.subHeading,
+  regularSubHeading: Typography.regularSubHeading,
+  primaryHeading: Typography.primaryHeading,
+  buttonTitle: Typography.buttonTitle,
+  primaryTitle: Typography.primaryTitle,
+  label: Typography.label,
+  description: Typography.description,
+  astericPasswordText: Typography.astericPasswordText,
+  passwordText: Typography.passwordText,
+  errorText: Typography.errorText,
+  detail: Typography.detail,
+};
 
-          style,
-        ]}
-        {...rest}
-      >
-        {text}
-      </Text>
-    </>
+export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) => {
+  const textStyle = [{ fontFamily: AppFont.regular }, typeStyles[type], style];
+
+  return (
+    <Text style={textStyle} {...rest}>
+      {text}
+    </Text>
   );
 };

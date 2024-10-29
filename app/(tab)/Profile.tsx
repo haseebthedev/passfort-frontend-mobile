@@ -1,24 +1,24 @@
 import React from "react";
 import { View, StyleSheet, Image, FlatList } from "react-native";
 import { router } from "expo-router";
-import { capitalize, hp, wp } from "@/utils";
-import { UserInfo_Data } from "@/constants/auth";
-import { PasswordCard_Data } from "@/constants";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
-import profilePicture from "../../assets/images/Profile10.png";
 import { useAuthStore } from "@/store";
+import { profilePicture } from "@/assets";
+import { capitalize, hp, wp } from "@/utils";
+import { PasswordCard_Data, UserInfo_Data } from "@/constants";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
+import { Screens } from "@/enums";
 
 const Profile = () => {
   const { user } = useAuthStore();
-  const onEditProfilePress = () => router.push("/profile/EditProfile");
+  const onEditProfilePress = () => router.push(Screens.EditProfile);
 
   return (
     <GradientWrapper style={styles.mainContainer}>
       <AppHeader
         title="Profile"
         rightIconName="settings"
-        onRightIconPress={() => router.push("/Settings")}
+        onRightIconPress={() => router.push(Screens.Settings)}
         containerStyle={LayoutStyles.horizontalSpacing}
       />
 
