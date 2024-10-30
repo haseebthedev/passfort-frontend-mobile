@@ -1,9 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { StyleSheet } from "react-native";
-import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
 import { wp } from "@/utils";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/styles";
+
+const iconSize = wp(5);
 
 interface DropDownI<T> {
   open: boolean;
@@ -11,9 +13,22 @@ interface DropDownI<T> {
   items: ItemType<T>[];
   setOpen: Dispatch<SetStateAction<boolean>>;
   setValue: Dispatch<SetStateAction<T | null>>;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
 
-export const Dropdown = <T extends ValueType>({ items, open, setOpen, setValue, value }: DropDownI<T>) => {
+export const Dropdown = <T extends ValueType>({
+  items,
+  open,
+  setOpen,
+  setValue,
+  value,
+  setFieldValue,
+}: DropDownI<T>) => {
+  const handleSelectItem = (item: ItemType<T>) => {
+    setValue(item?.value ?? null);
+    setFieldValue("type", item.value);
+  };
+
   return (
     <DropDownPicker
       open={open}
@@ -23,14 +38,16 @@ export const Dropdown = <T extends ValueType>({ items, open, setOpen, setValue, 
       setValue={setValue}
       autoScroll={true}
       style={styles.container}
-      onSelectItem={(item) => setValue(item?.value ?? null)}
+      onSelectItem={handleSelectItem}
       textStyle={styles.textStyle}
-      ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={20} color={colorPalette.primaryBg.primaryGrey} />}
+      ArrowUpIconComponent={() => (
+        <Ionicons name="chevron-up" size={iconSize} color={colorPalette.primaryBg.secondayGrey} />
+      )}
       ArrowDownIconComponent={() => (
-        <Ionicons name="chevron-down" size={20} color={colorPalette.primaryBg.primaryGrey} />
+        <Ionicons name="chevron-down" size={iconSize} color={colorPalette.primaryBg.secondayGrey} />
       )}
       TickIconComponent={() => (
-        <MaterialIcons name="check" size={20} color={colorPalette.primaryBg.secondaryLightGreen} />
+        <MaterialIcons name="check" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
       )}
       dropDownContainerStyle={styles.dropDownContainerStyle}
       listMode="SCROLLVIEW"
@@ -43,13 +60,12 @@ export const Dropdown = <T extends ValueType>({ items, open, setOpen, setValue, 
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: Spacing.md,
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,
-    backgroundColor: colorPalette.primaryBg.secondaryDarkGreen,
+    backgroundColor: colorPalette.primaryBg.primaryBg,
   },
   textStyle: {
-    color: colorPalette.primaryBg.primaryGrey,
+    color: colorPalette.primaryBg.secondayGrey,
   },
   dropDownContainerStyle: {
     backgroundColor: colorPalette.primaryBg.borderColor1,

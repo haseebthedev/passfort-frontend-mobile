@@ -21,6 +21,8 @@ export const colorPalette = {
     primaryText: "#101F12",
 
     primaryRed: "#FD2828FF",
+
+    primaryBg: "#1A2A1D",
   },
 
   gradientBg: {

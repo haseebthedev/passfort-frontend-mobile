@@ -27,3 +27,11 @@ export interface EditProfileI {
   email: string;
   phoneNumber?: string;
 }
+
+export interface CreatePasswordI {
+  type: string;
+  platform: string;
+  siteAddress?: string;
+  email?: string;
+  password: string;
+}

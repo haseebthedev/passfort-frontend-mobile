@@ -14,3 +14,4 @@ export * from "./PasswordItem";
 export * from "./PasswordStatCard";
 
 export * from "./Dropdown";
+export * from "./ErrorMessage";
