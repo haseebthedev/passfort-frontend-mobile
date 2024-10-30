@@ -1,18 +1,18 @@
 import { StyleSheet, View } from "react-native";
 import { AppText } from "./AppText";
 import { AppFont, hp, wp } from "@/utils";
+import { PasswordStatType } from "@/interfaces";
 import { colorPalette, Spacing } from "@/styles";
 
 interface PasswordStatCardProps {
-  label: string;
-  number: number;
+  item: PasswordStatType;
 }
 
-export const PasswordStatCard = ({ label, number }: PasswordStatCardProps) => {
+export const PasswordStatCard = ({ item }: PasswordStatCardProps) => {
   return (
     <View style={styles.card}>
-      <AppText text={label} style={styles.label} type="subHeading" />
-      <AppText text={number.toString()} style={styles.length} type="detail" />
+      <AppText text={item.label} style={styles.label} type="subHeading" />
+      <AppText text={item.number.toString()} style={styles.length} type="detail" />
     </View>
   );
 };

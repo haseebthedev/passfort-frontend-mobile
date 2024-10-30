@@ -17,3 +17,9 @@ export type PasswordItemType = {
   passwordText: string;
   icon?: ImageSourcePropType;
 };
+
+export type PasswordStatType = {
+  id: string;
+  label: string;
+  number: number;
+};

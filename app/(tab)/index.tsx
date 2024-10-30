@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   },
   username: {
     width: wp(65),
+    fontFamily: AppFont.bold,
   },
   welcomeText: {
     marginTop: Spacing.xxs,

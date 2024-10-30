@@ -72,5 +72,4 @@ const styles = StyleSheet.create({
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,
   },
-  tickIconStyle: {},
 });

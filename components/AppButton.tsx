@@ -1,8 +1,8 @@
 import React, { ComponentType } from "react";
+import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
 import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
-import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 
 type Presets = keyof typeof viewPresets;
 
@@ -37,24 +37,16 @@ export function AppButton(props: ButtonProps) {
     ...rest
   } = props;
 
-  const getViewStyle = ({ pressed }: PressableStateCallbackType) => [
-    viewPresets[preset],
-    style,
-    pressed && pressedViewPresets[preset],
-  ];
+  const getViewStyle = () => [viewPresets[preset], style];
 
-  const getTextStyle = ({ pressed }: PressableStateCallbackType) => [
-    textPresets[preset],
-    textStyle,
-    pressed && pressedTextPresets[preset],
-  ];
+  const getTextStyle = () => [textPresets[preset], textStyle];
 
   return (
     <Pressable style={getViewStyle} accessibilityRole="button" onPress={onPress} {...rest}>
       {(state) => (
         <>
           {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} pressableState={state} />}
-          <AppText text={text} style={getTextStyle(state)} type="buttonTitle" />
+          <AppText text={text} style={getTextStyle()} type="buttonTitle" />
           {RightAccessory && <RightAccessory style={rightAccessoryStyle} pressableState={state} />}
         </>
       )}
@@ -92,32 +84,33 @@ const viewPresets = {
     },
   ] as StyleProp<ViewStyle>,
   filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.secondaryLightGreen }] as StyleProp<ViewStyle>,
-  link: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
+  primaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
+  secondaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
+  noUnderline: [
+    { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs, alignSelf: "center" },
+  ] as StyleProp<ViewStyle>,
 };
 
 const textPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
   filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
-  link: [
+  primaryLink: [
     baseTextStyle,
     {
       fontFamily: AppFont.regular,
       textDecorationLine: "underline",
       color: colorPalette.primaryBg.secondaryLightGreen,
-      fontWeight: Fonts.weight.md,
       fontSize: Fonts.size.sm,
     },
   ],
-};
-
-const pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { opacity: 0.9 },
-  filled: { opacity: 0.9 },
-  link: { opacity: 0.7 },
-};
-
-const pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: { opacity: 0.8 },
-  filled: { opacity: 0.9 },
-  link: { opacity: 0.7 },
+  secondaryLink: [
+    baseTextStyle,
+    {
+      fontFamily: AppFont.regular,
+      textDecorationLine: "underline",
+      color: colorPalette.primaryBg.primaryWhite,
+      fontSize: Fonts.size.sm,
+    },
+  ],
+  noUnderline: { textDecorationLine: "none", color: colorPalette.primaryBg.primaryWhite },
 };

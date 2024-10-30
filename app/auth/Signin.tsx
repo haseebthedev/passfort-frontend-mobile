@@ -5,8 +5,8 @@ import { Screens } from "@/enums";
 import { SigninI } from "@/interfaces";
 import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
-import { AppFont, signinValidationSchema } from "@/utils";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
+import { signinValidationSchema } from "@/utils";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
 
 const Signin = () => {
@@ -76,15 +76,15 @@ const Signin = () => {
           />
 
           <View style={styles.actionGroup}>
-            <Checkbox label="Remember me" />
-            <AppButton text="Forget Password?" onPress={() => {}} preset="link" />
+            <Checkbox label="Remember me" labelStyle={styles.labelStyle} />
+            <AppButton text="Forget Password?" onPress={() => {}} preset="primaryLink" />
           </View>
 
           <AppButton text="Sign In" onPress={handleSubmit} />
 
           <View style={styles.linkRow}>
             <AppText text="Don’t have an account?" type="label" />
-            <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="link" />
+            <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="primaryLink" />
           </View>
         </View>
       </KeyboardResponsiveHOC>
@@ -110,10 +110,13 @@ const styles = StyleSheet.create({
   title: {
     paddingVertical: Spacing.md,
     alignSelf: "center",
+    marginBottom: Spacing.lg,
   },
   form: {
-    // flexGrow: 1,
     justifyContent: "space-between",
+  },
+  labelStyle: {
+    color: colorPalette.primaryBg.primaryGrey,
   },
   actionGroup: {
     flexDirection: "row",
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   linkRow: {
-    marginTop: Spacing.sm,
+    marginTop: Spacing.xs,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

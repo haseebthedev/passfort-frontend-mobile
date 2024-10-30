@@ -71,7 +71,7 @@ const Signup = () => {
 
             <View style={styles.linkRow}>
               <AppText text="Already have an account?" type="label" />
-              <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="link" />
+              <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
             </View>
           </View>
         </View>

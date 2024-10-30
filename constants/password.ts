@@ -1,4 +1,4 @@
-import { itemI, PasswordCardType, PasswordItemType } from "@/interfaces";
+import { itemI, PasswordCardType, PasswordItemType, PasswordStatType } from "@/interfaces";
 import { apps, social, wallets } from "@/assets";
 
 export const PasswordCard_Data: PasswordCardType[] = [
@@ -118,4 +118,10 @@ export const Password_Type: itemI[] = [
   { label: "Type 2", value: "Type 2" },
   { label: "Type 3", value: "Type 3" },
   { label: "Type 4", value: "Type 4" },
+];
+
+export const PasswordStats_Data: PasswordStatType[] = [
+  { id: "1", label: "Type 1", number: 10 },
+  { id: "2", label: "Type 2", number: 4 },
+  { id: "3", label: "Type 3", number: 8 },
 ];

@@ -25,7 +25,7 @@ const Profile = () => {
       <View style={styles.container}>
         <Image source={profilePicture} style={styles.profilePicture} />
         <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
-        <AppButton text="Edit profile" preset="link" onPress={onEditProfilePress} />
+        <AppButton text="Edit profile" preset="primaryLink" onPress={onEditProfilePress} />
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}

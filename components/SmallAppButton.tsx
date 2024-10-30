@@ -1,17 +1,8 @@
 import React, { ComponentType } from "react";
-import {
-  Pressable,
-  PressableProps,
-  PressableStateCallbackType,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
-import { AppFont, hp, loadFonts, wp } from "@/utils";
+import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
+import { AppFont, hp, wp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
-import { useFonts } from "expo-font";
 
 type Presets = keyof typeof viewPresets;
 
@@ -46,24 +37,16 @@ export function SmallAppButton(props: ButtonProps) {
     ...rest
   } = props;
 
-  const getViewStyle = ({ pressed }: PressableStateCallbackType) => [
-    viewPresets[preset],
-    style,
-    pressed && pressedViewPresets[preset],
-  ];
+  const getViewStyle = () => [viewPresets[preset], style];
 
-  const getTextStyle = ({ pressed }: PressableStateCallbackType) => [
-    textPresets[preset],
-    textStyle,
-    pressed && pressedTextPresets[preset],
-  ];
+  const getTextStyle = () => [textPresets[preset], textStyle];
 
   return (
     <Pressable style={getViewStyle} accessibilityRole="button" onPress={onPress} {...rest}>
       {(state) => (
         <>
           {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} pressableState={state} />}
-          <AppText text={text} style={getTextStyle(state)} type="buttonTitle" />
+          <AppText text={text} style={getTextStyle()} type="buttonTitle" />
           {RightAccessory && <RightAccessory style={rightAccessoryStyle} pressableState={state} />}
         </>
       )}
@@ -118,16 +101,4 @@ const textPresets: Record<Presets, StyleProp<TextStyle>> = {
       fontSize: Fonts.size.sm,
     },
   ],
-};
-
-const pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { opacity: 0.9 },
-  filled: { opacity: 0.9 },
-  link: { opacity: 0.7 },
-};
-
-const pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: { opacity: 0.8 },
-  filled: { opacity: 0.9 },
-  link: { opacity: 0.7 },
 };

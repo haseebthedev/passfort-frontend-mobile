@@ -82,14 +82,9 @@ const EditProfile = () => {
             error={typeof errors.phoneNumber === "string" ? errors.phoneNumber : undefined}
             visible={typeof touched.phoneNumber === "boolean" ? touched.phoneNumber : undefined}
           />
+
           <AppButton text="Save" onPress={handleSubmit} preset="filled" />
-          <AppButton
-            text="Cancel"
-            preset="link"
-            onPress={onCancelPress}
-            textStyle={styles.cancelButtonText}
-            style={styles.spacing}
-          />
+          <AppButton text="Cancel" preset="noUnderline" onPress={onCancelPress} />
         </View>
       </ScrollView>
     </GradientWrapper>
@@ -109,13 +104,6 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
-  },
-  cancelButtonText: {
-    color: colorPalette.primaryBg.primaryWhite,
-    textDecorationLine: "none",
-  },
-  spacing: {
-    marginVertical: Spacing.sm,
   },
   changePicture: {
     width: wp(10),

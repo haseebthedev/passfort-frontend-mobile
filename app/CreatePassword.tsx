@@ -3,8 +3,10 @@ import { Keyboard, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { Password_Type } from "@/constants";
-import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
+import { useFormikHook } from "@/hooks";
+import { CreatePasswordI } from "@/interfaces";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
 import {
   AppButton,
   AppHeader,
@@ -15,8 +17,6 @@ import {
   KeyboardResponsiveHOC,
   TextInput,
 } from "@/components";
-import { useFormikHook } from "@/hooks";
-import { CreatePasswordI } from "@/interfaces";
 
 const CreatePassword = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -34,7 +34,6 @@ const CreatePassword = () => {
   const submit = async ({ type, platform, siteAddress, email, password }: CreatePasswordI) => {
     try {
       Keyboard.dismiss();
-
       console.log(type, platform, siteAddress, email, password);
       router.push(Screens.GeneratedPassword);
     } catch (err) {

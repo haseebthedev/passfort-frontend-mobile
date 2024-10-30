@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import AuthLayout from "./auth/_layout";
 import { Stack } from "expo-router";
 import { useAuthStore } from "@/store";
-import { useFonts } from "expo-font";
 import { loadFonts } from "@/utils";
 import { LoadingIndicator } from "@/components";
 

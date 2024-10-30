@@ -3,6 +3,8 @@ import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { AppFont, hp, wp } from "@/utils";
+import { PasswordStatType } from "@/interfaces";
+import { PasswordStats_Data } from "@/constants";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, AppText, GradientWrapper, PasswordStatCard, SmallAppButton } from "@/components";
 
@@ -25,9 +27,8 @@ const GeneratedPassword = () => {
           <AppText text="STRONG" style={styles.passwordTypeText} type="regularSubHeading" />
         </View>
 
-        {/* Graph */}
-        <View style={styles.graphContainer}>
-          <View style={styles.graph}></View>
+        <View style={styles.sliderContainer}>
+          <View style={styles.slider}></View>
 
           <View style={styles.passwordDetails}>
             <AppText text="Characters" style={styles.passwordDetailLabel} type="label" />
@@ -49,9 +50,9 @@ const GeneratedPassword = () => {
         </View>
 
         <View style={styles.passwordStatCards}>
-          <PasswordStatCard label="Characters" number={10} />
-          <PasswordStatCard label="Numbers" number={5} />
-          <PasswordStatCard label="Symbols" number={4} />
+          {PasswordStats_Data.map((item: PasswordStatType) => (
+            <PasswordStatCard item={item} />
+          ))}
         </View>
 
         <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
@@ -95,11 +96,11 @@ const styles = StyleSheet.create({
   passwordTypeText: {
     color: colorPalette.primaryBg.secondaryLightGreen,
   },
-  graphContainer: {
+  sliderContainer: {
     marginTop: Spacing.smd,
     marginBottom: Spacing.lg,
   },
-  graph: {
+  slider: {
     height: wp(58),
     width: wp(58),
     borderRadius: wp(35),
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    top: 30,
+    top: hp(4.2),
   },
   passwordDetailLabel: {
     fontFamily: AppFont.semiBold,
