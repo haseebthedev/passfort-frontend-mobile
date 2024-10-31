@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { hp } from "@/utils";
+import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
 
 const TabLayout = () => {
@@ -53,5 +53,6 @@ const styles = StyleSheet.create({
   tabBarLabelStyle: {
     marginBottom: Spacing.sm,
     fontSize: Fonts.size.sm,
+    fontFamily: AppFont.regular,
   },
 });

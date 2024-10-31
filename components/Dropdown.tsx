@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
 import { wp } from "@/utils";
-import { colorPalette } from "@/styles";
+import { colorPalette, Spacing } from "@/styles";
 
 const iconSize = wp(5);
 
@@ -40,6 +40,8 @@ export const Dropdown = <T extends ValueType>({
       style={styles.container}
       onSelectItem={handleSelectItem}
       textStyle={styles.textStyle}
+      placeholder="Select"
+      placeholderStyle={styles.placeholderStyle}
       ArrowUpIconComponent={() => (
         <Ionicons name="chevron-up" size={iconSize} color={colorPalette.primaryBg.secondayGrey} />
       )}
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.primaryBg,
+    borderRadius: wp(4),
   },
   textStyle: {
     color: colorPalette.primaryBg.secondayGrey,
@@ -71,5 +74,8 @@ const styles = StyleSheet.create({
     backgroundColor: colorPalette.primaryBg.borderColor1,
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,
+  },
+  placeholderStyle: {
+    color: colorPalette.primaryBg.primaryGrey,
   },
 });

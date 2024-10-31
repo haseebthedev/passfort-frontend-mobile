@@ -3,9 +3,9 @@ import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native"
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
-import { maskPassword, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
+import { hp, maskPassword, wp } from "@/utils";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 
 interface PasswordItemI {
   item: PasswordItemType;
@@ -27,7 +27,7 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
             <AppText
               text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
               style={passwordVisible ? styles.passwordText : styles.astericPasswordText}
-              type="astericPasswordText"
+              type={passwordVisible ? "default" : "astericPasswordText"}
               numberOfLines={1}
             />
           </View>
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
     padding: Spacing.xxs,
+    height: hp(8.42),
   },
   passwordInfoContainer: {
     flexDirection: "row",
@@ -69,12 +70,13 @@ const styles = StyleSheet.create({
     gap: Spacing.xxs,
   },
   passwordText: {
-    fontSize: Fonts.size.lg,
     width: wp(50),
+    lineHeight: hp(4),
   },
   astericPasswordText: {
     width: wp(50),
     letterSpacing: wp(0.2),
+    lineHeight: hp(4),
   },
   spacing: { marginTop: Spacing.xxs },
   subHeading: {

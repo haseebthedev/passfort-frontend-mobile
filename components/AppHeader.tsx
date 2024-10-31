@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { StyleProp, StyleSheet, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
@@ -12,6 +12,8 @@ interface AppHeaderI {
   onRightIconPress?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   titleStyle?: StyleProp<TextStyle>;
+  rightAccessory?: ReactNode;
+  leftAccessory?: ReactNode;
 }
 
 export const AppHeader = ({
@@ -22,6 +24,8 @@ export const AppHeader = ({
   onRightIconPress,
   containerStyle,
   titleStyle,
+  rightAccessory,
+  leftAccessory,
 }: AppHeaderI) => {
   return (
     <View style={[LayoutStyles.headerNavContainer, containerStyle]}>
@@ -40,6 +44,8 @@ export const AppHeader = ({
           <Ionicons name={rightIconName} style={LayoutStyles.headerIcon} size={iconSize} />
         </TouchableWithoutFeedback>
       )}
+
+      {rightAccessory && <View>{rightAccessory}</View>}
     </View>
   );
 };

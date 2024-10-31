@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Keyboard, StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { Password_Type } from "@/constants";
 import { useFormikHook } from "@/hooks";
 import { CreatePasswordI } from "@/interfaces";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
 import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
 import {
   AppButton,
@@ -17,6 +17,7 @@ import {
   KeyboardResponsiveHOC,
   TextInput,
 } from "@/components";
+import { Entypo } from "@expo/vector-icons";
 
 const CreatePassword = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -35,7 +36,6 @@ const CreatePassword = () => {
     try {
       Keyboard.dismiss();
       console.log(type, platform, siteAddress, email, password);
-      router.push(Screens.GeneratedPassword);
     } catch (err) {
       console.log("error === ", err);
     }
@@ -47,9 +47,20 @@ const CreatePassword = () => {
     initialValues
   );
 
+  const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="New Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+      <AppHeader
+        title="New Password"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+        rightAccessory={
+          <TouchableWithoutFeedback onPress={onGeneratePasswordPress}>
+            <Entypo name="cycle" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
+          </TouchableWithoutFeedback>
+        }
+      />
       <KeyboardResponsiveHOC containerStyle={styles.mainContainer} scrollViewStyle={styles.scrollViewStyle}>
         <View style={styles.container}>
           <AppText text="Credentials" type="label" style={styles.heading} />

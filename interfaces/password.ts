@@ -21,5 +21,5 @@ export type PasswordItemType = {
 export type PasswordStatType = {
   id: string;
   label: string;
-  number: number;
+  number: string;
 };

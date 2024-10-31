@@ -51,7 +51,7 @@ const GeneratedPassword = () => {
 
         <View style={styles.passwordStatCards}>
           {PasswordStats_Data.map((item: PasswordStatType) => (
-            <PasswordStatCard item={item} />
+            <PasswordStatCard item={item} key={item.id} />
           ))}
         </View>
 
