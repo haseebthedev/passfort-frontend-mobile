@@ -1,7 +1,5 @@
-import { PasswordCardType, PasswordItemType } from "@/interfaces";
-import apps from "../assets/Icons/apps.png";
-import social from "../assets/Icons/social.png";
-import wallet from "../assets/Icons/wallets.png";
+import { itemI, PasswordCardType, PasswordItemType, PasswordStatType } from "@/interfaces";
+import { apps, social, wallets } from "@/assets";
 
 export const PasswordCard_Data: PasswordCardType[] = [
   {
@@ -20,7 +18,7 @@ export const PasswordCard_Data: PasswordCardType[] = [
     id: "3",
     title: "Wallets",
     subtitle: "10 Passwords",
-    icon: wallet,
+    icon: wallets,
   },
   {
     id: "4",
@@ -38,7 +36,7 @@ export const PasswordCard_Data: PasswordCardType[] = [
     id: "6",
     title: "Wallets",
     subtitle: "10 Passwords",
-    icon: wallet,
+    icon: wallets,
   },
 ];
 
@@ -113,4 +111,16 @@ export const PasswordItem_Data: PasswordItemType[] = [
     passwordText: "LinkedInPass!",
     icon: social,
   },
+];
+
+export const Password_Type: itemI[] = [
+  { label: "Wallets", value: "Wallets" },
+  { label: "Social", value: "Social" },
+  { label: "Apps", value: "Apps" },
+];
+
+export const PasswordStats_Data: PasswordStatType[] = [
+  { id: "1", label: "Characters", number: "10" },
+  { id: "2", label: "Numbers", number: "04" },
+  { id: "3", label: "Symbols", number: "08" },
 ];

@@ -1,17 +1,26 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import { router } from "expo-router";
 import { wp } from "@/utils";
+import { Screens } from "@/enums";
+import { AppFont } from "@/utils";
+import { useAuthStore } from "@/store";
 import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
-import { AppFont } from "@/utils";
 
 const HeaderComponent = () => {
+  const { user } = useAuthStore();
   return (
     <View>
       <View style={styles.greetingContainer}>
         <View>
-          <AppText text="Hello Username" type="heading" />
+          <AppText
+            text={`Hello ${user?.name ?? "Username"}`}
+            type="heading"
+            numberOfLines={1}
+            style={styles.username}
+          />
           <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
         </View>
         <AppLogo style={styles.appLogo} />
@@ -23,7 +32,7 @@ const HeaderComponent = () => {
             <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
-          <RoundButton />
+          <RoundButton onPress={() => router.push(Screens.CreatePassword)} />
         </View>
         <FlatList
           horizontal
@@ -44,6 +53,7 @@ const Home = () => {
     <GradientWrapper>
       <FlatList
         data={PasswordItem_Data}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <PasswordItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => <HeaderComponent />}
@@ -61,6 +71,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: Spacing.xxs,
+  },
+  username: {
+    width: wp(65),
+    fontFamily: AppFont.bold,
   },
   welcomeText: {
     marginTop: Spacing.xxs,
@@ -88,7 +102,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginBottom: Spacing.md,
-    fontFamily: AppFont.semi_bold,
+    fontFamily: AppFont.semiBold,
   },
   passwordItemsContainer: {
     paddingHorizontal: Spacing.md,

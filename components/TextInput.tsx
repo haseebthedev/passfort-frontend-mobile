@@ -3,27 +3,26 @@ import {
   StyleSheet,
   TextInput as InputText,
   View,
-  Text,
   StyleProp,
   ViewStyle,
   TextStyle,
   TextInputProps,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { wp } from "@/utils";
 import { AppText } from "./AppText";
+import { ErrorMessage } from "./ErrorMessage";
 import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
 
 interface TextInputI extends TextInputProps {
   label?: string;
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
-  error?: string;
   icon?: string;
   onIconPress?: () => void;
   secureInput?: boolean;
+  error?: string;
+  visible?: boolean;
 }
 
 export const TextInput: React.FC<TextInputI> = ({
@@ -31,9 +30,10 @@ export const TextInput: React.FC<TextInputI> = ({
   containerStyle,
   inputStyle,
   error,
-  icon = "eye",
+  icon,
   onIconPress,
   secureInput = false,
+  visible,
   ...props
 }) => {
   const [isPasswordVisible, setPasswordVisible] = useState<boolean>(!secureInput);
@@ -65,7 +65,8 @@ export const TextInput: React.FC<TextInputI> = ({
           </TouchableWithoutFeedback>
         )}
       </View>
-      {error && <Text style={styles.error}>{error}</Text>}
+
+      {error && visible && <ErrorMessage error={error} visible={visible} />}
     </View>
   );
 };
@@ -80,13 +81,8 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     position: "absolute",
-    right: wp(3),
-    paddingHorizontal: 8,
-  },
-  error: {
-    marginTop: 4,
-    color: "red",
-    fontSize: 12,
+    right: Spacing.sm,
+    padding: Spacing.xs,
   },
 });
 

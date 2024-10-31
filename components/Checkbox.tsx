@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
-import { colorPalette, Spacing } from "@/styles/styles";
+import { colorPalette, iconSize, Spacing } from "@/styles/styles";
 
 interface CheckboxI {
   label?: string;
@@ -26,8 +26,8 @@ export const Checkbox = ({ label, checked = false, onChange, containerStyle, lab
       <TouchableWithoutFeedback onPress={handlePress} style={styles.spacing}>
         <MaterialIcons
           name={isChecked ? "check-box" : "check-box-outline-blank"}
-          size={24}
-          color={colorPalette.primaryBg.secondaryLightGreen}
+          size={iconSize}
+          color={isChecked ? colorPalette.primaryBg.secondaryLightGreen : colorPalette.primaryBg.primaryGrey}
           style={styles.spacing}
         />
       </TouchableWithoutFeedback>

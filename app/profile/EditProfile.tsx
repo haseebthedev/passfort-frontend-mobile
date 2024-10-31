@@ -1,21 +1,46 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import { wp } from "@/utils";
 import { useAuthStore } from "@/store";
+import { EditProfileI } from "@/interfaces";
+import { useFormikHook } from "@/hooks";
+import { profilePicture } from "@/assets";
+import { editProfileValidationSchema, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, GradientWrapper, TextInput } from "@/components";
-import profilePicture from "../../assets/images/Profile10.png";
 
 const EditProfile = () => {
-  const { reset } = useAuthStore();
+  const { user } = useAuthStore();
+
+  const validationSchema = editProfileValidationSchema;
+  const initialValues: EditProfileI = {
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    phoneNumber: "",
+  };
+
+  const submit = async ({ email, name, phoneNumber }: EditProfileI) => {
+    try {
+      console.log(email, name, phoneNumber);
+      Keyboard.dismiss();
+      router.back();
+    } catch (err) {
+      console.log("error === ", err);
+    }
+  };
+
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
+    submit,
+    validationSchema,
+    initialValues
+  );
 
   const onCancelPress = () => router.back();
 
-  const onSavePress = () => {
-    reset();
-    router.push("/auth/Signin");
+  const onEditPicturePress = () => {
+    Keyboard.dismiss();
+    console.log("okwww");
   };
 
   return (
@@ -24,24 +49,42 @@ const EditProfile = () => {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
         <View style={styles.alignCenter}>
           <Image source={profilePicture} style={styles.profilePicture} />
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onEditPicturePress}>
             <View style={styles.changePicture}>
               <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
             </View>
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.form}>
-          <TextInput label="Name" placeholder="Enter Your Name" />
-          <TextInput label="Email Address" placeholder="Enter Your Email Address" />
-          <TextInput label="Phone Number" placeholder="Enter Your Phone Number" />
-          <AppButton text="Save" onPress={onSavePress} />
-          <AppButton
-            text="Cancel"
-            preset="link"
-            onPress={onCancelPress}
-            textStyle={styles.cancelButtonText}
-            style={styles.spacing}
+          <TextInput
+            label="Name"
+            placeholder="Enter Your Name"
+            value={values.name}
+            onChangeText={handleChange("name")}
+            onBlur={() => setFieldTouched("name")}
+            error={typeof errors.name === "string" ? errors.name : undefined}
+            visible={typeof touched.name === "boolean" ? touched.name : undefined}
           />
+          <TextInput
+            label="Email Address"
+            placeholder="Enter Your Email Address"
+            value={user?.email ?? values.email}
+            onChangeText={handleChange("email")}
+            onBlur={() => setFieldTouched("email")}
+            editable={false}
+          />
+          <TextInput
+            label="Phone Number"
+            placeholder="Enter Your Phone Number"
+            value={values.phoneNumber}
+            onChangeText={handleChange("phoneNumber")}
+            onBlur={() => setFieldTouched("phoneNumber")}
+            error={typeof errors.phoneNumber === "string" ? errors.phoneNumber : undefined}
+            visible={typeof touched.phoneNumber === "boolean" ? touched.phoneNumber : undefined}
+          />
+
+          <AppButton text="Save" onPress={handleSubmit} preset="filled" />
+          <AppButton text="Cancel" preset="noUnderline" onPress={onCancelPress} />
         </View>
       </ScrollView>
     </GradientWrapper>
@@ -61,13 +104,6 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
-  },
-  cancelButtonText: {
-    color: colorPalette.primaryBg.primaryWhite,
-    textDecorationLine: "none",
-  },
-  spacing: {
-    marginVertical: Spacing.sm,
   },
   changePicture: {
     width: wp(10),

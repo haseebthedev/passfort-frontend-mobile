@@ -1,7 +1,7 @@
 import React, { ComponentType } from "react";
 import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
-import { AppFont, hp } from "@/utils";
+import { AppFont, hp, wp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
 
 type Presets = keyof typeof viewPresets;
@@ -23,7 +23,7 @@ interface ButtonProps extends PressableProps {
   onPress?: () => void;
 }
 
-export function AppButton(props: ButtonProps) {
+export function SmallAppButton(props: ButtonProps) {
   const {
     text,
     style,
@@ -55,12 +55,13 @@ export function AppButton(props: ButtonProps) {
 }
 
 const baseViewStyle: ViewStyle = {
+  width: wp(41.5),
+  height: hp(5.8),
+  borderRadius: hp(2),
   flexDirection: "row",
-  alignSelf: "stretch",
-  borderRadius: hp(2.5),
+  alignSelf: "center",
   justifyContent: "center",
   alignItems: "center",
-  paddingVertical: Spacing.md,
   marginVertical: Spacing.md,
   overflow: "hidden",
 };
@@ -84,33 +85,20 @@ const viewPresets = {
     },
   ] as StyleProp<ViewStyle>,
   filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.secondaryLightGreen }] as StyleProp<ViewStyle>,
-  primaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
-  secondaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
-  noUnderline: [
-    { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs, alignSelf: "center" },
-  ] as StyleProp<ViewStyle>,
+  link: [{ marginHorizontal: Spacing.xxs }] as StyleProp<ViewStyle>,
 };
 
 const textPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
   filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
-  primaryLink: [
+  link: [
     baseTextStyle,
     {
       fontFamily: AppFont.regular,
       textDecorationLine: "underline",
       color: colorPalette.primaryBg.secondaryLightGreen,
+      fontWeight: Fonts.weight.md,
       fontSize: Fonts.size.sm,
     },
   ],
-  secondaryLink: [
-    baseTextStyle,
-    {
-      fontFamily: AppFont.regular,
-      textDecorationLine: "underline",
-      color: colorPalette.primaryBg.primaryWhite,
-      fontSize: Fonts.size.sm,
-    },
-  ],
-  noUnderline: { textDecorationLine: "none", color: colorPalette.primaryBg.primaryWhite },
 };
