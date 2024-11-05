@@ -29,6 +29,8 @@ export const colorPalette = {
     darkGreen01: "#0A140C",
     darkGreen02: "#0A140CFF",
     lightGreen: "#396E44F0",
+
+    iconBg: "#376440FF",
   },
 };
 
@@ -187,8 +189,8 @@ export const LayoutStyles = StyleSheet.create({
     resizeMode: "contain",
   },
   cardIcon: {
-    width: wp(14.5),
-    height: wp(14.5),
+    width: wp(6.5),
+    height: wp(6.5),
   },
   horizontalSpacing: {
     paddingHorizontal: Spacing.md,

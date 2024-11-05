@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { StyleSheet } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
-import { wp } from "@/utils";
+import { AppFont, wp } from "@/utils";
 import { colorPalette, Spacing } from "@/styles";
 
 const iconSize = wp(5);
@@ -42,6 +42,9 @@ export const Dropdown = <T extends ValueType>({
       textStyle={styles.textStyle}
       placeholder="Select"
       placeholderStyle={styles.placeholderStyle}
+      dropDownContainerStyle={styles.dropDownContainerStyle}
+      labelStyle={styles.labelStyle}
+      selectedItemLabelStyle={styles.selectedLabel}
       ArrowUpIconComponent={() => (
         <Ionicons name="chevron-up" size={iconSize} color={colorPalette.primaryBg.secondayGrey} />
       )}
@@ -51,7 +54,6 @@ export const Dropdown = <T extends ValueType>({
       TickIconComponent={() => (
         <MaterialIcons name="check" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
       )}
-      dropDownContainerStyle={styles.dropDownContainerStyle}
       listMode="SCROLLVIEW"
       scrollViewProps={{
         nestedScrollEnabled: true,
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: colorPalette.primaryBg.secondayGrey,
+    fontFamily: AppFont.medium,
   },
   dropDownContainerStyle: {
     backgroundColor: colorPalette.primaryBg.borderColor1,
@@ -77,5 +80,13 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     color: colorPalette.primaryBg.primaryGrey,
+  },
+  labelStyle: {
+    fontFamily: AppFont.medium,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  selectedLabel: {
+    fontFamily: AppFont.medium,
+    color: colorPalette.primaryBg.primaryWhite,
   },
 });

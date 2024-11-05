@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { Screens } from "@/enums";
 import { Password_Type } from "@/constants";
 import { useFormikHook } from "@/hooks";
@@ -17,7 +18,6 @@ import {
   KeyboardResponsiveHOC,
   TextInput,
 } from "@/components";
-import { Entypo } from "@expo/vector-icons";
 
 const CreatePassword = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -56,8 +56,8 @@ const CreatePassword = () => {
         leftIconName="chevron-back"
         onLeftIconPress={() => router.back()}
         rightAccessory={
-          <TouchableWithoutFeedback onPress={onGeneratePasswordPress}>
-            <Entypo name="cycle" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
+          <TouchableWithoutFeedback onPress={() => router.push("/Slider")}>
+            <FontAwesome name="magic" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
           </TouchableWithoutFeedback>
         }
       />

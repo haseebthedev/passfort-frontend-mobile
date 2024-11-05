@@ -79,8 +79,6 @@ const viewPresets = {
   default: [
     baseViewStyle,
     {
-      borderWidth: 1,
-      borderColor: colorPalette.primaryBg.secondaryLightGreen,
       backgroundColor: colorPalette.primaryBg.secondaryLightGreen,
     },
   ] as StyleProp<ViewStyle>,

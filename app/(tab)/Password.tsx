@@ -1,20 +1,26 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
-import { hp } from "@/utils";
-import { LayoutStyles } from "@/styles";
-import { PasswordItemType } from "@/interfaces";
+import { SectionList, StyleSheet, View } from "react-native";
+import { groupByDate, hp } from "@/utils";
 import { PasswordItem_Data } from "@/constants";
-import { AppHeader, GradientWrapper, PasswordItem } from "@/components";
+import { LayoutStyles, Spacing } from "@/styles";
+import { AppHeader, AppText, GradientWrapper, PasswordItem } from "@/components";
 
 const Password = () => {
+  const sections = groupByDate(PasswordItem_Data);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Your Passwords" containerStyle={styles.heading} />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={PasswordItem_Data}
-        renderItem={({ item }: { item: PasswordItemType }) => <PasswordItem item={item} />}
+      <SectionList
+        sections={sections}
         keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <PasswordItem item={item} />}
+        renderSectionHeader={({ section: { title } }) => (
+          <View style={styles.sectionHeader}>
+            <AppText text={title} type="default" />
+          </View>
+        )}
+        showsVerticalScrollIndicator={false}
       />
     </GradientWrapper>
   );
@@ -25,5 +31,9 @@ export default Password;
 const styles = StyleSheet.create({
   heading: {
     marginBottom: hp(2.9),
+  },
+  sectionHeader: {
+    paddingVertical: hp(0.5),
+    marginBottom: Spacing.sm,
   },
 });

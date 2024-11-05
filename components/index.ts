@@ -12,6 +12,6 @@ export * from "./LoadingIndicator";
 export * from "./PasswordCard";
 export * from "./PasswordItem";
 export * from "./PasswordStatCard";
-
 export * from "./Dropdown";
 export * from "./ErrorMessage";
+export * from "./ArcSlider";

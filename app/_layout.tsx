@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Stack } from "expo-router";
-import { useAuthStore } from "@/store";
 import { loadFonts } from "@/utils";
+import { useAuthStore } from "@/store";
 import { LoadingIndicator } from "@/components";
 
 const RootLayout = () => {
@@ -29,6 +29,7 @@ const RootLayout = () => {
         <Stack.Screen name="PasswordDetail" />
         <Stack.Screen name="CreatePassword" />
         <Stack.Screen name="GeneratedPassword" />
+        <Stack.Screen name="Slider" />
       </Stack>
     );
   } else {

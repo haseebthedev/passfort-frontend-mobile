@@ -13,7 +13,9 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
     <TouchableWithoutFeedback onPress={() => {}}>
       <View style={styles.card}>
-        <Image source={item.icon} style={LayoutStyles.cardIcon} />
+        <View style={styles.iconContainer}>
+          <Image source={item.icon} style={LayoutStyles.cardIcon} />
+        </View>
         <AppText text={item.title} type="subHeading" numberOfLines={1} />
         <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
       </View>
@@ -23,7 +25,7 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
 
 const styles = StyleSheet.create({
   card: {
-    paddingTop: Spacing.xs,
+    paddingTop: Spacing.md,
     paddingBottom: Spacing.md,
     alignItems: "center",
     borderWidth: wp(0.1),
@@ -32,6 +34,16 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.md,
     width: wp(90) / 3.25,
     paddingHorizontal: Spacing.xs,
+  },
+  iconContainer: {
+    width: wp(11),
+    height: wp(11),
+    backgroundColor: colorPalette.gradientBg.iconBg,
+    borderRadius: wp(7),
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: Spacing.xs,
+    elevation: 1,
   },
   subTitle: {
     color: colorPalette.primaryBg.secondayGrey,

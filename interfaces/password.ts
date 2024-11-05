@@ -16,6 +16,7 @@ export type PasswordItemType = {
   platform?: string;
   passwordText: string;
   icon?: ImageSourcePropType;
+  date: string | Date;
 };
 
 export type PasswordStatType = {
