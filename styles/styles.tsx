@@ -29,8 +29,6 @@ export const colorPalette = {
     darkGreen01: "#0A140C",
     darkGreen02: "#0A140CFF",
     lightGreen: "#396E44F0",
-
-    iconBg: "#376440FF",
   },
 };
 

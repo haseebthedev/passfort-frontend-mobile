@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { router } from "expo-router";
 import { wp } from "@/utils";
@@ -7,9 +7,11 @@ import { AppFont } from "@/utils";
 import { useAuthStore } from "@/store";
 import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
-import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton } from "@/components";
+import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
 
 const HeaderComponent = () => {
+  const [searchText, setSearchText] = useState<string>("");
+
   const { user } = useAuthStore();
   return (
     <View>
@@ -25,6 +27,8 @@ const HeaderComponent = () => {
         </View>
         <AppLogo style={styles.appLogo} />
       </View>
+
+      <SearchInput value={searchText} onChangeText={setSearchText} placeholder="Search for a name" />
 
       <View style={styles.passwordCards}>
         <View style={styles.passwordsHeader}>
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: Spacing.xxs,
+    marginBottom: Spacing.sm,
   },
   username: {
     width: wp(65),
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: Spacing.lg,
+    // marginTop: Spacing.lg,
     marginBottom: Spacing.md,
   },
   appLogo: {

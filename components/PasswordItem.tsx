@@ -6,6 +6,7 @@ import { AppText } from "./AppText";
 import { PasswordItemType } from "@/interfaces";
 import { getInitials, hp, wp } from "@/utils";
 import { colorPalette, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
 
 interface PasswordItemI {
   item: PasswordItemType;
@@ -15,22 +16,24 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
   const onCopyPasswordPress = () => {};
 
   return (
-    <TouchableWithoutFeedback onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
+    <View>
       <View style={styles.passwordItemCard}>
-        <View style={styles.passwordInfoContainer}>
-          <View style={styles.imageContainer}>
-            <AppText text={getInitials(item.username ?? "User Name")} type="heading" />
-          </View>
-          <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
-        </View>
-
-        <TouchableWithoutFeedback onPress={onCopyPasswordPress}>
-          <View style={{ transform: [{ rotate: "90deg" }] }}>
-            <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} />
+        <TouchableWithoutFeedback onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
+          <View style={styles.passwordInfoContainer}>
+            <View style={styles.imageContainer}>
+              <AppText text={getInitials(item.username ?? "User Name")} type="heading" />
+            </View>
+            <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
           </View>
         </TouchableWithoutFeedback>
+
+        <View style={{ borderRadius: Spacing.lg, overflow: "hidden" }}>
+          <RippleWrapper onPress={onCopyPasswordPress} style={styles.copyButton}>
+            <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} style={styles.copyIcon} />
+          </RippleWrapper>
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   );
 };
 
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: wp(11),
     height: wp(10),
-    backgroundColor: colorPalette.gradientBg.iconBg,
+    backgroundColor: colorPalette.gradientBg.lightGreen,
     marginRight: Spacing.sm,
     borderRadius: wp(2),
     alignItems: "center",
@@ -66,5 +69,14 @@ const styles = StyleSheet.create({
   subHeading: {
     textTransform: "capitalize",
     width: wp(63),
+  },
+  copyButton: {
+    width: wp(12),
+    height: wp(12),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  copyIcon: {
+    transform: [{ rotate: "90deg" }],
   },
 });

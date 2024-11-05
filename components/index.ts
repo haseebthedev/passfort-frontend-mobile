@@ -15,3 +15,5 @@ export * from "./PasswordStatCard";
 export * from "./Dropdown";
 export * from "./ErrorMessage";
 export * from "./ArcSlider";
+export * from "./RippleWrapper";
+export * from "./SearchInput";

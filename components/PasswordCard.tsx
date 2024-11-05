@@ -1,9 +1,10 @@
 import React from "react";
-import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { hp, wp } from "@/utils";
 import { AppText } from "./AppText";
 import { PasswordCardType } from "@/interfaces";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
 
 interface PasswordCardI {
   item: PasswordCardType;
@@ -11,19 +12,25 @@ interface PasswordCardI {
 
 export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
-    <TouchableWithoutFeedback onPress={() => {}}>
-      <View style={styles.card}>
-        <View style={styles.iconContainer}>
-          <Image source={item.icon} style={LayoutStyles.cardIcon} />
+    <View style={styles.cardContainer}>
+      <RippleWrapper onPress={() => {}}>
+        <View style={styles.card}>
+          <View style={styles.iconContainer}>
+            <Image source={item.icon} style={LayoutStyles.cardIcon} />
+          </View>
+          <AppText text={item.title} type="subHeading" numberOfLines={1} />
+          <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
         </View>
-        <AppText text={item.title} type="subHeading" numberOfLines={1} />
-        <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
-      </View>
-    </TouchableWithoutFeedback>
+      </RippleWrapper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  cardContainer: {
+    borderRadius: Spacing.md,
+    overflow: "hidden",
+  },
   card: {
     paddingTop: Spacing.md,
     paddingBottom: Spacing.md,
@@ -38,7 +45,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: wp(11),
     height: wp(11),
-    backgroundColor: colorPalette.gradientBg.iconBg,
+    backgroundColor: colorPalette.gradientBg.lightGreen,
     borderRadius: wp(7),
     alignItems: "center",
     justifyContent: "center",
