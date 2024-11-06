@@ -10,7 +10,7 @@ interface SearchInputProps {
   onChangeText: (text: string) => void;
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({ placeholder = "Search name...", value, onChangeText }) => {
+export const SearchInput: React.FC<SearchInputProps> = ({ placeholder = "Search here", value, onChangeText }) => {
   return (
     <View style={styles.container}>
       <Ionicons name="search" size={wp(5)} color={colorPalette.primaryBg.primaryGrey} />

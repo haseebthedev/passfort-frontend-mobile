@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { router } from "expo-router";
-import { Entypo, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { Screens } from "@/enums";
-import { Password_Type } from "@/constants";
 import { useFormikHook } from "@/hooks";
-import { CreatePasswordI } from "@/interfaces";
+import { CreatePasswordI, itemI } from "@/interfaces";
+import { PasswordCard_Data } from "@/constants";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
 import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
 import {
@@ -22,6 +22,7 @@ import {
 const CreatePassword = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string | null>(null);
+  const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
 
   const validationSchema = createPasswordValidationSchema;
   const initialValues: CreatePasswordI = {
@@ -49,6 +50,15 @@ const CreatePassword = () => {
 
   const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
 
+  useEffect(() => {
+    const passwordCardTitles = PasswordCard_Data.map((item) => ({
+      label: item.title,
+      value: item.id,
+    }));
+
+    setDropdownItems(passwordCardTitles);
+  }, []);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader
@@ -70,7 +80,7 @@ const CreatePassword = () => {
             <Dropdown
               open={open}
               value={value}
-              items={Password_Type}
+              items={dropdownItems}
               setOpen={setOpen}
               setValue={setValue}
               setFieldValue={setFieldValue}

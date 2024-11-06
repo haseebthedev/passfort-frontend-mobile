@@ -45,10 +45,10 @@ export const createPasswordValidationSchema = yup.object().shape({
   platform: yup.string().min(3).required("Platform is required!").label("Platform"),
   siteAddress: yup
     .string()
-    .required("Site Address is required!")
+    .optional()
     .url("Please enter a valid URL starting with http:// or https://")
     .label("Site Address"),
-  email: yup.string().required("Email address is required!").email("Please enter a valid email").label("Email Address"),
+  email: yup.string().optional().email("Please enter a valid email").label("Email Address"),
   password: yup
     .string()
     .required("Password is required!")

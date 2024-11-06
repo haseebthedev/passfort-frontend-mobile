@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
 import { AppFont, wp } from "@/utils";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/styles";
 
 const iconSize = wp(5);
 
@@ -13,7 +13,7 @@ interface DropDownI<T> {
   items: ItemType<T>[];
   setOpen: Dispatch<SetStateAction<boolean>>;
   setValue: Dispatch<SetStateAction<T | null>>;
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  setFieldValue: (field: string, value: T | null, shouldValidate?: boolean) => void;
 }
 
 export const Dropdown = <T extends ValueType>({
@@ -25,8 +25,9 @@ export const Dropdown = <T extends ValueType>({
   setFieldValue,
 }: DropDownI<T>) => {
   const handleSelectItem = (item: ItemType<T>) => {
+    console.log(typeof item.value);
     setValue(item?.value ?? null);
-    setFieldValue("type", item.value);
+    setFieldValue("type", item?.value ?? null);
   };
 
   return (
@@ -57,6 +58,7 @@ export const Dropdown = <T extends ValueType>({
       listMode="SCROLLVIEW"
       scrollViewProps={{
         nestedScrollEnabled: true,
+        showsVerticalScrollIndicator: false,
       }}
     />
   );

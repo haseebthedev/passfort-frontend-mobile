@@ -28,7 +28,7 @@ const HeaderComponent = () => {
         <AppLogo style={styles.appLogo} />
       </View>
 
-      <SearchInput value={searchText} onChangeText={setSearchText} placeholder="Search for a name" />
+      <SearchInput value={searchText} onChangeText={setSearchText} />
 
       <View style={styles.passwordCards}>
         <View style={styles.passwordsHeader}>

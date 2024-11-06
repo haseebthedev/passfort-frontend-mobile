@@ -9,7 +9,7 @@ export type PasswordCardType = {
 
 export type PasswordItemType = {
   id: string;
-  type: "Social" | "App" | "Wallet";
+  type: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking";
   username?: string;
   email?: string;
   address?: string;
