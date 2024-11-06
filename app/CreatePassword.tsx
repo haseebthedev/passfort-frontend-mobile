@@ -66,7 +66,7 @@ const CreatePassword = () => {
         leftIconName="chevron-back"
         onLeftIconPress={() => router.back()}
         rightAccessory={
-          <TouchableWithoutFeedback onPress={() => router.push("/Slider")}>
+          <TouchableWithoutFeedback onPress={onGeneratePasswordPress}>
             <FontAwesome name="magic" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
           </TouchableWithoutFeedback>
         }

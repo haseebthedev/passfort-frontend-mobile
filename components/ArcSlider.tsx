@@ -4,13 +4,15 @@ import { Canvas, Circle, Path, Skia } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSharedValue } from "react-native-reanimated";
 import { polar2Canvas } from "react-native-redash";
+import { colorPalette } from "@/styles";
+import { hp, wp } from "@/utils";
 
 const { width } = Dimensions.get("window");
 
 export const ArcSlider = () => {
-  const strokeWidth = 20;
+  const strokeWidth = 9;
   const center = width / 2;
-  const r = (width - strokeWidth) / 2 - 40;
+  const r = (width - strokeWidth) / 2 - 60;
   const startAngle = Math.PI;
   const endAngle = (3 * Math.PI) / 2;
   const x1 = center - r * Math.cos(startAngle);
@@ -79,18 +81,23 @@ export const ArcSlider = () => {
     <GestureHandlerRootView style={styles.container}>
       <GestureDetector gesture={gesture}>
         <Canvas style={styles.canvas}>
-          <Path path={skiaBackgroundPath} style="stroke" strokeWidth={strokeWidth} strokeCap="round" color={"grey"} />
+          <Path
+            path={skiaBackgroundPath}
+            style="stroke"
+            strokeWidth={strokeWidth}
+            strokeCap="round"
+            color={colorPalette.primaryBg.primaryText}
+          />
           <Path
             path={skiaForegroundPath}
             style="stroke"
             strokeWidth={strokeWidth}
             strokeCap="round"
-            color={"orange"}
+            color={colorPalette.primaryBg.secondaryLightGreen}
             start={0}
             end={percentComplete}
           />
-          <Circle cx={movableCx} cy={movableCy} r={20} color="orange" style="fill" />
-          <Circle cx={movableCx} cy={movableCy} r={15} color="white" style="fill" />
+          <Circle cx={movableCx} cy={movableCy} r={10} color={colorPalette.primaryBg.primaryWhite} style="fill" />
         </Canvas>
       </GestureDetector>
     </GestureHandlerRootView>
@@ -100,9 +107,10 @@ export const ArcSlider = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: -hp(6),
   },
   canvas: {
     flex: 1,
-    height: 260,
+    transform: [{ rotate: "45deg" }],
   },
 });

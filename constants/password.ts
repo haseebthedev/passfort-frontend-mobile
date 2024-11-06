@@ -154,12 +154,6 @@ export const PasswordItem_Data: PasswordItemType[] = [
   },
 ];
 
-export const Password_Type: itemI[] = [
-  { label: "Wallets", value: "Wallets" },
-  { label: "Social", value: "Social" },
-  { label: "Apps", value: "Apps" },
-];
-
 export const PasswordStats_Data: PasswordStatType[] = [
   { id: "1", label: "Characters", number: "10" },
   { id: "2", label: "Numbers", number: "04" },

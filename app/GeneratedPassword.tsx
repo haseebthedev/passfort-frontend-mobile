@@ -6,7 +6,7 @@ import { AppFont, hp, wp } from "@/utils";
 import { PasswordStatType } from "@/interfaces";
 import { PasswordStats_Data } from "@/constants";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
-import { AppHeader, AppText, GradientWrapper, PasswordStatCard, SmallAppButton } from "@/components";
+import { AppHeader, AppText, ArcSlider, GradientWrapper, PasswordStatCard, SmallAppButton } from "@/components";
 
 const GeneratedPassword = () => {
   return (
@@ -22,7 +22,42 @@ const GeneratedPassword = () => {
         </TouchableWithoutFeedback>
       </View>
 
-      <View style={styles.container}>
+      <View style={styles.passwordTypeContainer}>
+        <AppText text="STRONG" style={styles.passwordTypeText} type="regularSubHeading" />
+      </View>
+
+      <ArcSlider />
+
+      <View style={styles.passwordDetails}>
+        <AppText text="Characters" style={styles.passwordDetailLabel} type="label" />
+        <AppText text="20" type="passwordLength" />
+
+        <View style={styles.arrowButtons}>
+          <TouchableWithoutFeedback>
+            <View style={styles.arrowButtonContainer}>
+              <Ionicons name="chevron-back" style={LayoutStyles.headerIcon} size={iconSize} />
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback>
+            <View style={styles.arrowButtonContainer}>
+              <Ionicons name="chevron-forward" style={LayoutStyles.headerIcon} size={iconSize} />
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+
+      <View style={{ alignItems: "center", marginTop: -Spacing.sm, flex: 1 }}>
+        <View style={styles.passwordStatCards}>
+          {PasswordStats_Data.map((item: PasswordStatType) => (
+            <PasswordStatCard item={item} key={item.id} />
+          ))}
+        </View>
+
+        <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
+        <SmallAppButton text="Copy" />
+      </View>
+
+      {/* <View style={styles.container}>
         <View style={styles.passwordTypeContainer}>
           <AppText text="STRONG" style={styles.passwordTypeText} type="regularSubHeading" />
         </View>
@@ -57,7 +92,7 @@ const GeneratedPassword = () => {
 
         <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
         <SmallAppButton text="Copy" />
-      </View>
+      </View> */}
     </GradientWrapper>
   );
 };
@@ -92,6 +127,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     paddingHorizontal: Spacing.md,
     backgroundColor: colorPalette.primaryBg.primaryText,
+    alignSelf: "center",
   },
   passwordTypeText: {
     color: colorPalette.primaryBg.secondaryLightGreen,
@@ -112,7 +148,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    top: hp(4.2),
+    top: hp(32),
   },
   passwordDetailLabel: {
     fontFamily: AppFont.semiBold,

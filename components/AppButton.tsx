@@ -1,14 +1,14 @@
 import React, { ComponentType } from "react";
-import { Pressable, PressableProps, PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
+import { PressableProps, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
 import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
 
 type Presets = keyof typeof viewPresets;
 
 interface ButtonAccessoryProps {
   style: StyleProp<ViewStyle>;
-  pressableState: PressableStateCallbackType;
 }
 
 interface ButtonProps extends PressableProps {
@@ -20,7 +20,7 @@ interface ButtonProps extends PressableProps {
   pressedTextStyle?: StyleProp<TextStyle>;
   RightAccessory?: ComponentType<ButtonAccessoryProps>;
   LeftAccessory?: ComponentType<ButtonAccessoryProps>;
-  onPress?: () => void;
+  onPress: () => void;
 }
 
 export function AppButton(props: ButtonProps) {
@@ -37,20 +37,25 @@ export function AppButton(props: ButtonProps) {
     ...rest
   } = props;
 
+  const getContainerStyle = () => containerPresets[preset];
+
   const getViewStyle = () => [viewPresets[preset], style];
 
   const getTextStyle = () => [textPresets[preset], textStyle];
 
   return (
-    <Pressable style={getViewStyle} accessibilityRole="button" onPress={onPress} {...rest}>
-      {(state) => (
-        <>
-          {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} pressableState={state} />}
-          <AppText text={text} style={getTextStyle()} type="buttonTitle" />
-          {RightAccessory && <RightAccessory style={rightAccessoryStyle} pressableState={state} />}
-        </>
-      )}
-    </Pressable>
+    <RippleWrapper
+      onPress={onPress}
+      style={getViewStyle()}
+      rippleColor={colorPalette.primaryBg.primaryLightGreen}
+      containerStyle={getContainerStyle()}
+    >
+      <>
+        {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} />}
+        <AppText text={text} style={getTextStyle()} type="buttonTitle" />
+        {RightAccessory && <RightAccessory style={rightAccessoryStyle} />}
+      </>
+    </RippleWrapper>
   );
 }
 
@@ -61,7 +66,6 @@ const baseViewStyle: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
   paddingVertical: Spacing.md,
-  marginVertical: Spacing.md,
   overflow: "hidden",
 };
 
@@ -73,6 +77,14 @@ const baseTextStyle: TextStyle = {
 
 const rightAccessoryStyle: ViewStyle = { marginStart: Spacing.xs, zIndex: 1 };
 const leftAccessoryStyle: ViewStyle = { marginEnd: Spacing.xs, zIndex: 1 };
+
+const containerPresets = {
+  default: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
+  filled: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
+  primaryLink: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
+  secondaryLink: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
+  noUnderline: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
+};
 
 const viewPresets = {
   default: [

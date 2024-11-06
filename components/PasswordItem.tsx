@@ -27,17 +27,18 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
           </View>
         </TouchableWithoutFeedback>
 
-        <View style={{ borderRadius: Spacing.lg, overflow: "hidden" }}>
-          <RippleWrapper onPress={onCopyPasswordPress} style={styles.copyButton}>
-            <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} style={styles.copyIcon} />
-          </RippleWrapper>
-        </View>
+        <RippleWrapper onPress={onCopyPasswordPress} style={styles.copyButton} containerStyle={styles.buttonContainer}>
+          <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} style={styles.copyIcon} />
+        </RippleWrapper>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    borderRadius: Spacing.lg,
+  },
   passwordItemCard: {
     flexDirection: "row",
     alignItems: "center",

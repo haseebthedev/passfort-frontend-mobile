@@ -12,25 +12,19 @@ interface PasswordCardI {
 
 export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
-    <View style={styles.cardContainer}>
-      <RippleWrapper onPress={() => {}}>
-        <View style={styles.card}>
-          <View style={styles.iconContainer}>
-            <Image source={item.icon} style={LayoutStyles.cardIcon} />
-          </View>
-          <AppText text={item.title} type="subHeading" numberOfLines={1} />
-          <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
+    <RippleWrapper onPress={() => {}}>
+      <View style={styles.card}>
+        <View style={styles.iconContainer}>
+          <Image source={item.icon} style={LayoutStyles.cardIcon} />
         </View>
-      </RippleWrapper>
-    </View>
+        <AppText text={item.title} type="subHeading" numberOfLines={1} />
+        <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
+      </View>
+    </RippleWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    borderRadius: Spacing.md,
-    overflow: "hidden",
-  },
   card: {
     paddingTop: Spacing.md,
     paddingBottom: Spacing.md,
