@@ -1,19 +1,21 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { AppText } from "./AppText";
+import { RippleWrapper } from "./RippleWrapper";
 import { AppFont, hp, wp } from "@/utils";
 import { PasswordStatType } from "@/interfaces";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette, Fonts, Spacing } from "@/styles";
 
 interface PasswordStatCardProps {
   item: PasswordStatType;
+  onPress: () => void;
 }
 
 export const PasswordStatCard = ({ item }: PasswordStatCardProps) => {
   return (
-    <View style={styles.card}>
-      <AppText text={item.label} style={styles.label} type="subHeading" />
+    <RippleWrapper style={styles.card}>
+      <AppText text={item.label} style={styles.label} />
       <AppText text={item.number.toString()} style={styles.length} type="detail" />
-    </View>
+    </RippleWrapper>
   );
 };
 
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colorPalette.primaryBg.secondayGrey,
+    fontSize: Fonts.size.sm,
   },
   length: {
     fontFamily: AppFont.semiBold,

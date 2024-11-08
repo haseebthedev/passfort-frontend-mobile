@@ -47,7 +47,11 @@ export function AppButton(props: ButtonProps) {
     <RippleWrapper
       onPress={onPress}
       style={getViewStyle()}
-      rippleColor={colorPalette.primaryBg.primaryLightGreen}
+      rippleColor={
+        preset === "default" || preset === "filled"
+          ? colorPalette.primaryBg.primaryLightGreen
+          : colorPalette.primaryBg.transparent
+      }
       containerStyle={getContainerStyle()}
     >
       <>
@@ -79,11 +83,26 @@ const rightAccessoryStyle: ViewStyle = { marginStart: Spacing.xs, zIndex: 1 };
 const leftAccessoryStyle: ViewStyle = { marginEnd: Spacing.xs, zIndex: 1 };
 
 const containerPresets = {
-  default: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
-  filled: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
-  primaryLink: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
-  secondaryLink: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
-  noUnderline: { marginVertical: Spacing.md, borderRadius: Spacing.lg },
+  default: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  filled: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  primaryLink: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  secondaryLink: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  noUnderline: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
 };
 
 const viewPresets = {

@@ -4,9 +4,9 @@ import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
 import { profilePicture } from "@/assets";
-import { capitalize, hp, wp } from "@/utils";
+import { capitalize, wp } from "@/utils";
+import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, UserInfo_Data } from "@/constants";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
 
 const Profile = () => {
@@ -15,12 +15,7 @@ const Profile = () => {
 
   return (
     <GradientWrapper style={styles.mainContainer}>
-      <AppHeader
-        title="Profile"
-        rightIconName="settings"
-        onRightIconPress={() => router.push(Screens.Settings)}
-        containerStyle={LayoutStyles.horizontalSpacing}
-      />
+      <AppHeader title="Profile" rightIconName="settings" onRightIconPress={() => router.push(Screens.Settings)} />
 
       <View style={styles.container}>
         <Image source={profilePicture} style={styles.profilePicture} />

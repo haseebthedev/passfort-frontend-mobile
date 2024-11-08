@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { Screens } from "@/enums";
@@ -16,6 +16,7 @@ import {
   ErrorMessage,
   GradientWrapper,
   KeyboardResponsiveHOC,
+  RippleWrapper,
   TextInput,
 } from "@/components";
 
@@ -66,9 +67,13 @@ const CreatePassword = () => {
         leftIconName="chevron-back"
         onLeftIconPress={() => router.back()}
         rightAccessory={
-          <TouchableWithoutFeedback onPress={onGeneratePasswordPress}>
+          <RippleWrapper
+            onPress={onGeneratePasswordPress}
+            style={styles.buttonStyle}
+            containerStyle={styles.buttonContainer}
+          >
             <FontAwesome name="magic" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
-          </TouchableWithoutFeedback>
+          </RippleWrapper>
         }
       />
       <KeyboardResponsiveHOC containerStyle={styles.mainContainer} scrollViewStyle={styles.scrollViewStyle}>
@@ -153,7 +158,7 @@ const styles = StyleSheet.create({
   },
   scrollViewStyle: {
     flexGrow: 1,
-    paddingTop: Spacing.sm,
+    // paddingTop: Spacing.sm,
   },
   container: {
     borderWidth: wp(0.2),
@@ -161,7 +166,6 @@ const styles = StyleSheet.create({
     borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: hp(2),
     padding: Spacing.md,
-    marginTop: Spacing.xs,
     marginBottom: Spacing.xl,
   },
   heading: {
@@ -180,5 +184,14 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     backgroundColor: colorPalette.primaryBg.primaryBg,
+  },
+  buttonContainer: {
+    borderRadius: Spacing.lg,
+  },
+  buttonStyle: {
+    width: wp(12),
+    height: wp(12),
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

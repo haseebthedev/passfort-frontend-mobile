@@ -23,6 +23,7 @@ export const colorPalette = {
     primaryRed: "#FD2828FF",
 
     primaryBg: "#1A2A1D",
+    transparent: "rgba(0,0,0,0)",
   },
 
   gradientBg: {
@@ -180,7 +181,7 @@ export const LayoutStyles = StyleSheet.create({
   headerNavContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: Spacing.md,
+    marginVertical: Spacing.sm,
   },
   headerIcon: {
     color: colorPalette.primaryBg.primaryWhite,

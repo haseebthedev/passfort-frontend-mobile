@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { wp } from "@/utils";
-import { colorPalette, iconSize } from "@/styles";
+import { colorPalette, iconSize, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
 
 interface RoundButtonI {
   onPress?: () => void;
@@ -10,11 +11,14 @@ interface RoundButtonI {
 
 export const RoundButton = ({ onPress }: RoundButtonI) => {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.buttonContainer}>
-        <AntDesign name="plus" size={iconSize} />
-      </View>
-    </TouchableWithoutFeedback>
+    <RippleWrapper
+      onPress={onPress}
+      style={styles.buttonContainer}
+      containerStyle={styles.containerStyle}
+      rippleColor={colorPalette.primaryBg.secondaryLightGreen}
+    >
+      <AntDesign name="plus" size={iconSize} />
+    </RippleWrapper>
   );
 };
 
@@ -26,5 +30,8 @@ const styles = StyleSheet.create({
     borderRadius: wp(6),
     alignItems: "center",
     justifyContent: "center",
+  },
+  containerStyle: {
+    borderRadius: Spacing.lg,
   },
 });

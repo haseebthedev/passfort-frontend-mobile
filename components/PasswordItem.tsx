@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { AppText } from "./AppText";
@@ -16,22 +16,22 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
   const onCopyPasswordPress = () => {};
 
   return (
-    <View>
-      <View style={styles.passwordItemCard}>
-        <TouchableWithoutFeedback onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
-          <View style={styles.passwordInfoContainer}>
-            <View style={styles.imageContainer}>
-              <AppText text={getInitials(item.username ?? "User Name")} type="heading" />
-            </View>
-            <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
+    <>
+      <RippleWrapper onPress={() => router.push(`/PasswordDetail?id=${item.id}`)} style={styles.passwordItemCard}>
+        <View style={styles.passwordInfoContainer}>
+          <View style={styles.imageContainer}>
+            <AppText text={getInitials(item.username ?? "User Name")} type="heading" />
           </View>
-        </TouchableWithoutFeedback>
+          <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
+        </View>
+      </RippleWrapper>
 
+      <View style={styles.copyButtonContainer}>
         <RippleWrapper onPress={onCopyPasswordPress} style={styles.copyButton} containerStyle={styles.buttonContainer}>
           <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} style={styles.copyIcon} />
         </RippleWrapper>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -70,6 +70,11 @@ const styles = StyleSheet.create({
   subHeading: {
     textTransform: "capitalize",
     width: wp(63),
+  },
+  copyButtonContainer: {
+    position: "absolute",
+    right: wp(3),
+    top: hp(1.2),
   },
   copyButton: {
     width: wp(12),

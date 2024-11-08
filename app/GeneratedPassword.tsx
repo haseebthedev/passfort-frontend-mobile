@@ -1,12 +1,20 @@
 import React from "react";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { AppFont, hp, wp } from "@/utils";
 import { PasswordStatType } from "@/interfaces";
 import { PasswordStats_Data } from "@/constants";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
-import { AppHeader, AppText, ArcSlider, GradientWrapper, PasswordStatCard, SmallAppButton } from "@/components";
+import {
+  AppHeader,
+  AppText,
+  ArcSlider,
+  GradientWrapper,
+  PasswordStatCard,
+  RippleWrapper,
+  SmallAppButton,
+} from "@/components";
 
 const GeneratedPassword = () => {
   return (
@@ -15,11 +23,14 @@ const GeneratedPassword = () => {
 
       <View style={styles.headingContainer}>
         <AppText text="New Password" type="label" style={styles.heading} />
-        <TouchableWithoutFeedback onPress={() => {}}>
-          <View style={styles.reGenerateIcon}>
-            <Entypo name="cycle" size={iconSize} />
-          </View>
-        </TouchableWithoutFeedback>
+        <RippleWrapper
+          onPress={() => {}}
+          containerStyle={styles.rippleContainer}
+          rippleColor={colorPalette.primaryBg.primaryLightGreen}
+          style={styles.reGenerateIcon}
+        >
+          <Entypo name="cycle" size={iconSize} />
+        </RippleWrapper>
       </View>
 
       <View style={styles.passwordTypeContainer}>
@@ -33,66 +44,25 @@ const GeneratedPassword = () => {
         <AppText text="20" type="passwordLength" />
 
         <View style={styles.arrowButtons}>
-          <TouchableWithoutFeedback>
-            <View style={styles.arrowButtonContainer}>
-              <Ionicons name="chevron-back" style={LayoutStyles.headerIcon} size={iconSize} />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
-            <View style={styles.arrowButtonContainer}>
-              <Ionicons name="chevron-forward" style={LayoutStyles.headerIcon} size={iconSize} />
-            </View>
-          </TouchableWithoutFeedback>
+          <RippleWrapper containerStyle={styles.arrowButtonContainer} style={styles.actionButton}>
+            <Ionicons name="chevron-back" style={LayoutStyles.headerIcon} size={iconSize} />
+          </RippleWrapper>
+          <RippleWrapper containerStyle={styles.arrowButtonContainer} style={styles.actionButton}>
+            <Ionicons name="chevron-forward" style={LayoutStyles.headerIcon} size={iconSize} />
+          </RippleWrapper>
         </View>
       </View>
 
-      <View style={{ alignItems: "center", marginTop: -Spacing.sm, flex: 1 }}>
+      <View style={styles.passwordInfo}>
         <View style={styles.passwordStatCards}>
           {PasswordStats_Data.map((item: PasswordStatType) => (
-            <PasswordStatCard item={item} key={item.id} />
+            <PasswordStatCard item={item} key={item.id} onPress={() => {}} />
           ))}
         </View>
 
         <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
-        <SmallAppButton text="Copy" />
+        <SmallAppButton text="Copy" onPress={() => {}} />
       </View>
-
-      {/* <View style={styles.container}>
-        <View style={styles.passwordTypeContainer}>
-          <AppText text="STRONG" style={styles.passwordTypeText} type="regularSubHeading" />
-        </View>
-
-        <View style={styles.sliderContainer}>
-          <View style={styles.slider}></View>
-
-          <View style={styles.passwordDetails}>
-            <AppText text="Characters" style={styles.passwordDetailLabel} type="label" />
-            <AppText text="20" type="passwordLength" />
-
-            <View style={styles.arrowButtons}>
-              <TouchableWithoutFeedback>
-                <View style={styles.arrowButtonContainer}>
-                  <Ionicons name="chevron-back" style={LayoutStyles.headerIcon} size={iconSize} />
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback>
-                <View style={styles.arrowButtonContainer}>
-                  <Ionicons name="chevron-forward" style={LayoutStyles.headerIcon} size={iconSize} />
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.passwordStatCards}>
-          {PasswordStats_Data.map((item: PasswordStatType) => (
-            <PasswordStatCard item={item} key={item.id} />
-          ))}
-        </View>
-
-        <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
-        <SmallAppButton text="Copy" />
-      </View> */}
     </GradientWrapper>
   );
 };
@@ -104,6 +74,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: Spacing.sm,
   },
+  rippleContainer: { borderRadius: Spacing.lg },
   reGenerateIcon: {
     backgroundColor: colorPalette.primaryBg.secondaryLightGreen,
     width: wp(11),
@@ -111,6 +82,7 @@ const styles = StyleSheet.create({
     borderRadius: wp(6),
     alignItems: "center",
     justifyContent: "center",
+    transform: [{ rotate: "90deg" }],
   },
   headingContainer: {
     flexDirection: "row",
@@ -158,14 +130,19 @@ const styles = StyleSheet.create({
     gap: Spacing.smd,
   },
   arrowButtonContainer: {
-    width: wp(10),
-    height: wp(10),
-    borderRadius: wp(5),
+    width: wp(12),
+    height: wp(12),
+    borderRadius: wp(6),
     alignItems: "center",
     justifyContent: "center",
     borderWidth: wp(0.2),
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.primaryText,
+  },
+  passwordInfo: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: -Spacing.sm,
   },
   passwordStatCards: {
     flexDirection: "row",
@@ -175,5 +152,11 @@ const styles = StyleSheet.create({
   },
   passwordText: {
     marginBottom: Spacing.smd,
+  },
+  actionButton: {
+    width: wp(12),
+    height: wp(12),
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

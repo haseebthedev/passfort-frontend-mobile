@@ -1,8 +1,10 @@
 import React, { ReactNode } from "react";
-import { StyleProp, StyleSheet, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { iconSize, LayoutStyles, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
+import { wp } from "@/utils";
 
 interface AppHeaderI {
   title?: string;
@@ -31,21 +33,21 @@ export const AppHeader = ({
     <View style={[LayoutStyles.headerNavContainer, containerStyle]}>
       <View style={styles.leftContainer}>
         {leftIconName && (
-          <TouchableWithoutFeedback onPress={onLeftIconPress}>
+          <RippleWrapper onPress={onLeftIconPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
             <Ionicons name={leftIconName} style={LayoutStyles.headerIcon} size={iconSize} />
-          </TouchableWithoutFeedback>
+          </RippleWrapper>
         )}
 
         <AppText text={title ? title : ""} style={titleStyle} type="heading" />
       </View>
 
       {rightIconName && (
-        <TouchableWithoutFeedback onPress={onRightIconPress}>
+        <RippleWrapper onPress={onRightIconPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
           <Ionicons name={rightIconName} style={LayoutStyles.headerIcon} size={iconSize} />
-        </TouchableWithoutFeedback>
+        </RippleWrapper>
       )}
 
-      {rightAccessory && <View>{rightAccessory}</View>}
+      {rightAccessory && <>{rightAccessory}</>}
     </View>
   );
 };
@@ -55,5 +57,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.md,
+  },
+  buttonContainer: {
+    borderRadius: Spacing.lg,
+  },
+  buttonStyle: {
+    width: wp(12),
+    height: wp(12),
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

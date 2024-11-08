@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Keyboard, ScrollView, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { useAuthStore } from "@/store";
@@ -8,7 +8,7 @@ import { useFormikHook } from "@/hooks";
 import { profilePicture } from "@/assets";
 import { editProfileValidationSchema, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, GradientWrapper, TextInput } from "@/components";
+import { AppButton, AppHeader, GradientWrapper, RippleWrapper, TextInput } from "@/components";
 
 const EditProfile = () => {
   const { user } = useAuthStore();
@@ -49,11 +49,15 @@ const EditProfile = () => {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
         <View style={styles.alignCenter}>
           <Image source={profilePicture} style={styles.profilePicture} />
-          <TouchableWithoutFeedback onPress={onEditPicturePress}>
-            <View style={styles.changePicture}>
+          <View style={styles.editButton}>
+            <RippleWrapper
+              onPress={onEditPicturePress}
+              style={styles.changePicture}
+              containerStyle={styles.rippleContainer}
+            >
               <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
-            </View>
-          </TouchableWithoutFeedback>
+            </RippleWrapper>
+          </View>
         </View>
         <View style={styles.form}>
           <TextInput
@@ -105,6 +109,11 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
   },
+  editButton: {
+    position: "absolute",
+    bottom: 0,
+    right: wp(28),
+  },
   changePicture: {
     width: wp(10),
     height: wp(10),
@@ -112,8 +121,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: wp(5),
-    position: "absolute",
-    bottom: 0,
-    right: wp(28),
+  },
+  rippleContainer: {
+    borderRadius: Spacing.lg,
   },
 });

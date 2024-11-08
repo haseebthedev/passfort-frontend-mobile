@@ -2,7 +2,7 @@ import React from "react";
 import { SectionList, StyleSheet, View } from "react-native";
 import { groupByDate, hp } from "@/utils";
 import { PasswordItem_Data } from "@/constants";
-import { LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, AppText, GradientWrapper, PasswordItem } from "@/components";
 
 const Password = () => {
@@ -10,7 +10,7 @@ const Password = () => {
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Your Passwords" containerStyle={styles.heading} />
+      <AppHeader title="Your Passwords" />
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.id.toString()}
@@ -21,6 +21,7 @@ const Password = () => {
           </View>
         )}
         showsVerticalScrollIndicator={false}
+        stickySectionHeadersEnabled={true}
       />
     </GradientWrapper>
   );
@@ -29,11 +30,9 @@ const Password = () => {
 export default Password;
 
 const styles = StyleSheet.create({
-  heading: {
-    marginBottom: hp(2.9),
-  },
   sectionHeader: {
     paddingVertical: hp(0.5),
     marginBottom: Spacing.sm,
+    // backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
   },
 });

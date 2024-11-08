@@ -3,7 +3,7 @@ import React from "react";
 import { StyleProp, StyleSheet, TouchableNativeFeedback, View, ViewStyle } from "react-native";
 
 interface RippleWrapperProps {
-  onPress: () => void;
+  onPress?: () => void;
   rippleColor?: string;
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
