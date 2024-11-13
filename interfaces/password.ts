@@ -24,3 +24,5 @@ export type PasswordStatType = {
   label: string;
   number: string;
 };
+
+export type PasswordType = "WEAK" | "MODERATE" | "STRONG";

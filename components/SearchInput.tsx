@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: wp(12),
     marginLeft: Spacing.sm,
-    color: colorPalette.primaryBg.primaryGrey,
+    color: colorPalette.primaryBg.primaryWhite,
     fontFamily: AppFont.regular,
   },
 });

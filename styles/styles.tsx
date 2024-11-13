@@ -24,6 +24,9 @@ export const colorPalette = {
 
     primaryBg: "#1A2A1D",
     transparent: "rgba(0,0,0,0)",
+
+    moderateBorder: "#FFCC00", // Dark yellow border for moderate
+    moderateText: "#FF8C00", // Orange text for moderate
   },
 
   gradientBg: {
@@ -199,3 +202,27 @@ export const LayoutStyles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+export const getPasswordTypeContainerStyle = (type: string) => {
+  switch (type) {
+    case "STRONG":
+      return { borderColor: colorPalette.primaryBg.borderColor2 };
+    case "MODERATE":
+      return { borderColor: colorPalette.primaryBg.moderateBorder };
+    case "WEAK":
+    default:
+      return { borderColor: colorPalette.primaryBg.primaryRed };
+  }
+};
+
+export const getPasswordTypeTextStyle = (type: string) => {
+  switch (type) {
+    case "STRONG":
+      return { color: colorPalette.primaryBg.secondaryLightGreen };
+    case "MODERATE":
+      return { color: colorPalette.primaryBg.moderateBorder };
+    case "WEAK":
+    default:
+      return { color: colorPalette.primaryBg.primaryRed };
+  }
+};

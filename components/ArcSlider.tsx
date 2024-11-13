@@ -31,7 +31,8 @@ export const ArcSlider = () => {
   const percentComplete = useSharedValue(0);
 
   const gesture = Gesture.Pan()
-    .onUpdate(({ translationX, translationY, absoluteX }) => {
+    .onUpdate(({ translationX, translationY, absoluteX, x, y }) => {
+      console.log(x, y);
       const oldCanvasX = translationX + previousPositionX.value;
       const oldCanvasY = translationY + previousPositionY.value;
 
@@ -108,9 +109,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: -hp(6),
+    marginRight: hp(20),
+    width: wp(92),
+    alignItems: "center",
+    justifyContent: "center",
   },
   canvas: {
-    flex: 1,
-    transform: [{ rotate: "45deg" }],
+    height: hp(45),
+    width: hp(45),
+    transform: [{ rotate: "46deg" }],
   },
 });
