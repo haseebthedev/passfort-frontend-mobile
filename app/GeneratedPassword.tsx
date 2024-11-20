@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
@@ -21,14 +21,36 @@ import {
   RippleWrapper,
   SmallAppButton,
 } from "@/components";
-import { AppFont, handleDecrement, handleIncrement, hp, updatePasswordType, wp } from "@/utils";
+import {
+  AppFont,
+  generateRandomPassword,
+  handleCharacterChange,
+  handleNumberChange,
+  hp,
+  updatePasswordType,
+  wp,
+} from "@/utils";
 
 const GeneratedPassword = () => {
   const [passwordStats, setPasswordStats] = useState<PasswordStatType[]>(PasswordStats_Data);
   const [passwordType, setPasswordType] = useState<PasswordType>("WEAK");
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [selectedCard, setSelectedCard] = useState<PasswordStatType | null>(null);
+  const [randomPassword, setRandomPassword] = useState<string>("");
+  const [count, setCount] = useState<number>(0);
+  // const countRef = useRef<number>(count);
 
-  const handleCardPress = (item: PasswordStatType) => setSelectedCard(item.id);
+  const selectedCardNumber = selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number : "0";
+
+  const handleCardPress = (item: PasswordStatType) => setSelectedCard(item);
+
+  const generatePassword = () => {
+    const charLength = Number(passwordStats[0]?.number);
+    const numLength = Number(passwordStats[1]?.number);
+    const symbolsLength = Number(passwordStats[2]?.number);
+
+    const password = generateRandomPassword(charLength, numLength, symbolsLength);
+    setRandomPassword(password);
+  };
 
   const updatePasswordTypeCallback = useCallback(() => {
     const type = updatePasswordType(passwordStats);
@@ -39,6 +61,15 @@ const GeneratedPassword = () => {
     updatePasswordTypeCallback();
   }, [passwordStats, updatePasswordTypeCallback]);
 
+  useEffect(() => {
+    setCount(Number(selectedCardNumber));
+  }, [selectedCard, passwordStats]);
+
+  // useEffect(() => {
+  //   handleNumberChange(selectedCard?.label || "Characters", count, setPasswordStats);
+  //   console.log("nive");
+  // }, [countRef]);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Generate" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
@@ -46,7 +77,7 @@ const GeneratedPassword = () => {
       <View style={styles.headingContainer}>
         <AppText text="New Password" type="label" style={styles.heading} />
         <RippleWrapper
-          onPress={() => {}}
+          onPress={generatePassword}
           containerStyle={styles.rippleContainer}
           rippleColor={colorPalette.primaryBg.primaryLightGreen}
           style={styles.reGenerateIcon}
@@ -59,16 +90,16 @@ const GeneratedPassword = () => {
         <AppText text={passwordType} style={getPasswordTypeTextStyle(passwordType)} type="regularSubHeading" />
       </View>
 
-      <ArcSlider />
+      <ArcSlider count={count} />
 
       <View style={styles.passwordDetails}>
         <AppText
-          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard)?.label || "Select" : "Select"}
+          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.label || "Select" : "Select"}
           style={styles.passwordDetailLabel}
           type="label"
         />
         <AppText
-          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard)?.number || "00" : "00"}
+          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number || "00" : "00"}
           type="passwordLength"
         />
 
@@ -76,14 +107,16 @@ const GeneratedPassword = () => {
           <RippleWrapper
             containerStyle={styles.arrowButtonContainer}
             style={styles.actionButton}
-            onPress={() => handleDecrement(selectedCard, passwordStats, setPasswordStats)}
+            disabled={selectedCard ? false : true}
+            onPress={() => handleCharacterChange("decrement", selectedCard?.label || "Characters", setPasswordStats)}
           >
             <Ionicons name="chevron-back" style={LayoutStyles.headerIcon} size={iconSize} />
           </RippleWrapper>
           <RippleWrapper
             containerStyle={styles.arrowButtonContainer}
             style={styles.actionButton}
-            onPress={() => handleIncrement(selectedCard, passwordStats, setPasswordStats)}
+            disabled={selectedCard ? false : true}
+            onPress={() => handleCharacterChange("increment", selectedCard?.label || "Characters", setPasswordStats)}
           >
             <Ionicons name="chevron-forward" style={LayoutStyles.headerIcon} size={iconSize} />
           </RippleWrapper>
@@ -96,13 +129,13 @@ const GeneratedPassword = () => {
             <PasswordStatCard
               item={passwordStats[index]}
               key={passwordStats[index].id}
-              isSelected={passwordStats[index].id === selectedCard}
+              isSelected={passwordStats[index].id === selectedCard?.id}
               onPress={() => handleCardPress(passwordStats[index])}
             />
           ))}
         </View>
 
-        <AppText text={"S2fh4ngj4@"} type="passwordText" style={styles.passwordText} />
+        <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
         <SmallAppButton text="Copy" onPress={() => {}} />
       </View>
     </GradientWrapper>
@@ -155,6 +188,7 @@ const styles = StyleSheet.create({
   },
   passwordDetails: {
     alignItems: "center",
+    justifyContent: "center",
     position: "absolute",
     left: 0,
     right: 0,

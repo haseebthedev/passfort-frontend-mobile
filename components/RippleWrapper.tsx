@@ -8,6 +8,7 @@ interface RippleWrapperProps {
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const RippleWrapper = ({
@@ -16,10 +17,15 @@ export const RippleWrapper = ({
   style,
   containerStyle,
   children,
+  disabled = false,
 }: RippleWrapperProps) => {
   return (
     <View style={[styles.buttonContainer, containerStyle]}>
-      <TouchableNativeFeedback onPress={onPress} background={TouchableNativeFeedback.Ripple(rippleColor, false)}>
+      <TouchableNativeFeedback
+        onPress={onPress}
+        background={TouchableNativeFeedback.Ripple(rippleColor, false)}
+        disabled={disabled}
+      >
         <View style={style}>{children}</View>
       </TouchableNativeFeedback>
     </View>

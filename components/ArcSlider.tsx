@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Canvas, Circle, Path, Skia } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,7 +9,13 @@ import { hp, wp } from "@/utils";
 
 const { width } = Dimensions.get("window");
 
-export const ArcSlider = () => {
+interface ArcSliderI {
+  count: number;
+}
+
+export const ArcSlider = ({ count }: ArcSliderI) => {
+  const countRef = useRef<number>(count);
+
   const strokeWidth = 9;
   const center = width / 2;
   const r = (width - strokeWidth) / 2 - 60;
@@ -31,29 +37,35 @@ export const ArcSlider = () => {
   const percentComplete = useSharedValue(0);
 
   const gesture = Gesture.Pan()
-    .onUpdate(({ translationX, translationY, absoluteX, x, y }) => {
-      console.log(x, y);
+    .onUpdate(({ translationX, translationY, absoluteX }) => {
       const oldCanvasX = translationX + previousPositionX.value;
       const oldCanvasY = translationY + previousPositionY.value;
-
       const xPrime = oldCanvasX - center;
       const yPrime = -(oldCanvasY - center);
       const rawTheta = Math.atan2(yPrime, xPrime);
-
       let newTheta = rawTheta;
+      let minLimit = -0.2;
+      let maxLimit = startAngle - endAngle; //-1.5;
 
-      if (absoluteX < width / 2 && rawTheta < 0) {
-        newTheta = rawTheta < 0 ? rawTheta + 2 * Math.PI : rawTheta;
-      } else if (absoluteX > width / 2 && rawTheta <= -1) {
+      const midPoint = (minLimit + maxLimit) / 2; // -0.8
+
+      if (newTheta >= maxLimit && newTheta <= midPoint) {
         newTheta = (3 * Math.PI) / 2;
-      } else if (absoluteX > width / 2 && rawTheta <= 0) {
+      } else if (newTheta > midPoint && newTheta <= minLimit) {
         newTheta = 0;
+      } else if (absoluteX < width / 2 && rawTheta < 0) {
+        newTheta = rawTheta < 0 ? rawTheta + 2 * Math.PI : rawTheta;
       } else {
         newTheta = rawTheta;
       }
 
       const percent = 1 - newTheta / ((3 * Math.PI) / 2);
       percentComplete.value = percent;
+
+      const newCount = Math.min(Math.max(Math.round(percent * 8), 0), 8);
+      if (newCount !== countRef.current) {
+        countRef.current = newCount;
+      }
 
       const newCoords = polar2Canvas(
         {
@@ -73,6 +85,33 @@ export const ArcSlider = () => {
       previousPositionX.value = movableCx.value;
       previousPositionY.value = movableCy.value;
     });
+
+  useEffect(() => {
+    const normalizedCount = count / 8;
+    let newTheta;
+    if (count >= 7) {
+      newTheta = (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.15;
+    } else {
+      newTheta = (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.07;
+    }
+
+    const percent = normalizedCount * 100;
+    percentComplete.value = percent / 100;
+
+    const newCoords = polar2Canvas(
+      {
+        theta: newTheta,
+        radius: r,
+      },
+      {
+        x: center,
+        y: center,
+      }
+    );
+
+    movableCx.value = newCoords.x;
+    movableCy.value = newCoords.y;
+  }, [count]);
 
   if (!skiaBackgroundPath || !skiaForegroundPath) {
     return <View />;
