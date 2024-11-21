@@ -36,7 +36,7 @@ const HeaderComponent = () => {
             <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
-          <RoundButton onPress={() => router.push(Screens.CreatePassword)} />
+          <RoundButton iconName="plus" onPress={() => router.push(Screens.CreatePassword)} />
         </View>
         <FlatList
           horizontal

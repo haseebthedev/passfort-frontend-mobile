@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
-import { Entypo, FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
 

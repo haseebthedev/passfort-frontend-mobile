@@ -14,6 +14,8 @@ export const colorPalette = {
 
     borderColor1: "#1A291D",
     borderColor2: "#2C5235",
+    swipeButtonBg: "#274C2F",
+    lighterGreen: "#D2F0D9",
 
     primaryLightGreenBg: "rgba(126, 244, 150, 0.05)",
     secondaryLightGreenBg: "rgba(218, 255, 225, 0.05)",
@@ -27,6 +29,8 @@ export const colorPalette = {
 
     moderateBorder: "#FFCC00", // Dark yellow border for moderate
     moderateText: "#FF8C00", // Orange text for moderate
+
+    black: "#000000",
   },
 
   gradientBg: {

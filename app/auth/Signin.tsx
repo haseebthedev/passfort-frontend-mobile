@@ -33,7 +33,8 @@ const Signin = () => {
       if (user?.isFirstSignIn) {
         router.push(Screens.Onboarding);
       } else {
-        router.push(Screens.Home);
+        // router.push(Screens.Home);
+        router.push(Screens.BiometricAuth);
       }
     } catch (err) {
       console.log("error === ", err);
@@ -77,7 +78,11 @@ const Signin = () => {
 
           <View style={styles.actionGroup}>
             <Checkbox label="Remember me" labelStyle={styles.labelStyle} />
-            <AppButton text="Forget Password?" onPress={() => {}} preset="primaryLink" />
+            <AppButton
+              text="Forget Password?"
+              onPress={() => router.push(Screens.ForgetPassword)}
+              preset="primaryLink"
+            />
           </View>
 
           <AppButton text="Sign In" onPress={handleSubmit} />

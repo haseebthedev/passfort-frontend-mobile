@@ -17,3 +17,5 @@ export * from "./ErrorMessage";
 export * from "./ArcSlider";
 export * from "./RippleWrapper";
 export * from "./SearchInput";
+export * from "./BottomSheetHOC";
+export * from "./BiometricAuthModal";

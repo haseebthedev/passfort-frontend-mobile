@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { PasswordStats_Data } from "@/constants";
 import { PasswordStatType, PasswordType } from "@/interfaces";
+import { AppFont, generateRandomPassword, handleCharacterChange, hp, updatePasswordType, wp } from "@/utils";
 import {
   colorPalette,
   getPasswordTypeContainerStyle,
@@ -21,25 +22,15 @@ import {
   RippleWrapper,
   SmallAppButton,
 } from "@/components";
-import {
-  AppFont,
-  generateRandomPassword,
-  handleCharacterChange,
-  handleNumberChange,
-  hp,
-  updatePasswordType,
-  wp,
-} from "@/utils";
 
 const GeneratedPassword = () => {
-  const [passwordStats, setPasswordStats] = useState<PasswordStatType[]>(PasswordStats_Data);
+  const [count, setCount] = useState<number>(0);
   const [passwordType, setPasswordType] = useState<PasswordType>("WEAK");
   const [selectedCard, setSelectedCard] = useState<PasswordStatType | null>(null);
+  const [passwordStats, setPasswordStats] = useState<PasswordStatType[]>(PasswordStats_Data);
   const [randomPassword, setRandomPassword] = useState<string>("");
-  const [count, setCount] = useState<number>(0);
-  // const countRef = useRef<number>(count);
 
-  const selectedCardNumber = selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number : "0";
+  const selectedCardNumber = selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number : "00";
 
   const handleCardPress = (item: PasswordStatType) => setSelectedCard(item);
 
@@ -64,11 +55,6 @@ const GeneratedPassword = () => {
   useEffect(() => {
     setCount(Number(selectedCardNumber));
   }, [selectedCard, passwordStats]);
-
-  // useEffect(() => {
-  //   handleNumberChange(selectedCard?.label || "Characters", count, setPasswordStats);
-  //   console.log("nive");
-  // }, [countRef]);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>

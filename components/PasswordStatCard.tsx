@@ -13,7 +13,7 @@ interface PasswordStatCardProps {
 
 export const PasswordStatCard = ({ item, isSelected, onPress }: PasswordStatCardProps) => {
   return (
-    <View style={{ alignItems: "center" }}>
+    <View style={styles.container}>
       <RippleWrapper style={[styles.card]} onPress={onPress}>
         <AppText text={item.label} style={styles.label} />
         <AppText text={item.number} style={styles.length} type="detail" />
@@ -25,6 +25,9 @@ export const PasswordStatCard = ({ item, isSelected, onPress }: PasswordStatCard
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+  },
   card: {
     borderWidth: wp(0.2),
     backgroundColor: colorPalette.primaryBg.primaryText,
@@ -37,8 +40,6 @@ const styles = StyleSheet.create({
     gap: wp(1),
   },
   selectedCard: {
-    // borderBottomWidth: hp(0.2),
-    // borderBottomColor: colorPalette.primaryBg.secondaryLightGreen,
     width: wp(12),
     height: hp(0.2),
     backgroundColor: colorPalette.primaryBg.secondaryLightGreen,

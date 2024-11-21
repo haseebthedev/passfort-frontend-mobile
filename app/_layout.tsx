@@ -22,14 +22,14 @@ const RootLayout = () => {
 
   if (user?.isLogin) {
     return (
-      <Stack initialRouteName="(tab)" screenOptions={{ headerShown: false, animation: "ios" }}>
+      <Stack initialRouteName="auth/BiometricAuth" screenOptions={{ headerShown: false, animation: "ios" }}>
+        <Stack.Screen name="auth/BiometricAuth" />
         <Stack.Screen name="(tab)" />
         <Stack.Screen name="profile/EditProfile" />
         <Stack.Screen name="Settings" />
         <Stack.Screen name="PasswordDetail" />
         <Stack.Screen name="CreatePassword" />
         <Stack.Screen name="GeneratedPassword" />
-        <Stack.Screen name="Slider" />
       </Stack>
     );
   } else {
