@@ -19,3 +19,4 @@ export * from "./RippleWrapper";
 export * from "./SearchInput";
 export * from "./BottomSheetHOC";
 export * from "./BiometricAuthModal";
+export * from "./ImagePickerModal";

@@ -1,22 +1,31 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { router } from "expo-router";
 import BottomSheet, { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
-import { AppFont, hp } from "@/utils";
 import { AppText } from "./AppText";
-import { Screens } from "@/enums";
 import { AppButton } from "./AppButton";
+import { AppFont, hp, wp } from "@/utils";
 import { BottomSheetHOC } from "./BottomSheetHOC";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette, iconSize, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface BiometricAuthModalI {
   isVisible: boolean;
+  isBiometricDone: boolean;
   snapPoints: string[];
   bottomSheetRef: React.RefObject<BottomSheet>;
   renderBackdrop: (props: BottomSheetBackdropProps) => JSX.Element;
+  handleBiometricAuth: () => void;
 }
 
-export const BiometricAuthModal = ({ isVisible, bottomSheetRef, snapPoints, renderBackdrop }: BiometricAuthModalI) => {
+export const BiometricAuthModal = ({
+  isVisible,
+  bottomSheetRef,
+  isBiometricDone,
+  snapPoints,
+  renderBackdrop,
+  handleBiometricAuth,
+}: BiometricAuthModalI) => {
   return (
     <BottomSheetHOC
       isVisible={isVisible}
@@ -27,13 +36,19 @@ export const BiometricAuthModal = ({ isVisible, bottomSheetRef, snapPoints, rend
       <AppText text="Finger Authentication" type="default" style={styles.heading} />
       <AppText text="Please login to get access" type="default" style={styles.textStyle} />
 
-      <View style={styles.roundContainer}></View>
+      <RippleWrapper onPress={handleBiometricAuth} style={styles.roundContainer}>
+        <MaterialIcons
+          name="fingerprint"
+          color={isBiometricDone ? colorPalette.primaryBg.primaryLightGreen : colorPalette.primaryBg.black}
+          size={wp(15)}
+        />
+      </RippleWrapper>
 
       <AppText text="Touch the finger print sensor" type="default" style={styles.textStyle} />
       <AppButton
         text="Cancel"
         preset="primaryLink"
-        onPress={() => router.push(Screens.Home)}
+        onPress={() => bottomSheetRef.current?.close()}
         textStyle={styles.textStyle}
       />
     </BottomSheetHOC>
@@ -48,6 +63,8 @@ const styles = StyleSheet.create({
     borderRadius: hp(15),
     marginTop: Spacing.xl,
     marginBottom: Spacing.md,
+    alignItems: "center",
+    justifyContent: "center",
   },
   heading: {
     fontFamily: AppFont.bold,

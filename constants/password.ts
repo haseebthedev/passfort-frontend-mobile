@@ -62,7 +62,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Facebook",
     passwordText: "Password1",
     icon: social,
-    date: "2024-11-01",
+    date: "01-11-2024",
   },
   {
     id: "2",
@@ -73,7 +73,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Instagram",
     passwordText: "Password2",
     icon: social,
-    date: "2024-11-01",
+    date: "01-11-2024",
   },
   {
     id: "3",
@@ -84,7 +84,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Netflix",
     passwordText: "Netflix@123",
     icon: apps,
-    date: "2024-10-30",
+    date: "01-11-2024",
   },
   {
     id: "4",
@@ -95,7 +95,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Spotify",
     passwordText: "SpotifyPass2024",
     icon: apps,
-    date: "2024-10-30",
+    date: "01-11-2024",
   },
   {
     id: "5",
@@ -106,7 +106,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "MetaMask",
     passwordText: "CryptoWallet01",
     icon: wallets,
-    date: "2024-10-28",
+    date: "05-11-2024",
   },
   {
     id: "6",
@@ -117,7 +117,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Trust Wallet",
     passwordText: "SecureWallet123",
     icon: wallets,
-    date: "2024-10-28",
+    date: "11-11-2024",
   },
   {
     id: "7",
@@ -128,7 +128,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Chase",
     passwordText: "ChaseBank@456",
     icon: bank,
-    date: "2024-10-27",
+    date: "11-11-2024",
   },
   {
     id: "8",
@@ -139,7 +139,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Amazon",
     passwordText: "AmazonPrime2024",
     icon: shopping,
-    date: "2024-10-26",
+    date: "12-11-2024",
   },
   {
     id: "9",
@@ -150,7 +150,7 @@ export const PasswordItem_Data: PasswordItemType[] = [
     platform: "Hulu",
     passwordText: "HuluPass2024",
     icon: stream,
-    date: "2024-10-25",
+    date: "13-11-2024",
   },
 ];
 

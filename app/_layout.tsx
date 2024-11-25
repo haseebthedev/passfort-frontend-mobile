@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { loadFonts } from "@/utils";
 import { useAuthStore } from "@/store";
 import { LoadingIndicator } from "@/components";
+import AuthLayout from "./auth/_layout";
 
 const RootLayout = () => {
   const { user } = useAuthStore();
@@ -22,8 +23,7 @@ const RootLayout = () => {
 
   if (user?.isLogin) {
     return (
-      <Stack initialRouteName="auth/BiometricAuth" screenOptions={{ headerShown: false, animation: "ios" }}>
-        <Stack.Screen name="auth/BiometricAuth" />
+      <Stack initialRouteName="(tab)" screenOptions={{ headerShown: false, animation: "ios" }}>
         <Stack.Screen name="(tab)" />
         <Stack.Screen name="profile/EditProfile" />
         <Stack.Screen name="Settings" />

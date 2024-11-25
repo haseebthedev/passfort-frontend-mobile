@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SectionList, StyleSheet, View, ViewToken } from "react-native";
 import { groupByDate, hp } from "@/utils";
 import { PasswordItem_Data } from "@/constants";
@@ -17,6 +17,10 @@ const Password = () => {
       }
     },
   });
+
+  useEffect(() => {
+    console.log(new Date());
+  }, []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>

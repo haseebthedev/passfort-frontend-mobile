@@ -7,7 +7,7 @@ const AuthLayout = () => {
       <Stack.Screen name="Onboarding" />
       <Stack.Screen name="Signin" />
       <Stack.Screen name="Signup" />
-      <Stack.Screen name="ForgetPasword" />
+      <Stack.Screen name="ForgetPassword" />
       <Stack.Screen name="BiometricAuth" />
     </Stack>
   );
