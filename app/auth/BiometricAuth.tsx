@@ -7,6 +7,8 @@ import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppLogo, AppText, BiometricAuthModal, GradientWrapper, RoundButton } from "@/components";
 
 import * as LocalAuthentication from "expo-local-authentication";
+import { router } from "expo-router";
+import { Screens } from "@/enums";
 
 const BiometricAuth = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -49,6 +51,7 @@ const BiometricAuth = () => {
     if (biometricAuth) {
       console.log("login");
       setIsBiometricDone(true);
+      router.push(Screens.Home);
     }
   };
 

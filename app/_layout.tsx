@@ -17,6 +17,10 @@ const RootLayout = () => {
     load();
   }, []);
 
+  useEffect(() => {
+    console.log(user?.isLogin);
+  }, []);
+
   if (!fontsLoaded) {
     return <LoadingIndicator />;
   }

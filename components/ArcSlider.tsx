@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { Canvas, Circle, Path, Skia } from "@shopify/react-native-skia";
-import { useSharedValue } from "react-native-reanimated";
 import { polar2Canvas } from "react-native-redash";
-import { colorPalette } from "@/styles";
+import { Canvas, Circle, Path, Skia } from "@shopify/react-native-skia";
+import { useSharedValue, withTiming } from "react-native-reanimated";
 import { hp, wp } from "@/utils";
+import { colorPalette } from "@/styles";
 
 const { width } = Dimensions.get("window");
 
@@ -41,7 +41,9 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
     }
 
     const percent = normalizedCount * 100;
-    percentComplete.value = percent / 100;
+    percentComplete.value = withTiming(percent / 100, {
+      duration: 500,
+    });
 
     const newCoords = polar2Canvas(
       {
@@ -54,8 +56,12 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
       }
     );
 
-    movableCx.value = newCoords.x;
-    movableCy.value = newCoords.y;
+    movableCx.value = withTiming(newCoords.x, {
+      duration: 500,
+    });
+    movableCy.value = withTiming(newCoords.y, {
+      duration: 500,
+    });
   }, [count]);
 
   if (!skiaBackgroundPath || !skiaForegroundPath) {

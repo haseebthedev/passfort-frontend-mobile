@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   linkRow: {
-    marginTop: Spacing.xs,
+    // marginTop: Spacing.xs,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

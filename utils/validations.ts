@@ -59,3 +59,15 @@ export const createPasswordValidationSchema = yup.object().shape({
     .min(8)
     .label("Password"),
 });
+
+export const forgotPasswordValidation = yup.object().shape({
+  email: yup.string().required("Email is required!").email(),
+});
+
+export const newPasswordValidation = yup.object().shape({
+  newPassword: yup.string().required("New Password is required!").min(8, "Minimum 8 characters"),
+  confirmPassword: yup
+    .string()
+    .equals([yup.ref("newPassword"), null], "Passwords does not match!")
+    .required("Confirm new password is required!"),
+});

@@ -22,6 +22,13 @@ export interface SignupI {
 
 export type SigninI = Pick<SignupI, "email" | "password">;
 
+export type ForgetPasswordI = Pick<SignupI, "email">;
+
+export type ResetPasswordI = {
+  newPassword: string;
+  confirmPassword: string;
+};
+
 export interface EditProfileI {
   name: string;
   email: string;
