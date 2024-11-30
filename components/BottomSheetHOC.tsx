@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 import BottomSheet, { BottomSheetBackdropProps, BottomSheetView } from "@gorhom/bottom-sheet";
 
 interface BottomSheetHOCProps {
   isVisible: boolean;
   children: React.ReactNode;
   snapPoints?: string[];
+  containerStyle?: ViewStyle;
   bottomSheetRef: React.RefObject<BottomSheet>;
   onBackdropPress: (props: BottomSheetBackdropProps) => JSX.Element;
 }
@@ -13,6 +14,7 @@ interface BottomSheetHOCProps {
 export const BottomSheetHOC: React.FC<BottomSheetHOCProps> = ({
   isVisible,
   children,
+  containerStyle,
   onBackdropPress,
   snapPoints = ["25%", "50%", "75%"],
   bottomSheetRef,
@@ -34,7 +36,7 @@ export const BottomSheetHOC: React.FC<BottomSheetHOCProps> = ({
       backdropComponent={onBackdropPress}
       handleIndicatorStyle={styles.hiddenHandle}
     >
-      <BottomSheetView style={styles.contentContainer}>{children}</BottomSheetView>
+      <BottomSheetView style={[styles.contentContainer, containerStyle]}>{children}</BottomSheetView>
     </BottomSheet>
   );
 };

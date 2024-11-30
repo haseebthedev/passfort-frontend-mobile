@@ -16,7 +16,7 @@ const Signup = () => {
     try {
       Keyboard.dismiss();
       console.log(name, email, password);
-      router.push(Screens.Home);
+      router.push(Screens.Signin);
     } catch (err) {
       console.log("error === ", err);
     }

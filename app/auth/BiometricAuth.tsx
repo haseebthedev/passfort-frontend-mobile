@@ -1,35 +1,29 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
-import { hp } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppLogo, AppText, BiometricAuthModal, GradientWrapper, RoundButton } from "@/components";
-
-import * as LocalAuthentication from "expo-local-authentication";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Alert, Dimensions } from "react-native";
 import { router } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+import * as LocalAuthentication from "expo-local-authentication";
+import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { hp, wp } from "@/utils";
 import { Screens } from "@/enums";
+import { AppLogo, AppText, GradientWrapper } from "@/components";
+import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+
+const { height } = Dimensions.get("window");
 
 const BiometricAuth = () => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const [isBottomSheetOpen, setBottomSheetOpen] = useState<boolean>(false);
   const [isBiometricSupported, setIsBiometricSupported] = useState<boolean>(false);
   const [isBiometricDone, setIsBiometricDone] = useState<boolean>(false);
 
-  const snapPoints = ["48%", "75%"];
-
-  const handleOpenBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
-
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
-    []
-  );
+  const translateY = useSharedValue<number>(0);
 
   const handleBiometricAuth = async () => {
     const isBiometricAvailable = await LocalAuthentication.hasHardwareAsync();
 
     if (!isBiometricAvailable) {
       Alert.alert("Biometric support is not available.");
+      return;
     }
 
     let biometricsSupported;
@@ -51,9 +45,37 @@ const BiometricAuth = () => {
 
     if (biometricAuth) {
       setIsBiometricDone(true);
+      console.log("Biometric Authentication Success:", biometricAuth);
+    }
+
+    if (biometricAuth.success === true && isBiometricDone) {
       router.push(Screens.Home);
     }
   };
+
+  const swipeUp = Gesture.Pan()
+    .onBegin(() => {
+      translateY.value = withTiming(0);
+    })
+    .onChange((event) => {
+      if (event.translationY > 0) {
+        translateY.value = withTiming(0);
+      } else if (event.translationY > -height / 4) {
+        translateY.value = event.translationY;
+        runOnJS(handleBiometricAuth)();
+      }
+    })
+    .onFinalize(() => {
+      translateY.value = 0;
+    });
+
+  const animatedSwipeupStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(translateY.value, [0, -height / 4], [1, 0]);
+    return {
+      transform: [{ translateY: translateY.value }],
+      opacity: opacity,
+    };
+  }, []);
 
   useEffect(() => {
     async () => {
@@ -67,24 +89,14 @@ const BiometricAuth = () => {
       <GradientWrapper style={LayoutStyles.horizontalSpacing}>
         <AppLogo style={styles.appLogo} />
 
-        <View style={styles.innerContainer}>
-          <RoundButton
-            iconName="arrowup"
-            onPress={() => handleOpenBottomSheet()}
-            viewStyle={styles.viewStyle}
-            iconStyle={styles.iconStyle}
-          />
-          <AppText text="Swipe up to sign in" />
-        </View>
-
-        <BiometricAuthModal
-          bottomSheetRef={bottomSheetRef}
-          isVisible={isBottomSheetOpen}
-          isBiometricDone={isBiometricDone}
-          renderBackdrop={renderBackdrop}
-          snapPoints={snapPoints}
-          handleBiometricAuth={handleBiometricAuth}
-        />
+        <GestureDetector gesture={swipeUp}>
+          <Animated.View style={[styles.innerContainer, animatedSwipeupStyle]}>
+            <View style={styles.circleContainer}>
+              <AntDesign name="arrowup" size={iconSize} style={styles.iconStyle} />
+            </View>
+            <AppText text="Swipe up to sign in" />
+          </Animated.View>
+        </GestureDetector>
       </GradientWrapper>
     </GestureHandlerRootView>
   );
@@ -103,9 +115,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  viewStyle: {
+  iconStyle: {
+    color: colorPalette.primaryBg.primaryLightGreen,
+  },
+  circleContainer: {
     backgroundColor: colorPalette.primaryBg.swipeButtonBg,
     marginVertical: Spacing.sm,
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(6),
+    alignItems: "center",
+    justifyContent: "center",
   },
-  iconStyle: { color: colorPalette.primaryBg.primaryLightGreen },
 });

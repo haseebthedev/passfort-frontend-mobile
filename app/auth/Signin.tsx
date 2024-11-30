@@ -33,6 +33,7 @@ const Signin = () => {
       } else if (user?.isLogin && !user?.isFirstSignIn) {
         router.push(Screens.BiometricAuth);
       } else {
+        router.push(Screens.BiometricAuth);
       }
     } catch (err) {
       console.log("error === ", err);

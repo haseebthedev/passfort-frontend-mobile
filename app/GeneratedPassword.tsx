@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
+import * as Clipboard from "expo-clipboard";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { PasswordStats_Data } from "@/constants";
 import { PasswordStatType, PasswordType } from "@/interfaces";
@@ -26,7 +27,7 @@ import {
 const GeneratedPassword = () => {
   const [count, setCount] = useState<number>(0);
   const [passwordType, setPasswordType] = useState<PasswordType>("WEAK");
-  const [selectedCard, setSelectedCard] = useState<PasswordStatType | null>(null);
+  const [selectedCard, setSelectedCard] = useState<PasswordStatType>(PasswordStats_Data[0]);
   const [passwordStats, setPasswordStats] = useState<PasswordStatType[]>(PasswordStats_Data);
   const [randomPassword, setRandomPassword] = useState<string>("");
 
@@ -41,6 +42,13 @@ const GeneratedPassword = () => {
 
     const password = generateRandomPassword(charLength, numLength, symbolsLength);
     setRandomPassword(password);
+  };
+
+  const copyToClipboard = () => {
+    if (randomPassword) {
+      Clipboard.setStringAsync(randomPassword);
+      router.back();
+    }
   };
 
   const updatePasswordTypeCallback = useCallback(() => {
@@ -122,7 +130,7 @@ const GeneratedPassword = () => {
         </View>
 
         <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
-        <SmallAppButton text="Copy" onPress={() => {}} />
+        <SmallAppButton text="Copy" onPress={copyToClipboard} />
       </View>
     </GradientWrapper>
   );

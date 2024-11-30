@@ -20,7 +20,7 @@ const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<ImageSourcePropType>();
   const [selectedImage, setSelectedImage] = useState<ImageSourcePropType>();
 
-  const snapPoints = ["30%", "75%"];
+  const snapPoints = ["30%"];
 
   const handleOpenBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
 

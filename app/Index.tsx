@@ -26,7 +26,7 @@ export default function Index() {
     if (fontsLoaded) {
       setTimeout(() => {
         router.push(Screens.Signin);
-      }, 3000);
+      }, 10000);
     }
   };
 

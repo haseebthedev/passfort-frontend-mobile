@@ -27,7 +27,7 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
   const skiaBackgroundPath = Skia.Path.MakeFromSVGString(rawPath);
   const skiaForegroundPath = Skia.Path.MakeFromSVGString(rawForegroundPath);
 
-  const movableCx = useSharedValue(x2);
+  // const movableCx = useSharedValue(x2);
   const movableCy = useSharedValue(y2);
   const percentComplete = useSharedValue(0);
 
@@ -56,12 +56,12 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
       }
     );
 
-    movableCx.value = withTiming(newCoords.x, {
-      duration: 500,
-    });
-    movableCy.value = withTiming(newCoords.y, {
-      duration: 500,
-    });
+    // movableCx.value = withTiming(newCoords.x, {
+    //   duration: 500,
+    // });
+    // movableCy.value = withTiming(newCoords.y, {
+    //   duration: 500,
+    // });
   }, [count]);
 
   if (!skiaBackgroundPath || !skiaForegroundPath) {
@@ -87,7 +87,7 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
           start={0}
           end={percentComplete}
         />
-        <Circle cx={movableCx} cy={movableCy} r={10} color={colorPalette.primaryBg.primaryWhite} style="fill" />
+        {/* <Circle cx={movableCx} cy={movableCy} r={10} color={colorPalette.primaryBg.primaryWhite} style="fill" /> */}
       </Canvas>
     </View>
   );

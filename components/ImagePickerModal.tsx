@@ -32,6 +32,7 @@ export const ImagePickerModal = ({
       onBackdropPress={renderBackdrop}
       snapPoints={snapPoints}
       bottomSheetRef={bottomSheetRef}
+      containerStyle={styles.modalContainer}
     >
       <AppText text="Select any option" type="default" style={styles.heading} />
       <View>
@@ -57,13 +58,8 @@ export const ImagePickerModal = ({
 };
 
 const styles = StyleSheet.create({
-  roundContainer: {
-    width: hp(13),
-    height: hp(13),
-    backgroundColor: colorPalette.primaryBg.lighterGreen,
-    borderRadius: hp(15),
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.md,
+  modalContainer: {
+    height: hp(80),
   },
   heading: {
     fontFamily: AppFont.bold,
