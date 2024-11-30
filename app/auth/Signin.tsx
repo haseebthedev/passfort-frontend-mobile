@@ -17,24 +17,22 @@ const Signin = () => {
 
   const submit = async ({ email, password }: SigninI) => {
     try {
-      console.log(email, password);
       Keyboard.dismiss();
-      console.log("ok");
       login({
         id: "123",
         email,
         name: "John Doe",
         picture: "https://via.placeholder.com/150",
         location: "New York, USA",
-        isFirstSignIn: true,
+        isFirstSignIn: false,
         isLogin: true,
       });
 
       if (user?.isFirstSignIn) {
         router.push(Screens.Onboarding);
-      } else {
-        // router.push(Screens.Home);
+      } else if (user?.isLogin && !user?.isFirstSignIn) {
         router.push(Screens.BiometricAuth);
+      } else {
       }
     } catch (err) {
       console.log("error === ", err);

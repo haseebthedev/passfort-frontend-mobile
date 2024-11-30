@@ -40,6 +40,7 @@ const BiometricAuth = () => {
     const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
     if (!savedBiometrics) {
       Alert.alert("Biometric record not found.");
+      return;
     }
 
     const biometricAuth = await LocalAuthentication.authenticateAsync({
@@ -49,7 +50,6 @@ const BiometricAuth = () => {
     });
 
     if (biometricAuth) {
-      console.log("login");
       setIsBiometricDone(true);
       router.push(Screens.Home);
     }

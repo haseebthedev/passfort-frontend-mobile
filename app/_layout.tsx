@@ -3,7 +3,6 @@ import { Stack } from "expo-router";
 import { loadFonts } from "@/utils";
 import { useAuthStore } from "@/store";
 import { LoadingIndicator } from "@/components";
-import AuthLayout from "./auth/_layout";
 
 const RootLayout = () => {
   const { user } = useAuthStore();
@@ -15,10 +14,6 @@ const RootLayout = () => {
       setFontsLoaded(true);
     };
     load();
-  }, []);
-
-  useEffect(() => {
-    console.log(user?.isLogin);
   }, []);
 
   if (!fontsLoaded) {

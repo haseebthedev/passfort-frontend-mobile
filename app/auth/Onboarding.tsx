@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { hp, wp } from "@/utils";
@@ -8,7 +8,7 @@ import { LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
 
 const Onboarding = () => {
-  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const handleNext = () => {
     if (currentIndex < OnboardingData.length - 1) {

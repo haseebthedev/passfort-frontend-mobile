@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
 import { useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import * as SplashScreen from "expo-splash-screen";
 import { Screens } from "@/enums";
 import { passfortIcon } from "@/assets";
 import { loadFonts, wp } from "@/utils";
 import { GradientWrapper, LoadingIndicator } from "@/components";
-import * as ImagePicker from "expo-image-picker";
 
 export default function Index() {
   const router = useRouter();
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
   const [imagePickerLoaded, setImagePickerLoaded] = useState<boolean>(false);
+
+  const requestPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need media library permissions to make this work!");
+    } else {
+      setImagePickerLoaded(true);
+    }
+  };
 
   const redirectUser = async () => {
     if (fontsLoaded) {
@@ -39,15 +48,6 @@ export default function Index() {
 
     prepare();
   }, [router, fontsLoaded]);
-
-  const requestPermissions = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      alert("Sorry, we need media library permissions to make this work!");
-    } else {
-      setImagePickerLoaded(true);
-    }
-  };
 
   useEffect(() => {
     requestPermissions();

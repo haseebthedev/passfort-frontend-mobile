@@ -18,8 +18,6 @@ export const pickImageFromLibrary = async (
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setProfileImage({ uri: result.assets[0].uri });
       setSelectedImage(result.assets[0]);
-
-      console.log(result.assets[0]);
     } else {
       console.log("No image selected.");
     }
@@ -44,8 +42,6 @@ export const pickImageFromCamera = async (
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setProfileImage({ uri: result.assets[0].uri });
       setSelectedImage(result.assets[0]);
-
-      console.log(result.assets[0]);
     } else {
       console.log("No image captured.");
     }

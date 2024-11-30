@@ -25,7 +25,6 @@ export const Dropdown = <T extends ValueType>({
   setFieldValue,
 }: DropDownI<T>) => {
   const handleSelectItem = (item: ItemType<T>) => {
-    console.log(typeof item.value);
     setValue(item?.value ?? null);
     setFieldValue("type", item?.value ?? null);
   };

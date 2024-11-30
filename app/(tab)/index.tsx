@@ -10,9 +10,9 @@ import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
 
 const HeaderComponent = () => {
+  const { user } = useAuthStore();
   const [searchText, setSearchText] = useState<string>("");
 
-  const { user } = useAuthStore();
   return (
     <View>
       <View style={styles.greetingContainer}>

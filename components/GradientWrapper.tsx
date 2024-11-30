@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
 import { SafeAreaView, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { GradientColors, LayoutStyles } from "@/styles";
+import { colorPalette, GradientColors, LayoutStyles } from "@/styles";
+import { StatusBar } from "expo-status-bar";
 
 interface GradientWrapperI {
   children: ReactNode;
@@ -11,6 +12,7 @@ interface GradientWrapperI {
 export const GradientWrapper = ({ children, style }: GradientWrapperI) => {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
+      <StatusBar backgroundColor={colorPalette.primaryBg.primaryDarkGreen} />
       <LinearGradient
         colors={GradientColors}
         style={[LayoutStyles.pageContainer, style]}

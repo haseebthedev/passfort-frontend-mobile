@@ -18,10 +18,6 @@ const Password = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(new Date());
-  }, []);
-
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Your Passwords" />
