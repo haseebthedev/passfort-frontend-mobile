@@ -1,53 +1,52 @@
 import { StyleProp, Text, type TextProps, TextStyle } from "react-native";
-import { useFonts } from "expo-font";
+import { AppFont } from "@/utils";
 import { Typography } from "@/styles";
-import { AppFont, loadFonts } from "@/utils";
 
 export type AppTextI = TextProps & {
-  text?: string;
+  text: string;
   type?:
     | "default"
     | "title"
     | "heading"
     | "subHeading"
     | "regularSubHeading"
-    | "secondaryHeading"
     | "primaryHeading"
     | "buttonTitle"
     | "primaryTitle"
     | "label"
     | "description"
+    | "astericPasswordText"
     | "passwordText"
+    | "passwordLength"
+    | "errorText"
     | "detail";
   style?: StyleProp<TextStyle>;
 };
 
+const typeStyles: Record<NonNullable<AppTextI["type"]>, TextStyle | undefined> = {
+  default: Typography.default,
+  title: Typography.title,
+  heading: Typography.heading,
+  subHeading: Typography.subHeading,
+  regularSubHeading: Typography.regularSubHeading,
+  primaryHeading: Typography.primaryHeading,
+  buttonTitle: Typography.buttonTitle,
+  primaryTitle: Typography.primaryTitle,
+  label: Typography.label,
+  description: Typography.description,
+  astericPasswordText: Typography.astericPasswordText,
+  passwordText: Typography.passwordText,
+  errorText: Typography.errorText,
+  detail: Typography.detail,
+  passwordLength: Typography.passwordLength,
+};
+
 export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) => {
-  const [fontsLoaded] = useFonts(loadFonts());
+  const textStyle = [{ fontFamily: AppFont.regular }, typeStyles[type], style];
 
   return (
-    <>
-      <Text
-        style={[
-          fontsLoaded && { fontFamily: AppFont.regular },
-          type === "default" ? Typography.default : undefined,
-          type === "title" ? Typography.title : undefined,
-          type === "heading" ? [Typography.heading, { fontFamily: AppFont.semi_bold }] : undefined,
-          type === "subHeading" ? [Typography.subHeading, { fontFamily: AppFont.semi_bold }] : undefined,
-          type === "regularSubHeading" ? Typography.regularSubHeading : undefined,
-          type === "primaryHeading" ? Typography.primaryHeading : undefined,
-          type === "label" ? Typography.label : undefined,
-          type === "buttonTitle" ? Typography.buttonTitle : undefined,
-          type === "primaryTitle" ? Typography.primaryTitle : undefined,
-          type === "passwordText" ? Typography.passwordText : undefined,
-          type === "description" ? Typography.description : undefined,
-          type === "detail" ? Typography.detail : undefined,
-          style,
-        ]}
-        {...rest}
-      >
-        {text}
-      </Text>
-    </>
+    <Text style={textStyle} {...rest}>
+      {text}
+    </Text>
   );
 };

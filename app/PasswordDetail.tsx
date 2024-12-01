@@ -1,87 +1,84 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import { hp, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
-import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
-import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { AppHeader, AppText, GradientWrapper, RippleWrapper, SmallAppButton } from "@/components";
 
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
   const { id } = useLocalSearchParams();
-  const [passwordDetails, setPasswordDetails] = useState<PasswordItemType>({
-    icon: undefined,
-    username: "",
-    email: "",
-    id: "",
-    passwordText: "",
-    type: "App",
-    platform: "",
-    address: "",
-  });
+  const [passwordDetails, setPasswordDetails] = useState<PasswordItemType | null>(null);
 
   useEffect(() => {
     const password = PasswordItem_Data.find((item) => item.id === id);
-    if (password) {
-      setPasswordDetails(password);
-    }
-  }, []);
+    setPasswordDetails(password ?? null);
+  }, [id]);
+
+  const handleBackPress = useCallback(() => router.back(), []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Password Details" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+      <AppHeader title="Password Details" leftIconName="chevron-back" onLeftIconPress={handleBackPress} />
 
       <View style={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.infoContainer}>
             <AppText text="Type" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.type} type="default" />
+            <AppText text={passwordDetails?.type ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.platform} type="default" />
+            <AppText text={passwordDetails?.platform ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.address} type="default" />
+            <AppText text={passwordDetails?.address ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Usermame" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.username} type="default" />
+            <AppText text={passwordDetails?.username ?? ""} type="default" />
           </View>
           <View style={styles.infoContainer}>
             <AppText text="Email" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails.email} type="default" />
+            <AppText text={passwordDetails?.email ?? ""} type="default" />
           </View>
         </View>
 
         <View style={styles.passwordActionContainer}>
-          <AppText text={passwordDetails.passwordText} style={styles.passwordText} />
-          <AppButton text="Copy" style={styles.copyButton} />
+          <AppText text={passwordDetails?.passwordText ?? ""} type="passwordText" />
+          <SmallAppButton text="Copy" onPress={() => {}} />
 
           <View style={styles.buttonsContainer}>
-            <TouchableWithoutFeedback onPress={() => console.log("Trash icon pressed")}>
-              <View style={styles.buttonContainer}>
-                <Feather name="trash-2" size={iconSize} color={colorPalette.primaryBg.primaryWhite} />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log("Edit icon pressed")}>
-              <View style={styles.buttonContainer}>
-                <MaterialCommunityIcons
-                  name="square-edit-outline"
-                  size={iconSize}
-                  color={colorPalette.primaryBg.primaryWhite}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log("Share icon pressed")}>
-              <View style={styles.buttonContainer}>
-                <Fontisto name="share-a" size={iconSize - wp(1)} color={colorPalette.primaryBg.primaryWhite} />
-              </View>
-            </TouchableWithoutFeedback>
+            <RippleWrapper
+              onPress={() => console.log("Trash icon pressed")}
+              style={styles.buttonContainer}
+              containerStyle={styles.containerStyle}
+            >
+              <Feather name="trash-2" size={iconSize} color={colorPalette.primaryBg.primaryWhite} />
+            </RippleWrapper>
+            <RippleWrapper
+              onPress={() => console.log("Edit icon pressed")}
+              style={styles.buttonContainer}
+              containerStyle={styles.containerStyle}
+            >
+              <MaterialCommunityIcons
+                name="square-edit-outline"
+                size={iconSize}
+                color={colorPalette.primaryBg.primaryWhite}
+              />
+            </RippleWrapper>
+            <RippleWrapper
+              onPress={() => console.log("Share icon pressed")}
+              style={styles.buttonContainer}
+              containerStyle={styles.containerStyle}
+            >
+              <Fontisto name="share-a" size={iconSize - wp(1)} color={colorPalette.primaryBg.primaryWhite} />
+            </RippleWrapper>
           </View>
         </View>
       </View>
@@ -99,6 +96,7 @@ const styles = StyleSheet.create({
     borderColor: colorPalette.primaryBg.borderColor2,
     borderRadius: hp(2),
     padding: Spacing.xs,
+    marginTop: Spacing.xs,
   },
   innerContainer: {
     height: hp(57),
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp(0.7),
   },
   infoHeading: {
-    color: colorPalette.primaryBg.primaryGrey,
+    color: colorPalette.primaryBg.secondayGrey,
   },
   passwordActionContainer: {
     padding: Spacing.lg,
@@ -124,26 +122,19 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
-    gap: Spacing.sm,
+    gap: Spacing.lg,
   },
   buttonContainer: {
-    width: wp(10),
-    height: wp(10),
-    borderRadius: wp(5),
+    width: wp(14),
+    height: wp(14),
+    borderRadius: wp(7),
     alignItems: "center",
     justifyContent: "center",
     borderWidth: wp(0.2),
     backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
     borderColor: colorPalette.primaryBg.borderColor2,
   },
-  passwordText: {
-    fontSize: hp(3.4),
-    fontWeight: Fonts.weight.md,
-  },
-  copyButton: {
-    paddingVertical: 0,
-    width: wp(40),
-    height: hp(5.8),
-    borderRadius: hp(2),
+  containerStyle: {
+    borderRadius: Spacing.xl,
   },
 });

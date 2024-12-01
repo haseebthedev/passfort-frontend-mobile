@@ -7,6 +7,10 @@ const AuthLayout = () => {
       <Stack.Screen name="Onboarding" />
       <Stack.Screen name="Signin" />
       <Stack.Screen name="Signup" />
+      <Stack.Screen name="BiometricAuth" />
+      <Stack.Screen name="ForgetPassword" />
+      <Stack.Screen name="OtpVerification" />
+      <Stack.Screen name="ResetPassword" />
     </Stack>
   );
 };

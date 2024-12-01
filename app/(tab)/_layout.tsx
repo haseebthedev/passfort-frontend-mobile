@@ -1,33 +1,26 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
-import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { hp, wp } from "@/utils";
+import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
 
 const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
+        headerShown: false,
         tabBarActiveTintColor: colorPalette.primaryBg.secondaryLightGreen,
         tabBarInactiveTintColor: colorPalette.primaryBg.primaryGrey,
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
-          paddingVertical: hp(1.4),
-          height: hp(10),
-          borderTopWidth: 0,
-        },
-        tabBarLabelStyle: {
-          marginBottom: Spacing.sm,
-          fontSize: Fonts.size.sm,
-        },
+        tabBarStyle: styles.tabBarStyle,
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <FontAwesome size={iconSize} name="home" color={color} />,
+          tabBarIcon: ({ color }) => <Entypo size={iconSize} name="home" color={color} />,
         }}
       />
       <Tabs.Screen
@@ -49,3 +42,16 @@ const TabLayout = () => {
 };
 
 export default TabLayout;
+
+const styles = StyleSheet.create({
+  tabBarStyle: {
+    backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
+    height: hp(8),
+    borderTopWidth: 0,
+  },
+  tabBarLabelStyle: {
+    marginBottom: Spacing.sm,
+    fontSize: Fonts.size.sm,
+    fontFamily: AppFont.regular,
+  },
+});

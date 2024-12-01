@@ -1,40 +1,37 @@
-import React from "react";
-import { Image, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { Image, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { hp, wp } from "@/utils";
+import { Screens } from "@/enums";
 import { OnboardingData } from "@/constants";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
 
 const Onboarding = () => {
-  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const handleNext = () => {
     if (currentIndex < OnboardingData.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.push("/(tab)/");
+      router.push(Screens.Home);
     }
   };
 
-  const handleSkip = () => {
-    router.push("/(tab)/");
-  };
+  const handleSkip = () => router.push(Screens.Home);
 
   return (
-    <GradientWrapper style={[LayoutStyles.horizontalSpacing, styles.container]}>
-      <Image source={OnboardingData[currentIndex].image} style={styles.image} />
-      <AppText text={OnboardingData[currentIndex].title} type="primaryTitle" />
-      <AppText text={OnboardingData[currentIndex].subtitle} type="label" style={styles.textStyle} />
+    <GradientWrapper style={[LayoutStyles.horizontalSpacing]}>
+      <View style={styles.container}>
+        <Image source={OnboardingData[currentIndex].image} style={styles.image} />
+        <AppText text={OnboardingData[currentIndex].title} type="primaryTitle" />
+        <AppText text={OnboardingData[currentIndex].subtitle} type="label" style={styles.textStyle} />
+      </View>
 
-      <AppButton text={currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"} onPress={handleNext} />
-      <AppButton
-        text="Skip"
-        onPress={handleSkip}
-        preset="link"
-        style={styles.skipButton}
-        textStyle={styles.skipButtonText}
-      />
+      <View style={styles.actionButtons}>
+        <AppButton text={currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"} onPress={handleNext} />
+        <AppButton text="Skip" onPress={handleSkip} preset="secondaryLink" />
+      </View>
     </GradientWrapper>
   );
 };
@@ -55,16 +52,8 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
     marginBottom: hp(3.6),
   },
-  skipButton: {
-    marginTop: Spacing.xl,
-  },
-  skipButtonText: {
-    color: colorPalette.primaryBg.primaryWhite,
-  },
-  buttonText: {
-    textAlign: "center",
-    textDecorationLine: "underline",
-    color: colorPalette.primaryBg.primaryWhite,
+  actionButtons: {
+    gap: Spacing.xl,
   },
 });
 

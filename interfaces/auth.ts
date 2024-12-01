@@ -1,8 +1,7 @@
 export type UserI = {
   id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  name: string;
   picture: string | null;
   location: string | null;
   isFirstSignIn: boolean;
@@ -14,3 +13,32 @@ export type UserInfoI = {
   email: string;
   number: string;
 };
+
+export interface SignupI {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export type SigninI = Pick<SignupI, "email" | "password">;
+
+export type ForgetPasswordI = Pick<SignupI, "email">;
+
+export type ResetPasswordI = {
+  newPassword: string;
+  confirmPassword: string;
+};
+
+export interface EditProfileI {
+  name: string;
+  email: string;
+  phoneNumber?: string;
+}
+
+export interface CreatePasswordI {
+  type: string;
+  platform: string;
+  siteAddress?: string;
+  email?: string;
+  password: string;
+}

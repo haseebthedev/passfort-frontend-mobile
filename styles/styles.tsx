@@ -14,9 +14,23 @@ export const colorPalette = {
 
     borderColor1: "#1A291D",
     borderColor2: "#2C5235",
+    swipeButtonBg: "#274C2F",
+    lighterGreen: "#D2F0D9",
 
     primaryLightGreenBg: "rgba(126, 244, 150, 0.05)",
     secondaryLightGreenBg: "rgba(218, 255, 225, 0.05)",
+
+    primaryText: "#101F12",
+
+    primaryRed: "#FD2828FF",
+
+    primaryBg: "#1A2A1D",
+    transparent: "rgba(0,0,0,0)",
+
+    moderateBorder: "#FFCC00", // Dark yellow border for moderate
+    moderateText: "#FF8C00", // Orange text for moderate
+
+    black: "#000000",
   },
 
   gradientBg: {
@@ -45,7 +59,7 @@ export const Fonts: FontsType = {
     lg: hp(2.28),
     xl: hp(2.5),
     xxl: hp(3.03),
-    heading: hp(4.45),
+    heading: hp(4),
     display: hp(3.4),
   },
   weight: {
@@ -64,17 +78,17 @@ export const Typography = StyleSheet.create({
   default: {
     fontSize: Fonts.size.sm,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.regular,
   },
   title: {
     fontSize: Fonts.size.display,
-    fontWeight: Fonts.weight.xl,
-    letterSpacing: -0.02,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.bold,
   },
   primaryTitle: {
     fontSize: Fonts.size.heading,
-    fontWeight: Fonts.weight.xl,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.bold,
   },
   label: {
     fontSize: Fonts.size.md,
@@ -86,41 +100,57 @@ export const Typography = StyleSheet.create({
     fontSize: Fonts.size.xl,
     letterSpacing: 0.1,
     color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.semiBold,
   },
   primaryHeading: {
     fontSize: Fonts.size.md,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   regularSubHeading: {
     fontSize: Fonts.size.sm,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   subHeading: {
     fontSize: Fonts.size.sm,
     color: colorPalette.primaryBg.primaryWhite,
-    fontFamily: AppFont.medium,
+    fontFamily: AppFont.semiBold,
   },
   description: {
     fontSize: Fonts.size.xs,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   detail: {
     fontSize: Fonts.size.lg,
-    fontWeight: Fonts.weight.md,
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
   },
   buttonTitle: {
     fontSize: Fonts.size.lg,
-    fontWeight: Fonts.weight.xl,
     color: colorPalette.primaryBg.primaryDarkGreen,
+    fontFamily: AppFont.bold,
+  },
+  astericPasswordText: {
+    fontSize: Fonts.size.xxl,
+    color: colorPalette.primaryBg.primaryWhite,
+    fontFamily: AppFont.semiBold,
   },
   passwordText: {
-    fontSize: Fonts.size.xxl,
-    fontWeight: Fonts.weight.lg,
+    fontSize: hp(3.3),
+    fontFamily: AppFont.regular,
     color: colorPalette.primaryBg.primaryWhite,
+  },
+  passwordLength: {
+    fontSize: hp(8.6),
+    fontFamily: AppFont.bold,
+    color: colorPalette.primaryBg.primaryWhite,
+  },
+  errorText: {
+    fontSize: Fonts.size.sm,
+    fontFamily: AppFont.regular,
+    color: colorPalette.primaryBg.primaryRed,
   },
 });
 
@@ -129,16 +159,17 @@ export const iconSize = wp(6);
 export const FormsStyle = StyleSheet.create({
   formControl: {
     flex: 1,
-    padding: Spacing.md,
+    padding: Spacing.sm,
     gap: Spacing.md,
-    borderRadius: wp(5),
+    borderRadius: wp(4),
     borderWidth: wp(0.1),
     color: colorPalette.primaryBg.primaryWhite,
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.secondaryDarkGreen,
+    fontFamily: AppFont.regular,
   },
   formLabel: {
-    marginVertical: hp(1),
+    marginVertical: Spacing.xs,
   },
 });
 
@@ -157,17 +188,45 @@ export const LayoutStyles = StyleSheet.create({
   headerNavContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: Spacing.md,
+    marginVertical: Spacing.sm,
   },
   headerIcon: {
     color: colorPalette.primaryBg.primaryWhite,
     resizeMode: "contain",
   },
   cardIcon: {
-    width: wp(14.5),
-    height: wp(14.5),
+    width: wp(6.5),
+    height: wp(6.5),
   },
   horizontalSpacing: {
     paddingHorizontal: Spacing.md,
   },
+  positionCenter: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
+
+export const getPasswordTypeContainerStyle = (type: string) => {
+  switch (type) {
+    case "STRONG":
+      return { borderColor: colorPalette.primaryBg.borderColor2 };
+    case "MODERATE":
+      return { borderColor: colorPalette.primaryBg.moderateBorder };
+    case "WEAK":
+    default:
+      return { borderColor: colorPalette.primaryBg.primaryRed };
+  }
+};
+
+export const getPasswordTypeTextStyle = (type: string) => {
+  switch (type) {
+    case "STRONG":
+      return { color: colorPalette.primaryBg.secondaryLightGreen };
+    case "MODERATE":
+      return { color: colorPalette.primaryBg.moderateBorder };
+    case "WEAK":
+    default:
+      return { color: colorPalette.primaryBg.primaryRed };
+  }
+};

@@ -1,56 +1,44 @@
-import React, { useState } from "react";
-import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { AppText } from "./AppText";
-import { hp, maskPassword, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
-import { colorPalette, Fonts, LayoutStyles, Spacing } from "@/styles";
+import { getInitials, hp, wp } from "@/utils";
+import { colorPalette, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
 
 interface PasswordItemI {
   item: PasswordItemType;
 }
 
 export const PasswordItem = ({ item }: PasswordItemI) => {
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-
   const onCopyPasswordPress = () => {};
-  const onVisiblityPress = () => setPasswordVisible((prev) => !prev);
 
   return (
-    <TouchableWithoutFeedback onPress={() => router.push(`/PasswordDetail?id=${item.id}`)}>
-      <View style={styles.passwordItemCard}>
+    <>
+      <RippleWrapper onPress={() => router.push(`/PasswordDetail?id=${item.id}`)} style={styles.passwordItemCard}>
         <View style={styles.passwordInfoContainer}>
-          <Image source={item.icon} style={LayoutStyles.cardIcon} />
-          <View style={styles.spacing}>
-            <AppText text={item.type} type="subHeading" style={styles.subHeading} numberOfLines={1} />
-            <AppText
-              text={passwordVisible ? item.passwordText : maskPassword(item.passwordText)}
-              style={passwordVisible ? styles.passwordText : styles.astericPasswordText}
-              type="passwordText"
-              numberOfLines={1}
-            />
+          <View style={styles.imageContainer}>
+            <AppText text={getInitials(item.username ?? "User Name")} type="heading" />
           </View>
+          <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
         </View>
+      </RippleWrapper>
 
-        <View style={styles.actionButtons}>
-          <TouchableWithoutFeedback onPress={onCopyPasswordPress}>
-            <Ionicons name="copy-outline" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} />
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={onVisiblityPress}>
-            <Entypo
-              name={passwordVisible ? "eye-with-line" : "eye"}
-              size={wp(5)}
-              color={colorPalette.primaryBg.primaryWhite}
-            />
-          </TouchableWithoutFeedback>
-        </View>
+      <View style={styles.copyButtonContainer}>
+        <RippleWrapper onPress={onCopyPasswordPress} style={styles.copyButton} containerStyle={styles.buttonContainer}>
+          <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} style={styles.copyIcon} />
+        </RippleWrapper>
       </View>
-    </TouchableWithoutFeedback>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    borderRadius: Spacing.lg,
+  },
   passwordItemCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -60,31 +48,41 @@ const styles = StyleSheet.create({
     borderWidth: wp(0.1),
     borderColor: colorPalette.primaryBg.borderColor2,
     backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
-    padding: Spacing.xxs,
+    paddingVertical: Spacing.xxs,
+    paddingHorizontal: Spacing.sm,
+    height: hp(8.42),
   },
   passwordInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-    gap: Spacing.xxs,
   },
-  passwordText: {
-    fontSize: Fonts.size.lg,
-    width: wp(50),
+  imageContainer: {
+    width: wp(11),
+    height: wp(10),
+    backgroundColor: colorPalette.gradientBg.lightGreen,
+    marginRight: Spacing.sm,
+    borderRadius: wp(2),
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 1,
   },
-  astericPasswordText: {
-    fontSize: Fonts.size.lg,
-    width: wp(50),
-    letterSpacing: wp(0.3),
-  },
-  spacing: { marginTop: Spacing.xxs, gap: wp(1) },
   subHeading: {
-    color: colorPalette.primaryBg.primaryGrey,
-    fontSize: Fonts.size.sm,
+    textTransform: "capitalize",
+    width: wp(63),
   },
-  actionButtons: {
-    flexDirection: "row",
-    paddingHorizontal: Spacing.sm,
-    gap: Spacing.sm,
+  copyButtonContainer: {
+    position: "absolute",
+    right: wp(3),
+    top: hp(1.2),
+  },
+  copyButton: {
+    width: wp(12),
+    height: wp(12),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  copyIcon: {
+    transform: [{ rotate: "90deg" }],
   },
 });

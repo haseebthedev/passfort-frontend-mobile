@@ -1,30 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
+import { useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 import * as SplashScreen from "expo-splash-screen";
-import { Href, useRouter } from "expo-router";
-import { useFonts } from "expo-font";
-
-import { wp } from "@/utils";
-import { GradientWrapper } from "@/components";
-import passfortIcon from "../assets/Icons/passfortIcon.png";
+import { Screens } from "@/enums";
+import { passfortIcon } from "@/assets";
+import { loadFonts, wp } from "@/utils";
+import { GradientWrapper, LoadingIndicator } from "@/components";
 
 export default function Index() {
   const router = useRouter();
-  const [fontsLoaded] = useFonts({
-    regular: require("../assets/fonts/Mulish-Regular.ttf"),
-  });
+  const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
+  const [imagePickerLoaded, setImagePickerLoaded] = useState<boolean>(false);
+
+  const requestPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need media library permissions to make this work!");
+    } else {
+      setImagePickerLoaded(true);
+    }
+  };
 
   const redirectUser = async () => {
-    if (true) {
+    if (fontsLoaded) {
       setTimeout(() => {
-        router.push("/auth/Signin" as Href<string>);
-      }, 3000);
+        router.push(Screens.Signin);
+      }, 10000);
     }
   };
 
   useEffect(() => {
     async function prepare() {
       try {
+        await loadFonts();
+        setFontsLoaded(true);
         await SplashScreen.preventAutoHideAsync();
         if (fontsLoaded) {
           redirectUser();
@@ -38,6 +48,14 @@ export default function Index() {
 
     prepare();
   }, [router, fontsLoaded]);
+
+  useEffect(() => {
+    requestPermissions();
+  }, []);
+
+  if (!fontsLoaded && !imagePickerLoaded) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <GradientWrapper style={styles.container}>

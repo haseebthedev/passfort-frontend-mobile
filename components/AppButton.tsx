@@ -1,22 +1,14 @@
 import React, { ComponentType } from "react";
-import {
-  Pressable,
-  PressableProps,
-  PressableStateCallbackType,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
-import { hp, wp } from "@/utils";
+import { PressableProps, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
+import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
+import { RippleWrapper } from "./RippleWrapper";
 
 type Presets = keyof typeof viewPresets;
 
 interface ButtonAccessoryProps {
   style: StyleProp<ViewStyle>;
-  pressableState: PressableStateCallbackType;
 }
 
 interface ButtonProps extends PressableProps {
@@ -28,7 +20,7 @@ interface ButtonProps extends PressableProps {
   pressedTextStyle?: StyleProp<TextStyle>;
   RightAccessory?: ComponentType<ButtonAccessoryProps>;
   LeftAccessory?: ComponentType<ButtonAccessoryProps>;
-  onPress?: () => void;
+  onPress: () => void;
 }
 
 export function AppButton(props: ButtonProps) {
@@ -45,50 +37,73 @@ export function AppButton(props: ButtonProps) {
     ...rest
   } = props;
 
-  const getViewStyle = ({ pressed }: PressableStateCallbackType) => [
-    viewPresets[preset],
-    style,
-    pressed && pressedViewPresets[preset],
-  ];
+  const getContainerStyle = () => containerPresets[preset];
 
-  const getTextStyle = ({ pressed }: PressableStateCallbackType) => [
-    textPresets[preset],
-    textStyle,
-    pressed && pressedTextPresets[preset],
-  ];
+  const getViewStyle = () => [viewPresets[preset], style];
+
+  const getTextStyle = () => [textPresets[preset], textStyle];
 
   return (
-    <Pressable style={getViewStyle} accessibilityRole="button" onPress={onPress} {...rest}>
-      {(state) => (
-        <>
-          {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} pressableState={state} />}
-          <AppText text={text} style={getTextStyle(state)} type="buttonTitle" />
-          {RightAccessory && <RightAccessory style={rightAccessoryStyle} pressableState={state} />}
-        </>
-      )}
-    </Pressable>
+    <RippleWrapper
+      onPress={onPress}
+      style={getViewStyle()}
+      rippleColor={
+        preset === "default" || preset === "filled"
+          ? colorPalette.primaryBg.primaryLightGreen
+          : colorPalette.primaryBg.transparent
+      }
+      containerStyle={getContainerStyle()}
+    >
+      <>
+        {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} />}
+        <AppText text={text} style={getTextStyle()} type="buttonTitle" />
+        {RightAccessory && <RightAccessory style={rightAccessoryStyle} />}
+      </>
+    </RippleWrapper>
   );
 }
 
 const baseViewStyle: ViewStyle = {
-  width: wp(91),
   flexDirection: "row",
-  alignSelf: "center",
+  alignSelf: "stretch",
   borderRadius: hp(2.5),
   justifyContent: "center",
   alignItems: "center",
   paddingVertical: Spacing.md,
-  marginVertical: Spacing.md,
   overflow: "hidden",
 };
 
 const baseTextStyle: TextStyle = {
   color: colorPalette.primaryBg.primaryDarkGreen,
   textAlign: "center",
+  fontFamily: AppFont.bold,
 };
 
 const rightAccessoryStyle: ViewStyle = { marginStart: Spacing.xs, zIndex: 1 };
 const leftAccessoryStyle: ViewStyle = { marginEnd: Spacing.xs, zIndex: 1 };
+
+const containerPresets = {
+  default: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  filled: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  primaryLink: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  secondaryLink: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+  noUnderline: {
+    marginVertical: Spacing.md,
+    borderRadius: Spacing.lg,
+  },
+};
 
 const viewPresets = {
   default: [
@@ -100,31 +115,33 @@ const viewPresets = {
     },
   ] as StyleProp<ViewStyle>,
   filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.secondaryLightGreen }] as StyleProp<ViewStyle>,
-  link: [{ marginHorizontal: Spacing.xxs }] as StyleProp<ViewStyle>,
+  primaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
+  secondaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
+  noUnderline: [
+    { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs, alignSelf: "center" },
+  ] as StyleProp<ViewStyle>,
 };
 
 const textPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1 }],
-  filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1 }],
-  link: [
+  default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
+  filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
+  primaryLink: [
     baseTextStyle,
     {
+      fontFamily: AppFont.regular,
       textDecorationLine: "underline",
       color: colorPalette.primaryBg.secondaryLightGreen,
-      fontWeight: Fonts.weight.md,
-      fontSize: 16,
+      fontSize: Fonts.size.sm,
     },
   ],
-};
-
-const pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { opacity: 0.9 },
-  filled: { opacity: 0.9 },
-  link: { opacity: 0.7 },
-};
-
-const pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: { opacity: 0.8 },
-  filled: { opacity: 0.9 },
-  link: { opacity: 0.7 },
+  secondaryLink: [
+    baseTextStyle,
+    {
+      fontFamily: AppFont.regular,
+      textDecorationLine: "underline",
+      color: colorPalette.primaryBg.primaryWhite,
+      fontSize: Fonts.size.sm,
+    },
+  ],
+  noUnderline: { textDecorationLine: "none", color: colorPalette.primaryBg.primaryWhite },
 };
