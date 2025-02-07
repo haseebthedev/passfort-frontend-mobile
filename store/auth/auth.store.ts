@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { UserI } from "@/interfaces";
+import { EditProfileI, ForgetPasswordI, ResetPasswordI, SigninI, SignupI, UserI } from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AxiosInstance from "@/services/api";
 
 type Store = {
   isLoading: boolean;
@@ -11,7 +12,11 @@ type Store = {
 
 type Action = {
   setUser: (user: UserI | null) => void;
-  login: (body: UserI) => Promise<void>;
+  signin: (body: SigninI) => Promise<void>;
+  signup: (body: SignupI) => Promise<void>;
+  editProfile: (body: EditProfileI) => Promise<void>;
+  forgetPassword: (body: ForgetPasswordI) => Promise<void>;
+  resetPassword: (body: ResetPasswordI) => Promise<void>;
   reset: () => void;
 };
 
@@ -26,17 +31,75 @@ const useAuthStore = create<Store & Action>()(
         setUser: (user: UserI | null) => set({ user }),
 
         // Actions
-        login: async (body: UserI) => {
+        signin: async (body: SigninI) => {
           try {
             set({ isLoading: true });
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            const response = await AxiosInstance.post("/auth/signin", body);
 
-            set({ user: body, isLoading: false });
+            const { user, token } = response.data.result;
+
+            await AsyncStorage.setItem("UserToken", token);
+
+            set({ user, isLoading: false });
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Something went wrong";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            console.error("Error:", errorMessage);
+          }
+        },
+
+        signup: async (body: SignupI) => {
+          try {
+            set({ isLoading: true });
+            const response = await AxiosInstance.post("/auth/signup", body);
+            set({ isLoading: false });
+            return Promise.resolve(response.data.result);
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Something went wrong";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            return Promise.reject(errorMessage);
+          }
+        },
+
+        editProfile: async (body: EditProfileI) => {
+          try {
+            set({ isLoading: true });
+            const response = await AxiosInstance.post("/auth/signup", body);
+            set({ isLoading: false });
+            return Promise.resolve(response.data.result);
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Something went wrong";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            return Promise.reject(errorMessage);
+          }
+        },
+
+        forgetPassword: async (body: ForgetPasswordI) => {
+          try {
+            set({ isLoading: true });
+            await AxiosInstance.post("/auth/forget-password", body);
             set({ isLoading: false });
           } catch (error: any) {
-            set({ isLoading: false, error: error.message });
+            set({ isLoading: false, error: error.response?.data?.message || "Something went wrong" });
+          }
+        },
 
-            console.error("Error:", error);
+        resetPassword: async (body: ResetPasswordI) => {
+          try {
+            set({ isLoading: true });
+            await AxiosInstance.post("/auth/reset-password", body);
+            set({ isLoading: false });
+          } catch (error: any) {
+            set({ isLoading: false, error: error.response?.data?.message || "Something went wrong" });
           }
         },
 

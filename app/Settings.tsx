@@ -9,8 +9,8 @@ import { AppButton, AppHeader, GradientWrapper } from "@/components";
 const Settings = () => {
   const { reset } = useAuthStore();
 
-  const onLogoutPress = () => {
-    reset();
+  const onLogoutPress = async () => {
+    await reset();
     router.push(Screens.Signin);
   };
 

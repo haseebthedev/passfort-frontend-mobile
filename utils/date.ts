@@ -12,7 +12,7 @@ export const groupByDate = (data: PasswordItemType[]) => {
   const yesterdayString = yesterday.toISOString().split("T")[0];
 
   data.forEach((item) => {
-    const itemDate = item.date.toString();
+    const itemDate = item.createdAt ? new Date(item.createdAt).toISOString().split("T")[0] : "";
 
     let sectionTitle: string;
     if (itemDate === todayString) {

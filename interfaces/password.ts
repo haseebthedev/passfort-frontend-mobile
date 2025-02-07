@@ -1,5 +1,21 @@
 import { ImageSourcePropType } from "react-native";
 
+export interface CreatePasswordI {
+  type?: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking" | null;
+  platform: string;
+  siteAddress?: string;
+  email?: string;
+  password: string;
+}
+
+export interface updatePasswordI {
+  type?: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking";
+  platform?: string;
+  siteAddress?: string;
+  email?: string;
+  password?: string;
+}
+
 export type PasswordCardType = {
   id: string;
   icon?: ImageSourcePropType;
@@ -14,9 +30,10 @@ export type PasswordItemType = {
   email?: string;
   address?: string;
   platform?: string;
-  passwordText: string;
+  passwordText?: string;
   icon?: ImageSourcePropType;
   date: string | Date;
+  createdAt?: string | Date;
 };
 
 export type PasswordStatType = {

@@ -10,7 +10,7 @@ import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
 
 const Signin = () => {
-  const { login, user } = useAuthStore();
+  const { user, signin } = useAuthStore();
 
   const validationSchema = signinValidationSchema;
   const initialValues: SigninI = { email: "", password: "" };
@@ -18,23 +18,19 @@ const Signin = () => {
   const submit = async ({ email, password }: SigninI) => {
     try {
       Keyboard.dismiss();
-      login({
-        id: "123",
-        email,
-        name: "John Doe",
-        picture: "https://via.placeholder.com/150",
-        location: "New York, USA",
-        isFirstSignIn: false,
-        isLogin: true,
-      });
+      await signin({ email, password });
 
-      if (user?.isFirstSignIn) {
-        router.push(Screens.Onboarding);
-      } else if (user?.isLogin && !user?.isFirstSignIn) {
-        router.push(Screens.BiometricAuth);
-      } else {
-        router.push(Screens.BiometricAuth);
+      if (user) {
+        router.push(Screens.Home);
       }
+
+      // if (user?.isFirstSignIn) {
+      //   router.push(Screens.Onboarding);
+      // } else if (!user?.isFirstSignIn) {
+      //   router.push(Screens.BiometricAuth);
+      // } else {
+      //   router.push(Screens.BiometricAuth);
+      // }
     } catch (err) {
       console.log("error === ", err);
     }

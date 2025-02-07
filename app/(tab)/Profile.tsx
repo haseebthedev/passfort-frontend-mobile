@@ -2,15 +2,23 @@ import React from "react";
 import { View, StyleSheet, Image, FlatList } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
+import { UserInfoI } from "@/interfaces";
 import { useAuthStore } from "@/store";
 import { profilePicture } from "@/assets";
 import { capitalize, wp } from "@/utils";
+import { PasswordCard_Data } from "@/constants";
 import { colorPalette, Spacing } from "@/styles";
-import { PasswordCard_Data, UserInfo_Data } from "@/constants";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
 
 const Profile = () => {
   const { user } = useAuthStore();
+
+  const userInfo: UserInfoI = {
+    name: user?.name ?? "N/A",
+    email: user?.email ?? "N/A",
+    number: "0300-458728",
+  };
+
   const onEditProfilePress = () => router.push(Screens.EditProfile);
 
   return (
@@ -31,7 +39,7 @@ const Profile = () => {
         />
       </View>
       <View style={styles.personalInfoContainer}>
-        {Object.entries(UserInfo_Data).map(([key, value]) => (
+        {Object.entries(userInfo).map(([key, value]) => (
           <View key={key}>
             <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
             <AppText text={value} type="detail" numberOfLines={1} />

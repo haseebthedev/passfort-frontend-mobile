@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { SectionList, StyleSheet, View, ViewToken } from "react-native";
 import { groupByDate, hp } from "@/utils";
-import { PasswordItem_Data } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, AppText, GradientWrapper, PasswordItem } from "@/components";
+import { usePasswordStore } from "@/store";
 
 const Password = () => {
-  const sections = groupByDate(PasswordItem_Data);
+  const { getPasswords, passwords } = usePasswordStore();
+  const sections = groupByDate(passwords);
   const [stickyHeader, setStickyHeader] = useState<string | null>(null);
 
   const viewableItemsConfig = useRef({
@@ -17,6 +18,10 @@ const Password = () => {
       }
     },
   });
+
+  useEffect(() => {
+    getPasswords();
+  }, [getPasswords]);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>

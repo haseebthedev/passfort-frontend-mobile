@@ -7,18 +7,22 @@ import { useFormikHook } from "@/hooks";
 import { signupValidationSchema } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
+import { useAuthStore } from "@/store";
 
 const Signup = () => {
+  const { user, signup } = useAuthStore();
+
   const validationSchema = signupValidationSchema;
   const initialValues: SignupI = { name: "", email: "", password: "" };
 
   const submit = async ({ name, email, password }: SignupI) => {
     try {
       Keyboard.dismiss();
-      console.log(name, email, password);
-      router.push(Screens.Signin);
-    } catch (err) {
-      console.log("error === ", err);
+      await signup({ name, email, password })
+        .then(() => router.push(Screens.Signin))
+        .catch((err) => console.log("Signup Error === ", err));
+    } catch (error) {
+      console.log("Signup Failed: ", error);
     }
   };
 

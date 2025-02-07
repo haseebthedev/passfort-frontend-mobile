@@ -2,10 +2,13 @@ export type UserI = {
   id: string;
   email: string;
   name: string;
-  picture: string | null;
+  profilePicture: string | null;
   location: string | null;
   isFirstSignIn: boolean;
-  isLogin?: boolean;
+  isEmailVerified: boolean;
+  dateOfBirth: string | null;
+  city: string | null;
+  country: string | null;
 };
 
 export type UserInfoI = {
@@ -30,15 +33,9 @@ export type ResetPasswordI = {
 };
 
 export interface EditProfileI {
-  name: string;
-  email: string;
+  profilePicture?: string;
+  name?: string;
+  DOB?: string;
+  country?: string;
   phoneNumber?: string;
-}
-
-export interface CreatePasswordI {
-  type: string;
-  platform: string;
-  siteAddress?: string;
-  email?: string;
-  password: string;
 }

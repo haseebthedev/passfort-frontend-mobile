@@ -20,7 +20,7 @@ const RootLayout = () => {
     return <LoadingIndicator />;
   }
 
-  if (user?.isLogin) {
+  if (user) {
     return (
       <Stack initialRouteName="(tab)" screenOptions={{ headerShown: false, animation: "ios" }}>
         <Stack.Screen name="(tab)" />

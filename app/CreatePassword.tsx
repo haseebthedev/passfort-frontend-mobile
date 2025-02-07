@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Keyboard, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
@@ -22,12 +22,12 @@ import {
 
 const CreatePassword = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<CreatePasswordI["type"]>(null);
   const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
 
   const validationSchema = createPasswordValidationSchema;
   const initialValues: CreatePasswordI = {
-    type: value ?? "",
+    type: value,
     platform: "",
     siteAddress: "",
     email: "",
@@ -84,10 +84,10 @@ const CreatePassword = () => {
             <AppText text="Type" type="subHeading" style={styles.infoHeading} />
             <Dropdown
               open={open}
-              value={value}
+              value={value ?? null}
               items={dropdownItems}
               setOpen={setOpen}
-              setValue={setValue}
+              setValue={setValue as Dispatch<SetStateAction<string | null>>}
               setFieldValue={setFieldValue}
             />
             {typeof errors.type === "string" && (

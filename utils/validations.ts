@@ -29,7 +29,14 @@ export const signinValidationSchema = yup.object().shape({
 
 export const editProfileValidationSchema = yup.object().shape({
   name: yup.string().min(3).required("Name is required!").label("Name"),
-  email: yup.string().required("Email address is required!").email("Please enter a valid email").label("Email Address"),
+  DOB: yup
+    .date()
+    .nullable()
+    .max(new Date(), "Date of Birth cannot be in the future")
+    .optional()
+    .typeError("Invalid date format (YYYY-MM-DD)"),
+  country: yup.string().min(3).optional().label("Country"),
+
   phoneNumber: yup
     .string()
     .optional()

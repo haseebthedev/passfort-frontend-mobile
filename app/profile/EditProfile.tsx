@@ -8,11 +8,12 @@ import { useAuthStore } from "@/store";
 import { EditProfileI } from "@/interfaces";
 import { useFormikHook } from "@/hooks";
 import { profilePicture } from "@/assets";
-import { editProfileValidationSchema, wp } from "@/utils";
+import { editProfileValidationSchema, uploadImageToCloudinary, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, GradientWrapper, ImagePickerModal, RippleWrapper, TextInput } from "@/components";
 
 const EditProfile = () => {
+  const { editProfile } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const { user } = useAuthStore();
@@ -32,14 +33,34 @@ const EditProfile = () => {
   const validationSchema = editProfileValidationSchema;
   const initialValues: EditProfileI = {
     name: user?.name ?? "",
-    email: user?.email ?? "",
+    DOB: user?.dateOfBirth ?? "",
+    country: user?.country ?? "",
     phoneNumber: "",
   };
 
-  const submit = async ({ email, name, phoneNumber }: EditProfileI) => {
+  const submit = async ({ name, DOB, country, profilePicture, phoneNumber }: EditProfileI) => {
+    Keyboard.dismiss();
     try {
-      console.log(email, name, phoneNumber);
-      Keyboard.dismiss();
+      let updatedPicture = null;
+      if (selectedImage) {
+        updatedPicture = await uploadImageToCloudinary(selectedImage);
+      }
+
+      const dataToBeUpdate: EditProfileI = {
+        name,
+        country,
+        DOB,
+        phoneNumber,
+        profilePicture: updatedPicture,
+      };
+
+      if (profilePicture) {
+        dataToBeUpdate.profilePicture = profilePicture;
+      }
+
+      await editProfile(dataToBeUpdate);
+
+      console.log(name, phoneNumber, DOB, country, profilePicture);
       router.back();
     } catch (err) {
       console.log("error === ", err);
@@ -88,12 +109,12 @@ const EditProfile = () => {
             <TextInput
               label="Email Address"
               placeholder="Enter Your Email Address"
-              value={user?.email ?? values.email}
+              value={user?.email}
               onChangeText={handleChange("email")}
               onBlur={() => setFieldTouched("email")}
               editable={false}
             />
-            <TextInput
+            {/* <TextInput
               label="Phone Number"
               placeholder="Enter Your Phone Number"
               value={values.phoneNumber}
@@ -101,6 +122,24 @@ const EditProfile = () => {
               onBlur={() => setFieldTouched("phoneNumber")}
               error={typeof errors.phoneNumber === "string" ? errors.phoneNumber : undefined}
               visible={typeof touched.phoneNumber === "boolean" ? touched.phoneNumber : undefined}
+            /> */}
+            <TextInput
+              label="Date Of Birth"
+              placeholder="Enter Your DOB"
+              value={values.DOB}
+              onChangeText={handleChange("DOB")}
+              onBlur={() => setFieldTouched("DOB")}
+              error={typeof errors.DOB === "string" ? errors.DOB : undefined}
+              visible={typeof touched.DOB === "boolean" ? touched.DOB : undefined}
+            />
+            <TextInput
+              label="Country"
+              placeholder="Enter Your Country"
+              value={values.country}
+              onChangeText={handleChange("country")}
+              onBlur={() => setFieldTouched("country")}
+              error={typeof errors.country === "string" ? errors.country : undefined}
+              visible={typeof touched.country === "boolean" ? touched.country : undefined}
             />
 
             <AppButton text="Save" onPress={handleSubmit} preset="filled" />
@@ -135,6 +174,7 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
+    marginBottom: Spacing.lg,
   },
   editButton: {
     position: "absolute",
