@@ -24,16 +24,17 @@ export type PasswordCardType = {
 };
 
 export type PasswordItemType = {
-  id: string;
+  _id: string;
   type: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking";
   username?: string;
   email?: string;
-  address?: string;
+  siteAddress?: string;
   platform?: string;
   passwordText?: string;
   icon?: ImageSourcePropType;
-  date: string | Date;
+  date?: string | Date;
   createdAt?: string | Date;
+  updatedAt?: string | Date;
 };
 
 export type PasswordStatType = {

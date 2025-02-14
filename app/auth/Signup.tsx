@@ -3,26 +3,33 @@ import { View, StyleSheet, Keyboard } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { SignupI } from "@/interfaces";
+import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
 import { signupValidationSchema } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppLogo, AppText, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
-import { useAuthStore } from "@/store";
+import {
+  AppButton,
+  AppLogo,
+  AppText,
+  GradientWrapper,
+  KeyboardResponsiveHOC,
+  LoadingIndicator,
+  TextInput,
+} from "@/components";
 
 const Signup = () => {
-  const { user, signup } = useAuthStore();
+  const { signup, isLoading } = useAuthStore();
 
   const validationSchema = signupValidationSchema;
   const initialValues: SignupI = { name: "", email: "", password: "" };
 
   const submit = async ({ name, email, password }: SignupI) => {
+    Keyboard.dismiss();
     try {
-      Keyboard.dismiss();
-      await signup({ name, email, password })
-        .then(() => router.push(Screens.Signin))
-        .catch((err) => console.log("Signup Error === ", err));
+      await signup({ name, email, password });
+      router.push(Screens.Signin);
     } catch (error) {
-      console.log("Signup Failed: ", error);
+      console.log("Signup Error: ", error);
     }
   };
 
@@ -71,7 +78,11 @@ const Signup = () => {
               secureInput={true}
             />
 
-            <AppButton text="Sign Up" onPress={handleSubmit} />
+            <AppButton
+              text={isLoading ? "" : "Sign Up"}
+              onPress={handleSubmit}
+              RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+            />
 
             <View style={styles.linkRow}>
               <AppText text="Already have an account?" type="label" />

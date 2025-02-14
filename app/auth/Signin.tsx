@@ -7,22 +7,28 @@ import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
 import { signinValidationSchema } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
+import {
+  AppButton,
+  AppLogo,
+  AppText,
+  Checkbox,
+  GradientWrapper,
+  KeyboardResponsiveHOC,
+  LoadingIndicator,
+  TextInput,
+} from "@/components";
 
 const Signin = () => {
-  const { user, signin } = useAuthStore();
+  const { user, signin, isLoading } = useAuthStore();
 
   const validationSchema = signinValidationSchema;
   const initialValues: SigninI = { email: "", password: "" };
 
   const submit = async ({ email, password }: SigninI) => {
+    Keyboard.dismiss();
     try {
-      Keyboard.dismiss();
       await signin({ email, password });
-
-      if (user) {
-        router.push(Screens.Home);
-      }
+      router.push(Screens.Home);
 
       // if (user?.isFirstSignIn) {
       //   router.push(Screens.Onboarding);
@@ -32,7 +38,7 @@ const Signin = () => {
       //   router.push(Screens.BiometricAuth);
       // }
     } catch (err) {
-      console.log("error === ", err);
+      console.log("Signin Error: ", err);
     }
   };
 
@@ -80,7 +86,11 @@ const Signin = () => {
             />
           </View>
 
-          <AppButton text="Sign In" onPress={handleSubmit} />
+          <AppButton
+            text={isLoading ? "" : "Sign In"}
+            onPress={handleSubmit}
+            RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+          />
 
           <View style={styles.linkRow}>
             <AppText text="Don’t have an account?" type="label" />
@@ -125,7 +135,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   linkRow: {
-    // marginTop: Spacing.xs,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

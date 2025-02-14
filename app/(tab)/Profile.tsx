@@ -1,8 +1,8 @@
 import React from "react";
-import { View, StyleSheet, Image, FlatList } from "react-native";
+import { View, StyleSheet, Image, FlatList, ImageSourcePropType } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { UserInfoI } from "@/interfaces";
+import { UserI } from "@/interfaces";
 import { useAuthStore } from "@/store";
 import { profilePicture } from "@/assets";
 import { capitalize, wp } from "@/utils";
@@ -13,11 +13,13 @@ import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/
 const Profile = () => {
   const { user } = useAuthStore();
 
-  const userInfo: UserInfoI = {
+  const userInfo: UserI = {
     name: user?.name ?? "N/A",
     email: user?.email ?? "N/A",
     number: "0300-458728",
   };
+
+  const profileImage: ImageSourcePropType = user?.profilePicture ? { uri: user?.profilePicture } : profilePicture;
 
   const onEditProfilePress = () => router.push(Screens.EditProfile);
 
@@ -26,7 +28,7 @@ const Profile = () => {
       <AppHeader title="Profile" rightIconName="settings" onRightIconPress={() => router.push(Screens.Settings)} />
 
       <View style={styles.container}>
-        <Image source={profilePicture} style={styles.profilePicture} />
+        <Image source={profileImage} style={styles.profilePicture} />
         <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
         <AppButton text="Edit profile" preset="primaryLink" onPress={onEditProfilePress} />
         <FlatList
@@ -42,7 +44,7 @@ const Profile = () => {
         {Object.entries(userInfo).map(([key, value]) => (
           <View key={key}>
             <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
-            <AppText text={value} type="detail" numberOfLines={1} />
+            <AppText text={String(value) ?? ""} type="detail" numberOfLines={1} />
           </View>
         ))}
       </View>
@@ -64,6 +66,7 @@ const styles = StyleSheet.create({
     height: wp(26),
     marginTop: Spacing.lg,
     marginBottom: Spacing.md,
+    borderRadius: wp(26),
   },
   passwordCardsContainer: {
     marginVertical: Spacing.md,

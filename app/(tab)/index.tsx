@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { router } from "expo-router";
 import { wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppFont } from "@/utils";
-import { useAuthStore } from "@/store";
+import { useAuthStore, usePasswordStore } from "@/store";
 import { colorPalette, Spacing } from "@/styles";
 import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
 import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
+import { PasswordItemType } from "@/interfaces";
 
 const HeaderComponent = () => {
   const { user } = useAuthStore();
@@ -53,15 +54,26 @@ const HeaderComponent = () => {
 };
 
 const Home = () => {
+  const { passwords, getPasswords } = usePasswordStore();
+
+  useEffect(() => {
+    getPasswords(1);
+  }, [getPasswords]);
+
   return (
     <GradientWrapper>
       <FlatList
-        data={PasswordItem_Data}
+        data={passwords}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <PasswordItem item={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        // keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => <HeaderComponent />}
         contentContainerStyle={styles.passwordItemsContainer}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <AppText text="No passwords found!" type="default" />
+          </View>
+        }
       />
     </GradientWrapper>
   );
@@ -92,7 +104,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    // marginTop: Spacing.lg,
     marginBottom: Spacing.md,
   },
   appLogo: {
@@ -110,5 +121,11 @@ const styles = StyleSheet.create({
   },
   passwordItemsContainer: {
     paddingHorizontal: Spacing.md,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Spacing.md,
   },
 });

@@ -6,17 +6,24 @@ import { hp, wp } from "@/utils";
 import { PasswordItemType } from "@/interfaces";
 import { PasswordItem_Data } from "@/constants";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppHeader, AppText, GradientWrapper, RippleWrapper, SmallAppButton } from "@/components";
+import { AppHeader, AppText, GradientWrapper, LoadingIndicator, RippleWrapper, SmallAppButton } from "@/components";
+import { usePasswordStore } from "@/store";
 
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
+  const { isLoading, getPasswordById } = usePasswordStore();
   const { id } = useLocalSearchParams();
   const [passwordDetails, setPasswordDetails] = useState<PasswordItemType | null>(null);
 
+  const getPassword = async () => {
+    await getPasswordById(id.toString())
+      .then((res: PasswordItemType) => setPasswordDetails(res))
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
-    const password = PasswordItem_Data.find((item) => item.id === id);
-    setPasswordDetails(password ?? null);
+    getPassword();
   }, [id]);
 
   const handleBackPress = useCallback(() => router.back(), []);
@@ -25,63 +32,67 @@ const PasswordDetail = () => {
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader title="Password Details" leftIconName="chevron-back" onLeftIconPress={handleBackPress} />
 
-      <View style={styles.container}>
-        <View style={styles.innerContainer}>
-          <View style={styles.infoContainer}>
-            <AppText text="Type" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails?.type ?? ""} type="default" />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.innerContainer}>
+            <View style={styles.infoContainer}>
+              <AppText text="Type" type="subHeading" style={styles.infoHeading} />
+              <AppText text={passwordDetails?.type ?? ""} type="default" />
+            </View>
+            <View style={styles.infoContainer}>
+              <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
+              <AppText text={passwordDetails?.platform ?? ""} type="default" />
+            </View>
+            <View style={styles.infoContainer}>
+              <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
+              <AppText text={passwordDetails?.siteAddress ?? ""} type="default" />
+            </View>
+            <View style={styles.infoContainer}>
+              <AppText text="Usermame" type="subHeading" style={styles.infoHeading} />
+              <AppText text={passwordDetails?.username ?? ""} type="default" />
+            </View>
+            <View style={styles.infoContainer}>
+              <AppText text="Email" type="subHeading" style={styles.infoHeading} />
+              <AppText text={passwordDetails?.email ?? ""} type="default" />
+            </View>
           </View>
-          <View style={styles.infoContainer}>
-            <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails?.platform ?? ""} type="default" />
-          </View>
-          <View style={styles.infoContainer}>
-            <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails?.address ?? ""} type="default" />
-          </View>
-          <View style={styles.infoContainer}>
-            <AppText text="Usermame" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails?.username ?? ""} type="default" />
-          </View>
-          <View style={styles.infoContainer}>
-            <AppText text="Email" type="subHeading" style={styles.infoHeading} />
-            <AppText text={passwordDetails?.email ?? ""} type="default" />
+
+          <View style={styles.passwordActionContainer}>
+            <AppText text={passwordDetails?.passwordText ?? ""} type="passwordText" />
+            <SmallAppButton text="Copy" onPress={() => {}} />
+
+            <View style={styles.buttonsContainer}>
+              <RippleWrapper
+                onPress={() => console.log("Trash icon pressed")}
+                style={styles.buttonContainer}
+                containerStyle={styles.containerStyle}
+              >
+                <Feather name="trash-2" size={iconSize} color={colorPalette.primaryBg.primaryWhite} />
+              </RippleWrapper>
+              <RippleWrapper
+                onPress={() => console.log("Edit icon pressed")}
+                style={styles.buttonContainer}
+                containerStyle={styles.containerStyle}
+              >
+                <MaterialCommunityIcons
+                  name="square-edit-outline"
+                  size={iconSize}
+                  color={colorPalette.primaryBg.primaryWhite}
+                />
+              </RippleWrapper>
+              <RippleWrapper
+                onPress={() => console.log("Share icon pressed")}
+                style={styles.buttonContainer}
+                containerStyle={styles.containerStyle}
+              >
+                <Fontisto name="share-a" size={iconSize - wp(1)} color={colorPalette.primaryBg.primaryWhite} />
+              </RippleWrapper>
+            </View>
           </View>
         </View>
-
-        <View style={styles.passwordActionContainer}>
-          <AppText text={passwordDetails?.passwordText ?? ""} type="passwordText" />
-          <SmallAppButton text="Copy" onPress={() => {}} />
-
-          <View style={styles.buttonsContainer}>
-            <RippleWrapper
-              onPress={() => console.log("Trash icon pressed")}
-              style={styles.buttonContainer}
-              containerStyle={styles.containerStyle}
-            >
-              <Feather name="trash-2" size={iconSize} color={colorPalette.primaryBg.primaryWhite} />
-            </RippleWrapper>
-            <RippleWrapper
-              onPress={() => console.log("Edit icon pressed")}
-              style={styles.buttonContainer}
-              containerStyle={styles.containerStyle}
-            >
-              <MaterialCommunityIcons
-                name="square-edit-outline"
-                size={iconSize}
-                color={colorPalette.primaryBg.primaryWhite}
-              />
-            </RippleWrapper>
-            <RippleWrapper
-              onPress={() => console.log("Share icon pressed")}
-              style={styles.buttonContainer}
-              containerStyle={styles.containerStyle}
-            >
-              <Fontisto name="share-a" size={iconSize - wp(1)} color={colorPalette.primaryBg.primaryWhite} />
-            </RippleWrapper>
-          </View>
-        </View>
-      </View>
+      )}
     </GradientWrapper>
   );
 };

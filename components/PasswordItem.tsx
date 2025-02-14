@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
@@ -17,7 +17,7 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
 
   return (
     <>
-      <RippleWrapper onPress={() => router.push(`/PasswordDetail?id=${item.id}`)} style={styles.passwordItemCard}>
+      <RippleWrapper onPress={() => router.push(`/PasswordDetail?id=${item._id}`)} style={styles.passwordItemCard}>
         <View style={styles.passwordInfoContainer}>
           <View style={styles.imageContainer}>
             <AppText text={getInitials(item.username ?? "User Name")} type="heading" />

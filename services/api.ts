@@ -4,7 +4,7 @@ import { loadString } from "@/utils/storage";
 
 const AxiosInstance = axios.create({
   baseURL: API_URL,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 AxiosInstance.interceptors.request.use(

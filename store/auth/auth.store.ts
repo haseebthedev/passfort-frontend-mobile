@@ -3,6 +3,7 @@ import { devtools, persist } from "zustand/middleware";
 import { EditProfileI, ForgetPasswordI, ResetPasswordI, SigninI, SignupI, UserI } from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
+import { AxiosError } from "axios";
 
 type Store = {
   isLoading: boolean;
@@ -47,7 +48,7 @@ const useAuthStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
-            console.error("Error:", errorMessage);
+            throw new Error(errorMessage);
           }
         },
 
@@ -56,30 +57,28 @@ const useAuthStore = create<Store & Action>()(
             set({ isLoading: true });
             const response = await AxiosInstance.post("/auth/signup", body);
             set({ isLoading: false });
-            return Promise.resolve(response.data.result);
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
             });
-            return Promise.reject(errorMessage);
+            throw new Error(errorMessage);
           }
         },
 
         editProfile: async (body: EditProfileI) => {
           try {
             set({ isLoading: true });
-            const response = await AxiosInstance.post("/auth/signup", body);
-            set({ isLoading: false });
-            return Promise.resolve(response.data.result);
+            const response = await AxiosInstance.patch("/user/me", body);
+            set({ user: response.data.result, isLoading: false });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
             });
-            return Promise.reject(errorMessage);
+            throw new Error(errorMessage);
           }
         },
 
@@ -89,7 +88,12 @@ const useAuthStore = create<Store & Action>()(
             await AxiosInstance.post("/auth/forget-password", body);
             set({ isLoading: false });
           } catch (error: any) {
-            set({ isLoading: false, error: error.response?.data?.message || "Something went wrong" });
+            const errorMessage = error.response?.data?.message || "Something went wrong";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            throw new Error(errorMessage);
           }
         },
 
@@ -99,7 +103,12 @@ const useAuthStore = create<Store & Action>()(
             await AxiosInstance.post("/auth/reset-password", body);
             set({ isLoading: false });
           } catch (error: any) {
-            set({ isLoading: false, error: error.response?.data?.message || "Something went wrong" });
+            const errorMessage = error.response?.data?.message || "Something went wrong";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            throw new Error(errorMessage);
           }
         },
 

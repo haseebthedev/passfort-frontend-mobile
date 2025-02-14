@@ -2,20 +2,27 @@ import React from "react";
 import { View, StyleSheet, Keyboard } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
+import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
 import { ResetPasswordI } from "@/interfaces";
 import { hp, newPasswordValidation, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, TextInput } from "@/components";
+import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
 
 const ResetPassword = () => {
+  const { isLoading, resetPassword } = useAuthStore();
+
   const validationSchema = newPasswordValidation;
   const initialValues: ResetPasswordI = { newPassword: "", confirmPassword: "" };
 
-  const submit = ({ newPassword, confirmPassword }: ResetPasswordI) => {
+  const submit = async ({ newPassword, confirmPassword }: ResetPasswordI) => {
     Keyboard.dismiss();
-    console.log("passwords: ", newPassword, confirmPassword);
-    router.push(Screens.Signin);
+    try {
+      await resetPassword({ newPassword, confirmPassword });
+      router.push(Screens.Signin);
+    } catch (err) {
+      console.log("Error while reseting password: ", err);
+    }
   };
 
   const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
@@ -55,7 +62,12 @@ const ResetPassword = () => {
           error={errors.confirmPassword}
           visible={touched.confirmPassword}
         />
-        <AppButton preset="filled" text="Continue" onPress={handleSubmit} />
+        <AppButton
+          preset="filled"
+          text={isLoading ? "" : "Continue"}
+          onPress={handleSubmit}
+          RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+        />
       </View>
     </GradientWrapper>
   );

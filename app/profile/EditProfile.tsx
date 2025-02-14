@@ -1,25 +1,40 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Image, ImageSourcePropType, Keyboard, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ImageSourcePropType, Keyboard, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { TranslationLanguageCodeMap } from "react-native-country-picker-modal";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
 import { EditProfileI } from "@/interfaces";
 import { useFormikHook } from "@/hooks";
 import { profilePicture } from "@/assets";
-import { editProfileValidationSchema, uploadImageToCloudinary, wp } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, GradientWrapper, ImagePickerModal, RippleWrapper, TextInput } from "@/components";
+import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
+import { editProfileValidationSchema, formatDate, uploadImageToBackend, wp } from "@/utils";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  CountryPickerModal,
+  GradientWrapper,
+  ImagePickerModal,
+  LoadingIndicator,
+  RippleWrapper,
+  TextInput,
+} from "@/components";
 
 const EditProfile = () => {
-  const { editProfile } = useAuthStore();
+  const { user, editProfile, isLoading } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const { user } = useAuthStore();
-  const [imagePickerVisible, setImagePickerVisible] = useState<boolean>(false);
+  const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
   const [profileImage, setProfileImage] = useState<ImageSourcePropType>();
   const [selectedImage, setSelectedImage] = useState<ImageSourcePropType>();
+  const [selectedCountry, setSelectedCountry] = useState<TranslationLanguageCodeMap | string>("");
+  const [dateModalVisible, setDateModalVisible] = useState<boolean>(false);
+  const [imagePickerVisible, setImagePickerVisible] = useState<boolean>(false);
+  const [countryModalVisible, setCountryModalVisible] = useState<boolean>(false);
 
   const snapPoints = ["30%"];
 
@@ -33,37 +48,37 @@ const EditProfile = () => {
   const validationSchema = editProfileValidationSchema;
   const initialValues: EditProfileI = {
     name: user?.name ?? "",
-    DOB: user?.dateOfBirth ?? "",
-    country: user?.country ?? "",
+    dateOfBirth: user?.dateOfBirth ?? "",
     phoneNumber: "",
   };
 
-  const submit = async ({ name, DOB, country, profilePicture, phoneNumber }: EditProfileI) => {
+  const submit = async ({ name, phoneNumber }: EditProfileI) => {
     Keyboard.dismiss();
+
     try {
       let updatedPicture = null;
       if (selectedImage) {
-        updatedPicture = await uploadImageToCloudinary(selectedImage);
+        updatedPicture = await uploadImageToBackend(selectedImage);
       }
 
       const dataToBeUpdate: EditProfileI = {
         name,
-        country,
-        DOB,
+        country: selectedCountry,
         phoneNumber,
-        profilePicture: updatedPicture,
       };
 
-      if (profilePicture) {
-        dataToBeUpdate.profilePicture = profilePicture;
+      if (dateOfBirth !== new Date()) {
+        dataToBeUpdate.dateOfBirth = dateOfBirth;
+      }
+
+      if (updatedPicture) {
+        dataToBeUpdate.profilePicture = updatedPicture;
       }
 
       await editProfile(dataToBeUpdate);
-
-      console.log(name, phoneNumber, DOB, country, profilePicture);
       router.back();
     } catch (err) {
-      console.log("error === ", err);
+      console.log("Error while updating user data: ", err);
     }
   };
 
@@ -76,8 +91,24 @@ const EditProfile = () => {
   const onCancelPress = () => router.back();
 
   useEffect(() => {
-    setProfileImage(profilePicture);
+    if (user?.dateOfBirth) {
+      setDateOfBirth(new Date(user.dateOfBirth));
+    }
   }, []);
+
+  useEffect(() => {
+    if (user?.country) {
+      setSelectedCountry(user?.country);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.profilePicture) {
+      setProfileImage({ uri: user.profilePicture });
+    } else {
+      setProfileImage(profilePicture);
+    }
+  }, [user]);
 
   return (
     <GestureHandlerRootView>
@@ -123,26 +154,39 @@ const EditProfile = () => {
               error={typeof errors.phoneNumber === "string" ? errors.phoneNumber : undefined}
               visible={typeof touched.phoneNumber === "boolean" ? touched.phoneNumber : undefined}
             /> */}
-            <TextInput
-              label="Date Of Birth"
-              placeholder="Enter Your DOB"
-              value={values.DOB}
-              onChangeText={handleChange("DOB")}
-              onBlur={() => setFieldTouched("DOB")}
-              error={typeof errors.DOB === "string" ? errors.DOB : undefined}
-              visible={typeof touched.DOB === "boolean" ? touched.DOB : undefined}
-            />
-            <TextInput
-              label="Country"
-              placeholder="Enter Your Country"
-              value={values.country}
-              onChangeText={handleChange("country")}
-              onBlur={() => setFieldTouched("country")}
-              error={typeof errors.country === "string" ? errors.country : undefined}
-              visible={typeof touched.country === "boolean" ? touched.country : undefined}
-            />
 
-            <AppButton text="Save" onPress={handleSubmit} preset="filled" />
+            <AppText text="Date of Birth" type="label" style={FormsStyle.formLabel} />
+            <TouchableOpacity
+              onPress={() => setDateModalVisible(true)}
+              style={[FormsStyle.formControl, styles.datePicker]}
+              activeOpacity={1}
+            >
+              <AppText
+                text={dateOfBirth ? formatDate(dateOfBirth.toString()) : "Select Date"}
+                type="default"
+                style={dateOfBirth ? styles.selectedDate : styles.placeholder}
+              />
+            </TouchableOpacity>
+
+            <AppText text="Country" type="label" style={FormsStyle.formLabel} />
+
+            <TouchableOpacity
+              onPress={() => setCountryModalVisible((prev) => !prev)}
+              style={[FormsStyle.formControl, styles.datePicker]}
+            >
+              <AppText
+                text={selectedCountry ? String(selectedCountry) : "Select Country"}
+                type={"default"}
+                style={selectedCountry ? styles.selectedDate : styles.placeholder}
+              />
+            </TouchableOpacity>
+
+            <AppButton
+              text={isLoading ? "" : "Save"}
+              onPress={handleSubmit}
+              preset="filled"
+              RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+            />
             <AppButton text="Cancel" preset="noUnderline" onPress={onCancelPress} />
           </View>
         </ScrollView>
@@ -155,6 +199,26 @@ const EditProfile = () => {
         snapPoints={snapPoints}
         setProfileImage={setProfileImage}
         setSelectedImage={setSelectedImage}
+      />
+
+      {dateModalVisible && (
+        <DateTimePicker
+          value={dateOfBirth}
+          mode="date"
+          display="default"
+          onChange={(event: DateTimePickerEvent, selectedDate?: Date) => {
+            setDateModalVisible(false);
+            if (selectedDate) {
+              setDateOfBirth(selectedDate);
+            }
+          }}
+        />
+      )}
+
+      <CountryPickerModal
+        visible={countryModalVisible}
+        setSelectedCountry={setSelectedCountry}
+        setCountryModalVisible={setCountryModalVisible}
       />
     </GestureHandlerRootView>
   );
@@ -191,5 +255,15 @@ const styles = StyleSheet.create({
   },
   rippleContainer: {
     borderRadius: Spacing.lg,
+  },
+  datePicker: {
+    paddingVertical: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  placeholder: {
+    color: colorPalette.primaryBg.primaryGrey,
+  },
+  selectedDate: {
+    color: colorPalette.primaryBg.primaryWhite,
   },
 });
