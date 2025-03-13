@@ -145,15 +145,6 @@ const EditProfile = () => {
               onBlur={() => setFieldTouched("email")}
               editable={false}
             />
-            {/* <TextInput
-              label="Phone Number"
-              placeholder="Enter Your Phone Number"
-              value={values.phoneNumber}
-              onChangeText={handleChange("phoneNumber")}
-              onBlur={() => setFieldTouched("phoneNumber")}
-              error={typeof errors.phoneNumber === "string" ? errors.phoneNumber : undefined}
-              visible={typeof touched.phoneNumber === "boolean" ? touched.phoneNumber : undefined}
-            /> */}
 
             <AppText text="Date of Birth" type="label" style={FormsStyle.formLabel} />
             <TouchableOpacity

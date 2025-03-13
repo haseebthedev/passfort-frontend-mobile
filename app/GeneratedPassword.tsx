@@ -70,14 +70,6 @@ const GeneratedPassword = () => {
 
       <View style={styles.headingContainer}>
         <AppText text="New Password" type="label" style={styles.heading} />
-        <RippleWrapper
-          onPress={generatePassword}
-          containerStyle={styles.rippleContainer}
-          rippleColor={colorPalette.primaryBg.primaryLightGreen}
-          style={styles.reGenerateIcon}
-        >
-          <Entypo name="cycle" size={iconSize} />
-        </RippleWrapper>
       </View>
 
       <View style={[styles.passwordTypeContainer, getPasswordTypeContainerStyle(passwordType)]}>
@@ -130,7 +122,10 @@ const GeneratedPassword = () => {
         </View>
 
         <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
-        <SmallAppButton text="Copy" onPress={copyToClipboard} />
+        <View style={styles.buttonContainer}>
+          <SmallAppButton text="Copy" onPress={copyToClipboard} />
+          <SmallAppButton text="Generate" onPress={generatePassword} />
+        </View>
       </View>
     </GradientWrapper>
   );
@@ -224,5 +219,9 @@ const styles = StyleSheet.create({
     height: wp(12),
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    gap: Spacing.sm,
   },
 });

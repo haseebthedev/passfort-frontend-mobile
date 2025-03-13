@@ -1,24 +1,27 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { hp, wp } from "@/utils";
+import { wp } from "@/utils";
 import { AppText } from "./AppText";
-import { PasswordCardType } from "@/interfaces";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { RippleWrapper } from "./RippleWrapper";
+import { PasswordGroup } from "@/interfaces";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 
 interface PasswordCardI {
-  item: PasswordCardType;
+  item: PasswordGroup;
 }
 
 export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
     <RippleWrapper onPress={() => {}}>
       <View style={styles.card}>
-        <View style={styles.iconContainer}>
-          <Image source={item.icon} style={LayoutStyles.cardIcon} />
-        </View>
-        <AppText text={item.title} type="subHeading" numberOfLines={1} />
-        <AppText text={item.subtitle} type="description" style={styles.subTitle} numberOfLines={1} />
+        <View style={styles.iconContainer}>{/* <Image source={item?.icon} style={LayoutStyles.cardIcon} /> */}</View>
+        <AppText text={item.type.title} type="subHeading" numberOfLines={1} />
+        <AppText
+          text={`${item.passwords.length} Passwords`}
+          type="description"
+          style={styles.subTitle}
+          numberOfLines={1}
+        />
       </View>
     </RippleWrapper>
   );
@@ -48,6 +51,6 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: colorPalette.primaryBg.secondayGrey,
-    paddingTop: hp(0.4),
+    paddingTop: Spacing.xxs,
   },
 });

@@ -1,36 +1,57 @@
 import { ImageSourcePropType } from "react-native";
 
-export interface CreatePasswordI {
-  type?: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking" | null;
-  platform: string;
-  siteAddress?: string;
+export type ListPagination<T> = {
+  docs: T[];
+  totalDocs?: number;
+  limit?: number;
+  page: number;
+  totalPages?: number;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
+  listRefreshing?: boolean;
+};
+
+export type PasswordCategoryType = {
+  icon?: string;
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export interface PasswordI {
+  type: string;
+  platform?: string;
+  siteAddress: string;
   email?: string;
   password: string;
 }
 
+export interface PasswordGroup {
+  passwords: PasswordI[];
+  type: PasswordCategoryType;
+}
+
+export interface PasswordsResponse {
+  result: PasswordGroup[];
+}
+
 export interface updatePasswordI {
-  type?: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking";
+  type?: string;
   platform?: string;
   siteAddress?: string;
   email?: string;
   password?: string;
 }
 
-export type PasswordCardType = {
-  id: string;
-  icon?: ImageSourcePropType;
-  title: string;
-  subtitle: string;
-};
-
 export type PasswordItemType = {
-  _id: string;
-  type: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking";
+  id: string;
+  type: PasswordCategoryType;
   username?: string;
   email?: string;
   siteAddress?: string;
   platform?: string;
-  passwordText?: string;
+  password?: string;
   icon?: ImageSourcePropType;
   date?: string | Date;
   createdAt?: string | Date;

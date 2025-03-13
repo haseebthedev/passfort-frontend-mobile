@@ -49,13 +49,13 @@ export const editProfileValidationSchema = yup.object().shape({
 
 export const createPasswordValidationSchema = yup.object().shape({
   type: yup.string().min(3).required("Type is required!").label("Type"),
-  platform: yup.string().min(3).required("Platform is required!").label("Platform"),
+  platform: yup.string().optional().min(3).label("Platform"),
   siteAddress: yup
     .string()
-    .optional()
+    .required("Site Address is required!")
     .url("Please enter a valid URL starting with http:// or https://")
     .label("Site Address"),
-  email: yup.string().optional().email("Please enter a valid email").label("Email Address"),
+  email: yup.string().optional().label("Email Address"),
   password: yup
     .string()
     .required("Password is required!")

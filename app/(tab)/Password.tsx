@@ -4,14 +4,21 @@ import { groupByDate, hp } from "@/utils";
 import { usePasswordStore } from "@/store";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordItem } from "@/components";
+import { ListPagination, PasswordItemType } from "@/interfaces";
+
+const LIMIT: number = 10;
 
 const Password = () => {
-  const { getPasswords, passwords, pagination, isLoading } = usePasswordStore();
+  const { getPasswords, isLoading } = usePasswordStore();
 
-  const sections = groupByDate(passwords);
-  const [page, setPage] = useState<number>(1);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [stickyHeader, setStickyHeader] = useState<string | null>(null);
+  const [state, setState] = useState<ListPagination<PasswordItemType>>({
+    docs: [],
+    page: 1,
+    hasNextPage: false,
+    listRefreshing: false,
+  });
 
   const viewableItemsConfig = useRef({
     viewableItemsChanged: ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -22,23 +29,73 @@ const Password = () => {
     },
   });
 
-  const loadMorePasswords = () => {
-    if (pagination?.hasNextPage && !isLoading) {
-      const nextPage = page + 1;
-      setPage(nextPage);
-      getPasswords(nextPage);
+  const getAllPasswords = async (page = 1) => {
+    setState((prev) => ({
+      ...prev,
+      listRefreshing: true,
+    }));
+
+    try {
+      const response = await getPasswords({ page, limit: LIMIT });
+
+      if (response?.docs) {
+        setState((prev) => ({
+          ...prev,
+          docs: page === 1 ? response.docs : [...prev.docs, ...response.docs],
+          page: response.hasNextPage ? page + 1 : prev.page,
+          hasNextPage: response.hasNextPage,
+          listRefreshing: false,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching passwords:", error);
+      setState((prev) => ({ ...prev, listRefreshing: false }));
     }
   };
 
+  const loadMorePasswords = () => {
+    if (!state.listRefreshing && state.hasNextPage) {
+      getAllPasswords(state.page);
+    }
+  };
+
+  const sections = groupByDate(state.docs);
+
   const onRefresh = async () => {
+    if (state.listRefreshing || refreshing) {
+      return;
+    }
+
     setRefreshing(true);
-    setPage(1);
-    await getPasswords(1);
-    setRefreshing(false);
+
+    try {
+      const response = await getPasswords({ page: 1, limit: LIMIT });
+
+      if (response?.docs) {
+        setState({
+          docs: response.docs,
+          page: response.hasNextPage ? 2 : 1,
+          hasNextPage: response.hasNextPage,
+          listRefreshing: false,
+        });
+      }
+    } catch (error) {
+      console.error("Error refreshing passwords:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const renderLoader = () => {
+    return state.listRefreshing && <LoadingIndicator />;
   };
 
   useEffect(() => {
-    getPasswords(1);
+    getAllPasswords(1);
+
+    return () => {
+      setState({ ...state, docs: [], page: 1, hasNextPage: false });
+    };
   }, []);
 
   return (
@@ -46,7 +103,7 @@ const Password = () => {
       <AppHeader title="Your Passwords" />
       <SectionList
         sections={sections}
-        keyExtractor={(item, index) => (item?._id ? item._id.toString() : `item-${index}`)}
+        keyExtractor={(item, index) => (item?.id ? item.id.toString() : `item-${index}`)}
         renderItem={({ item }) => <PasswordItem item={item} />}
         renderSectionHeader={({ section: { title } }) => (
           <View style={[styles.sectionHeader, stickyHeader === title && styles.stickyHeader]}>
@@ -59,11 +116,15 @@ const Password = () => {
         onEndReached={loadMorePasswords}
         onEndReachedThreshold={0.5}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        ListFooterComponent={isLoading ? <LoadingIndicator color={colorPalette.gradientBg.lightGreen} /> : null}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <AppText text="No passwords found!" type="default" />
-          </View>
+        ListFooterComponent={renderLoader}
+        ListEmptyComponent={() =>
+          !state.listRefreshing &&
+          !refreshing &&
+          state.docs.length === 0 && (
+            <View style={styles.emptyContainer}>
+              <AppText text="No passwords found!" type="default" />
+            </View>
+          )
         }
       />
     </GradientWrapper>

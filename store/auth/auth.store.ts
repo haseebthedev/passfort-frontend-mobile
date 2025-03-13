@@ -33,8 +33,8 @@ const useAuthStore = create<Store & Action>()(
 
         // Actions
         signin: async (body: SigninI) => {
+          set({ isLoading: true });
           try {
-            set({ isLoading: true });
             const response = await AxiosInstance.post("/auth/signin", body);
 
             const { user, token } = response.data.result;
@@ -53,8 +53,8 @@ const useAuthStore = create<Store & Action>()(
         },
 
         signup: async (body: SignupI) => {
+          set({ isLoading: true });
           try {
-            set({ isLoading: true });
             const response = await AxiosInstance.post("/auth/signup", body);
             set({ isLoading: false });
           } catch (error: any) {
@@ -68,8 +68,8 @@ const useAuthStore = create<Store & Action>()(
         },
 
         editProfile: async (body: EditProfileI) => {
+          set({ isLoading: true });
           try {
-            set({ isLoading: true });
             const response = await AxiosInstance.patch("/user/me", body);
             set({ user: response.data.result, isLoading: false });
           } catch (error: any) {
@@ -83,8 +83,8 @@ const useAuthStore = create<Store & Action>()(
         },
 
         forgetPassword: async (body: ForgetPasswordI) => {
+          set({ isLoading: true });
           try {
-            set({ isLoading: true });
             await AxiosInstance.post("/auth/forget-password", body);
             set({ isLoading: false });
           } catch (error: any) {
@@ -98,8 +98,8 @@ const useAuthStore = create<Store & Action>()(
         },
 
         resetPassword: async (body: ResetPasswordI) => {
+          set({ isLoading: true });
           try {
-            set({ isLoading: true });
             await AxiosInstance.post("/auth/reset-password", body);
             set({ isLoading: false });
           } catch (error: any) {

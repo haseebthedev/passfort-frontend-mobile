@@ -15,9 +15,16 @@ interface PasswordItemI {
 export const PasswordItem = ({ item }: PasswordItemI) => {
   const onCopyPasswordPress = () => {};
 
+  const onPressItem = () => {
+    router.push({
+      pathname: "/PasswordDetail",
+      params: { item: JSON.stringify(item) },
+    });
+  };
+
   return (
     <>
-      <RippleWrapper onPress={() => router.push(`/PasswordDetail?id=${item._id}`)} style={styles.passwordItemCard}>
+      <RippleWrapper onPress={onPressItem} style={styles.passwordItemCard}>
         <View style={styles.passwordInfoContainer}>
           <View style={styles.imageContainer}>
             <AppText text={getInitials(item.username ?? "User Name")} type="heading" />

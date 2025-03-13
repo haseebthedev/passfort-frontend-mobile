@@ -1,27 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image, FlatList, ImageSourcePropType } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { UserI } from "@/interfaces";
-import { useAuthStore } from "@/store";
 import { profilePicture } from "@/assets";
 import { capitalize, wp } from "@/utils";
-import { PasswordCard_Data } from "@/constants";
+import { PasswordGroup, UserI } from "@/interfaces";
 import { colorPalette, Spacing } from "@/styles";
+import { useAuthStore, usePasswordStore } from "@/store";
 import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
 
 const Profile = () => {
   const { user } = useAuthStore();
+  const { getGroupedPasswords, isLoading } = usePasswordStore();
+  const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
 
   const userInfo: UserI = {
     name: user?.name ?? "N/A",
     email: user?.email ?? "N/A",
-    number: "0300-458728",
+    country: user?.country ?? "N/A",
   };
 
   const profileImage: ImageSourcePropType = user?.profilePicture ? { uri: user?.profilePicture } : profilePicture;
 
   const onEditProfilePress = () => router.push(Screens.EditProfile);
+
+  const getAllGroupedPasswords = async () => {
+    try {
+      const response = await getGroupedPasswords();
+
+      if (response.result) {
+        setGroupedPassword(response.result);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllGroupedPasswords();
+  }, []);
 
   return (
     <GradientWrapper style={styles.mainContainer}>
@@ -34,9 +51,9 @@ const Profile = () => {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={PasswordCard_Data}
+          data={groupedPassword ?? []}
           renderItem={({ item }) => <PasswordCard item={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          // keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.passwordCardsContainer}
         />
       </View>

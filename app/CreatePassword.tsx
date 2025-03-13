@@ -1,12 +1,12 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Keyboard, StyleSheet, View } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { Screens } from "@/enums";
 import { useFormikHook } from "@/hooks";
-import { CreatePasswordI, itemI } from "@/interfaces";
-import { PasswordCard_Data } from "@/constants";
+import { PasswordI, itemI } from "@/interfaces";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { useAuthStore, usePasswordCategoryStore, usePasswordStore } from "@/store";
 import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
 import {
   AppButton,
@@ -16,49 +16,100 @@ import {
   ErrorMessage,
   GradientWrapper,
   KeyboardResponsiveHOC,
+  LoadingIndicator,
+  PasswordItem,
   RippleWrapper,
   TextInput,
 } from "@/components";
 
 const CreatePassword = () => {
+  const { passwordId } = useLocalSearchParams<{ passwordId: string }>() || {};
+
+  const { user } = useAuthStore();
+  const { createPassword, isLoading, updatePassword, getPasswordById } = usePasswordStore();
+  const { getPasswordCategories, isLoading: loadingPasswordCategories } = usePasswordCategoryStore();
+
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<CreatePasswordI["type"]>(null);
+  const [value, setValue] = useState<string>("");
+  const [passwordData, setPasswordData] = useState<PasswordI | null>(null);
   const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
 
   const validationSchema = createPasswordValidationSchema;
-  const initialValues: CreatePasswordI = {
-    type: value,
+  const initialValues: PasswordI = {
+    type: "",
     platform: "",
     siteAddress: "",
     email: "",
     password: "",
   };
 
-  const submit = async ({ type, platform, siteAddress, email, password }: CreatePasswordI) => {
+  const submit = async ({ type, platform, siteAddress, email, password }: PasswordI) => {
+    Keyboard.dismiss();
+
     try {
-      Keyboard.dismiss();
-      console.log(type, platform, siteAddress, email, password);
+      if (value && siteAddress && password) {
+        await createPassword({
+          type: value,
+          platform,
+          password,
+          email: email || user?.name,
+          siteAddress,
+        });
+
+        resetForm();
+        setValue("");
+      }
     } catch (err) {
       console.log("error === ", err);
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue, resetForm } =
+    useFormikHook(submit, validationSchema, initialValues);
 
   const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
 
-  useEffect(() => {
-    const passwordCardTitles = PasswordCard_Data.map((item) => ({
-      label: item.title,
-      value: item.id,
-    }));
+  const getAllPasswordCategories = async () => {
+    try {
+      const response = await getPasswordCategories();
+      if (response) {
+        const passwordCardTitles = response.map((item) => ({
+          label: item.title,
+          value: item.id,
+        }));
 
-    setDropdownItems(passwordCardTitles);
+        setDropdownItems(passwordCardTitles);
+      }
+    } catch (err) {
+      console.log("Error while getting password categories: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllPasswordCategories();
   }, []);
+
+  useEffect(() => {
+    if (passwordId) {
+      const fetchPassword = async () => {
+        try {
+          const passwordItem = await getPasswordById(passwordId);
+          console.log(passwordItem);
+          // setPasswordData(passwordItem);
+          // setValue(passwordItem?.type);
+          // setFieldValue("type", passwordItem?.type);
+          // setFieldValue("platform", passwordItem?.platform);
+          // setFieldValue("siteAddress", passwordItem?.siteAddress);
+          // setFieldValue("email", passwordItem?.email);
+          // setFieldValue("password", passwordItem?.password);
+        } catch (error) {
+          console.error("Error fetching password:", error);
+        }
+      };
+
+      fetchPassword();
+    }
+  }, [passwordId]);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -84,11 +135,14 @@ const CreatePassword = () => {
             <AppText text="Type" type="subHeading" style={styles.infoHeading} />
             <Dropdown
               open={open}
-              value={value ?? null}
+              value={value}
               items={dropdownItems}
               setOpen={setOpen}
-              setValue={setValue as Dispatch<SetStateAction<string | null>>}
               setFieldValue={setFieldValue}
+              setValue={(selectedValue) => {
+                setValue(selectedValue as any);
+                setFieldValue("type", selectedValue as any);
+              }}
             />
             {typeof errors.type === "string" && (
               <ErrorMessage
@@ -143,7 +197,11 @@ const CreatePassword = () => {
             inputStyle={styles.inputStyle}
           />
 
-          <AppButton text="Save" onPress={handleSubmit} />
+          <AppButton
+            text={isLoading ? "" : "Save"}
+            onPress={handleSubmit}
+            RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+          />
         </View>
       </KeyboardResponsiveHOC>
     </GradientWrapper>
@@ -158,7 +216,6 @@ const styles = StyleSheet.create({
   },
   scrollViewStyle: {
     flexGrow: 1,
-    // paddingTop: Spacing.sm,
   },
   container: {
     borderWidth: wp(0.2),
