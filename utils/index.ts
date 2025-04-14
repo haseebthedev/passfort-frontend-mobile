@@ -6,3 +6,4 @@ export * from "./date";
 export * from "./passwords";
 export * from "./image";
 export * from "./cloudinary";
+export * from "./toastService";

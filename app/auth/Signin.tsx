@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Keyboard } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
@@ -17,9 +17,12 @@ import {
   LoadingIndicator,
   TextInput,
 } from "@/components";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Signin = () => {
   const { user, signin, isLoading } = useAuthStore();
+
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   const validationSchema = signinValidationSchema;
   const initialValues: SigninI = { email: "", password: "" };
@@ -29,6 +32,16 @@ const Signin = () => {
     try {
       await signin({ email, password });
       router.push(Screens.Home);
+
+      if (rememberMe) {
+        await AsyncStorage.setItem("savedEmail", email);
+        await AsyncStorage.setItem("savedPassword", password);
+        await AsyncStorage.setItem("rememberMe", "true");
+      } else {
+        await AsyncStorage.removeItem("savedEmail");
+        await AsyncStorage.removeItem("savedPassword");
+        await AsyncStorage.setItem("rememberMe", "false");
+      }
 
       // if (user?.isFirstSignIn) {
       //   router.push(Screens.Onboarding);
@@ -42,7 +55,21 @@ const Signin = () => {
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
+  useEffect(() => {
+    const loadSavedCredentials = async () => {
+      const savedEmail = await AsyncStorage.getItem("savedEmail");
+      const savedPassword = await AsyncStorage.getItem("savedPassword");
+      const savedRememberMe = await AsyncStorage.getItem("rememberMe");
+
+      if (savedEmail && savedPassword && savedRememberMe === "true") {
+        setFieldValue("email", savedEmail);
+        setFieldValue("password", savedPassword);
+        setRememberMe(true);
+      }
+    };
+    loadSavedCredentials();
+  }, []);
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue } = useFormikHook(
     submit,
     validationSchema,
     initialValues
@@ -78,7 +105,12 @@ const Signin = () => {
           />
 
           <View style={styles.actionGroup}>
-            <Checkbox label="Remember me" labelStyle={styles.labelStyle} />
+            <Checkbox
+              label="Remember me"
+              labelStyle={styles.labelStyle}
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
+            />
             <AppButton
               text="Forget Password?"
               onPress={() => router.push(Screens.ForgetPassword)}

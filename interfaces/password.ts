@@ -20,14 +20,23 @@ export type PasswordCategoryType = {
 };
 
 export interface PasswordI {
-  type: string;
+  type: {
+    id: string;
+    icon?: string;
+    title: string;
+    updatedAt?: string;
+  };
   platform?: string;
-  siteAddress: string;
+  siteAddress?: string;
   email?: string;
+  username?: string;
   password: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface PasswordGroup {
+  _id: string;
   passwords: PasswordI[];
   type: PasswordCategoryType;
 }
@@ -40,7 +49,7 @@ export interface updatePasswordI {
   type?: string;
   platform?: string;
   siteAddress?: string;
-  email?: string;
+  username?: string;
   password?: string;
 }
 

@@ -4,6 +4,7 @@ import { EditProfileI, ForgetPasswordI, ResetPasswordI, SigninI, SignupI, UserI 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
 import { AxiosError } from "axios";
+import { showToast } from "@/utils";
 
 type Store = {
   isLoading: boolean;
@@ -42,12 +43,15 @@ const useAuthStore = create<Store & Action>()(
             await AsyncStorage.setItem("UserToken", token);
 
             set({ user, isLoading: false });
+            showToast({ type: "success", text1: "Signin Successfully!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -57,12 +61,15 @@ const useAuthStore = create<Store & Action>()(
           try {
             const response = await AxiosInstance.post("/auth/signup", body);
             set({ isLoading: false });
+            showToast({ type: "success", text1: "Successfully Signup Now Sign In!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -72,12 +79,15 @@ const useAuthStore = create<Store & Action>()(
           try {
             const response = await AxiosInstance.patch("/user/me", body);
             set({ user: response.data.result, isLoading: false });
+            showToast({ type: "success", text1: "Profile updated successfully!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -93,6 +103,8 @@ const useAuthStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -108,6 +120,8 @@ const useAuthStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },

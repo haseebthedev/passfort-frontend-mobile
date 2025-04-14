@@ -3,6 +3,7 @@ import { devtools, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
 import { PasswordI, ListPagination, PasswordItemType, updatePasswordI, PasswordsResponse } from "@/interfaces";
+import { showToast } from "@/utils";
 
 type Store = {
   isLoading: boolean;
@@ -11,7 +12,7 @@ type Store = {
 
 type Action = {
   getPasswords: ({ page, limit }: { page: number; limit: number }) => Promise<ListPagination<PasswordItemType>>;
-  createPassword: (passwordData: PasswordI) => Promise<void>;
+  createPassword: (passwordData: Partial<PasswordI>) => Promise<void>;
   updatePassword: (id: string, passwordData: updatePasswordI) => Promise<void>;
   deletePassword: (id: string) => Promise<void>;
   getPasswordById: (id: string) => Promise<PasswordItemType>;
@@ -43,11 +44,11 @@ const usePasswordStore = create<Store & Action>()(
           }
         },
 
-        createPassword: async (passwordData: PasswordI) => {
+        createPassword: async (passwordData: Partial<PasswordI>) => {
           set({ isLoading: true });
           const formattedPasswordData = {
             ...passwordData,
-            type: passwordData.type.toString(),
+            type: passwordData.type?.id.toString(),
             username: passwordData.email,
           };
           delete formattedPasswordData.email;
@@ -55,12 +56,15 @@ const usePasswordStore = create<Store & Action>()(
           try {
             const response = await AxiosInstance.post("/password/create-password", formattedPasswordData);
             set({ isLoading: false });
+            showToast({ type: "success", text1: "Successfully Created Password!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to create password";
             set({
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -68,14 +72,17 @@ const usePasswordStore = create<Store & Action>()(
         updatePassword: async (id: string, passwordData: updatePasswordI) => {
           set({ isLoading: true });
           try {
-            await AxiosInstance.patch(`/password/${id}`, passwordData);
+            const res = await AxiosInstance.patch(`/password/${id}`, passwordData);
+
             set({ isLoading: false });
+            showToast({ type: "success", text1: "Successfully Updated Password!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to update password";
             set({
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
             throw new Error(errorMessage);
           }
         },
@@ -85,12 +92,15 @@ const usePasswordStore = create<Store & Action>()(
           try {
             await AxiosInstance.delete(`/password/${id}`);
             set({ isLoading: false });
+            showToast({ type: "success", text1: "Successfully Deleted Password!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to delete password";
             set({
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -107,6 +117,8 @@ const usePasswordStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },
@@ -124,6 +136,8 @@ const usePasswordStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },

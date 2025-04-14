@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
@@ -7,39 +7,50 @@ import { hp, wp } from "@/utils";
 import { usePasswordStore } from "@/store";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, AppText, GradientWrapper, LoadingIndicator, RippleWrapper, SmallAppButton } from "@/components";
+import { PasswordItemType } from "@/interfaces";
 
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
-  const { isLoading, deletePassword } = usePasswordStore();
+  const { isLoading, deletePassword, getPasswordById } = usePasswordStore();
   const { item } = useLocalSearchParams<{ item?: string }>();
+  const [passwordDetail, setPasswordDetail] = useState<PasswordItemType | null>(null);
 
   const passwordItem = typeof item === "string" ? JSON.parse(item) : null;
 
   const onBackPress = useCallback(() => router.back(), []);
 
-  const onDeletePasswordPress = useCallback(async () => {
+  const onDeletePasswordPress = async () => {
     try {
-      await deletePassword(passwordItem?.id);
-      router.back();
+      if (passwordDetail) {
+        await deletePassword(passwordDetail.id);
+        router.back();
+      }
     } catch (err) {
       console.log("Error: ", err);
     }
-  }, []);
+  };
 
   const copyToClipboard = () => {
-    if (passwordItem) {
+    if (passwordDetail) {
       Clipboard.setStringAsync(passwordItem?.password);
     }
   };
 
   const onEditPasswordPress = async () => {
-    console.log("Edit icon pressed");
     router.push({
       pathname: "/CreatePassword",
-      params: { passwordId: JSON.stringify(passwordItem.id) },
+      params: { passwordItem: JSON.stringify(passwordItem) },
     });
   };
+
+  const getPasswordItemById = async () => {
+    await getPasswordById(passwordItem.id).then((res) => setPasswordDetail(res));
+  };
+
+  useEffect(() => {
+    getPasswordItemById();
+  }, []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -50,38 +61,31 @@ const PasswordDetail = () => {
       ) : (
         <View style={styles.container}>
           <View style={styles.innerContainer}>
-            {passwordItem?.type?.title && (
+            {passwordDetail?.type.title && (
               <View style={styles.infoContainer}>
                 <AppText text="Type" type="subHeading" style={styles.infoHeading} />
-                <AppText text={passwordItem.type.title} type="default" />
+                <AppText text={passwordDetail?.type.title} type="default" />
               </View>
             )}
 
-            {passwordItem?.platform && (
+            {passwordDetail?.platform && (
               <View style={styles.infoContainer}>
                 <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
-                <AppText text={passwordItem.platform} type="default" />
+                <AppText text={passwordDetail?.platform} type="default" />
               </View>
             )}
 
-            {passwordItem?.siteAddress && (
+            {passwordDetail?.siteAddress && (
               <View style={styles.infoContainer}>
                 <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
-                <AppText text={passwordItem.siteAddress} type="default" />
+                <AppText text={passwordDetail.siteAddress} type="default" />
               </View>
             )}
 
-            {passwordItem?.username && (
+            {passwordDetail?.username && (
               <View style={styles.infoContainer}>
                 <AppText text="Username" type="subHeading" style={styles.infoHeading} />
-                <AppText text={passwordItem.username} type="default" />
-              </View>
-            )}
-
-            {passwordItem?.email && (
-              <View style={styles.infoContainer}>
-                <AppText text="Email" type="subHeading" style={styles.infoHeading} />
-                <AppText text={passwordItem.email} type="default" />
+                <AppText text={passwordDetail.username} type="default" />
               </View>
             )}
           </View>

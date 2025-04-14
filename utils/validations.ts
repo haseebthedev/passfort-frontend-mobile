@@ -48,7 +48,9 @@ export const editProfileValidationSchema = yup.object().shape({
 });
 
 export const createPasswordValidationSchema = yup.object().shape({
-  type: yup.string().min(3).required("Type is required!").label("Type"),
+  type: yup.object().shape({
+    id: yup.string().required("Please select a type.").label("Type"),
+  }),
   platform: yup.string().optional().min(3).label("Platform"),
   siteAddress: yup
     .string()

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
+import { showToast } from "@/utils";
 import { PasswordCategoryType } from "@/interfaces";
 
 type Store = {
@@ -34,6 +35,8 @@ const usePasswordCategoryStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
+            showToast({ type: "error", text1: errorMessage });
+
             throw new Error(errorMessage);
           }
         },

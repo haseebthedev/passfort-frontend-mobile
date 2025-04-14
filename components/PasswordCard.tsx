@@ -14,7 +14,9 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
   return (
     <RippleWrapper onPress={() => {}}>
       <View style={styles.card}>
-        <View style={styles.iconContainer}>{/* <Image source={item?.icon} style={LayoutStyles.cardIcon} /> */}</View>
+        <View style={styles.iconContainer}>
+          {item?.type.icon && <Image source={{ uri: item?.type.icon }} style={LayoutStyles.cardIcon} />}
+        </View>
         <AppText text={item.type.title} type="subHeading" numberOfLines={1} />
         <AppText
           text={`${item.passwords.length} Passwords`}

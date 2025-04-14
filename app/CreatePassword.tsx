@@ -6,8 +6,8 @@ import { Screens } from "@/enums";
 import { useFormikHook } from "@/hooks";
 import { PasswordI, itemI } from "@/interfaces";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
-import { useAuthStore, usePasswordCategoryStore, usePasswordStore } from "@/store";
 import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
+import { useAuthStore, usePasswordCategoryStore, usePasswordStore } from "@/store";
 import {
   AppButton,
   AppHeader,
@@ -17,47 +17,69 @@ import {
   GradientWrapper,
   KeyboardResponsiveHOC,
   LoadingIndicator,
-  PasswordItem,
   RippleWrapper,
   TextInput,
 } from "@/components";
 
 const CreatePassword = () => {
-  const { passwordId } = useLocalSearchParams<{ passwordId: string }>() || {};
+  const { passwordItem } = useLocalSearchParams<{ passwordItem: string }>();
+  const parsedPasswordItem: any = passwordItem ? JSON.parse(passwordItem) : null;
 
   const { user } = useAuthStore();
-  const { createPassword, isLoading, updatePassword, getPasswordById } = usePasswordStore();
+  const { createPassword, isLoading, updatePassword } = usePasswordStore();
   const { getPasswordCategories, isLoading: loadingPasswordCategories } = usePasswordCategoryStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
-  const [passwordData, setPasswordData] = useState<PasswordI | null>(null);
   const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
 
   const validationSchema = createPasswordValidationSchema;
   const initialValues: PasswordI = {
-    type: "",
-    platform: "",
-    siteAddress: "",
-    email: "",
-    password: "",
+    type: {
+      icon: parsedPasswordItem?.type.icon ?? "",
+      id: parsedPasswordItem?.type.id ?? "",
+      title: parsedPasswordItem?.type.title ?? "",
+      updatedAt: parsedPasswordItem?.type.updatedAt ?? "",
+    },
+    platform: parsedPasswordItem?.platform ?? "",
+    siteAddress: parsedPasswordItem?.siteAddress ?? "",
+    email: (parsedPasswordItem?.email || parsedPasswordItem?.username) ?? "",
+    password: parsedPasswordItem?.password ?? "",
+    createdAt: parsedPasswordItem?.createdAt ?? "",
+    updatedAt: parsedPasswordItem?.updatedAt ?? "",
   };
 
-  const submit = async ({ type, platform, siteAddress, email, password }: PasswordI) => {
+  const submit = async ({ platform, siteAddress, email, password }: PasswordI) => {
     Keyboard.dismiss();
 
     try {
       if (value && siteAddress && password) {
-        await createPassword({
-          type: value,
-          platform,
-          password,
-          email: email || user?.name,
-          siteAddress,
-        });
+        if (parsedPasswordItem) {
+          await updatePassword(parsedPasswordItem.id, {
+            type: value,
+            platform,
+            siteAddress,
+            username: email,
+            password,
+          });
+        } else {
+          const filteredItem = dropdownItems.filter((item) => item.value === value)[0];
+
+          await createPassword({
+            type: {
+              id: filteredItem?.value,
+              title: filteredItem?.label ?? "",
+            },
+            platform,
+            password,
+            email: email || user?.name,
+            siteAddress,
+          });
+        }
 
         resetForm();
         setValue("");
+        router.back();
       }
     } catch (err) {
       console.log("error === ", err);
@@ -90,31 +112,15 @@ const CreatePassword = () => {
   }, []);
 
   useEffect(() => {
-    if (passwordId) {
-      const fetchPassword = async () => {
-        try {
-          const passwordItem = await getPasswordById(passwordId);
-          console.log(passwordItem);
-          // setPasswordData(passwordItem);
-          // setValue(passwordItem?.type);
-          // setFieldValue("type", passwordItem?.type);
-          // setFieldValue("platform", passwordItem?.platform);
-          // setFieldValue("siteAddress", passwordItem?.siteAddress);
-          // setFieldValue("email", passwordItem?.email);
-          // setFieldValue("password", passwordItem?.password);
-        } catch (error) {
-          console.error("Error fetching password:", error);
-        }
-      };
-
-      fetchPassword();
+    if (parsedPasswordItem?.type) {
+      setValue(parsedPasswordItem.type.id);
     }
-  }, [passwordId]);
+  }, []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader
-        title="New Password"
+        title={parsedPasswordItem ? "Edit Password" : "New Password"}
         leftIconName="chevron-back"
         onLeftIconPress={() => router.back()}
         rightAccessory={
@@ -140,16 +146,11 @@ const CreatePassword = () => {
               setOpen={setOpen}
               setFieldValue={setFieldValue}
               setValue={(selectedValue) => {
-                setValue(selectedValue as any);
-                setFieldValue("type", selectedValue as any);
+                setValue(selectedValue as string);
+                setFieldValue("type", selectedValue as string);
               }}
             />
-            {typeof errors.type === "string" && (
-              <ErrorMessage
-                error="Please select a type."
-                visible={typeof touched.type === "boolean" ? touched.type : undefined}
-              />
-            )}
+            {touched.type?.id && errors.type?.id && <ErrorMessage error={errors.type.id} visible={touched.type?.id} />}
           </View>
 
           <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
