@@ -7,9 +7,11 @@ import { Screens } from "@/enums";
 import { passfortIcon } from "@/assets";
 import { loadFonts, wp } from "@/utils";
 import { GradientWrapper, LoadingIndicator } from "@/components";
+import { useAuthStore } from "@/store";
 
 export default function Index() {
   const router = useRouter();
+  const { user, firstTimeUser } = useAuthStore();
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
   const [imagePickerLoaded, setImagePickerLoaded] = useState<boolean>(false);
 
@@ -22,13 +24,36 @@ export default function Index() {
     }
   };
 
-  const redirectUser = async () => {
-    if (fontsLoaded) {
-      setTimeout(() => {
-        router.push(Screens.Signin);
-      }, 10000);
-    }
-  };
+  // const redirectUser = async () => {
+  //   if (fontsLoaded) {
+  //     if (!user) {
+  //       if (firstTimeUser) {
+  //         router.push(Screens.Onboarding);
+  //       } else {
+  //         router.push(Screens.Signin);
+  //       }
+  //     } else {
+  //       router.push(Screens.Home);
+  //     }
+  //   }
+  // };
+
+    const redirectUser = async () => {
+      if (fontsLoaded) {
+        setTimeout(() => {
+          if (!user) {
+            if (firstTimeUser) {
+              router.push(Screens.Onboarding);
+            } else {
+              router.push(Screens.Signin);
+            }
+          } else {
+            router.push(Screens.Home);
+          }
+        }, 2000); // 2 second delay
+      }
+    };
+  
 
   useEffect(() => {
     async function prepare() {

@@ -21,9 +21,13 @@ import {
   TextInput,
 } from "@/components";
 
+interface ParsedPasswordItem extends PasswordI {
+  id?: string;
+}
+
 const CreatePassword = () => {
   const { passwordItem } = useLocalSearchParams<{ passwordItem: string }>();
-  const parsedPasswordItem: any = passwordItem ? JSON.parse(passwordItem) : null;
+  const parsedPasswordItem: ParsedPasswordItem | null = passwordItem ? JSON.parse(passwordItem) : null;
 
   const { user } = useAuthStore();
   const { createPassword, isLoading, updatePassword } = usePasswordStore();
@@ -32,14 +36,15 @@ const CreatePassword = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
   const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
+  const [error, setError] = useState<string>("");
 
   const validationSchema = createPasswordValidationSchema;
   const initialValues: PasswordI = {
     type: {
-      icon: parsedPasswordItem?.type.icon ?? "",
-      id: parsedPasswordItem?.type.id ?? "",
-      title: parsedPasswordItem?.type.title ?? "",
-      updatedAt: parsedPasswordItem?.type.updatedAt ?? "",
+      icon: parsedPasswordItem?.type?.icon ?? "",
+      id: parsedPasswordItem?.type?.id ?? "",
+      title: parsedPasswordItem?.type?.title ?? "",
+      updatedAt: parsedPasswordItem?.type?.updatedAt ?? "",
     },
     platform: parsedPasswordItem?.platform ?? "",
     siteAddress: parsedPasswordItem?.siteAddress ?? "",
@@ -51,45 +56,71 @@ const CreatePassword = () => {
 
   const submit = async ({ platform, siteAddress, email, password }: PasswordI) => {
     Keyboard.dismiss();
+    setError("");
 
     try {
-      if (value && siteAddress && password) {
-        if (parsedPasswordItem) {
-          await updatePassword(parsedPasswordItem.id, {
-            type: value,
-            platform,
-            siteAddress,
-            username: email,
-            password,
-          });
-        } else {
-          const filteredItem = dropdownItems.filter((item) => item.value === value)[0];
+      if (!value || !siteAddress || !password) {
+        setError("Please fill in all required fields");
+        return;
+      }
 
-          await createPassword({
-            type: {
-              id: filteredItem?.value,
-              title: filteredItem?.label ?? "",
-            },
-            platform,
-            password,
-            email: email || user?.name,
-            siteAddress,
-          });
+      if (parsedPasswordItem?.id) {
+        await updatePassword(parsedPasswordItem.id, {
+          type: value,
+          platform,
+          siteAddress,
+          username: email,
+          password,
+        });
+        setError("Password updated successfully");
+
+        router.replace({
+          pathname: "/PasswordDetail",
+          params: { 
+            item: JSON.stringify({
+              ...parsedPasswordItem,
+              type: { ...parsedPasswordItem.type, id: value },
+              platform,
+              siteAddress,
+              username: email,
+              password,
+            })
+          }
+        });
+      } else {
+        const filteredItem = dropdownItems.find((item) => item.value === value);
+        if (!filteredItem) {
+          setError("Please select a valid password type");
+          return;
         }
 
+        await createPassword({
+          type: {
+            id: filteredItem.value,
+            title: filteredItem.label ?? "",
+          },
+          platform,
+          password,
+          email: email || user?.name,
+          siteAddress,
+        });
+        setError("Password created successfully");
+      }
+
+      if (!parsedPasswordItem?.id) {
         resetForm();
         setValue("");
-        router.back();
       }
+      router.back();
     } catch (err) {
-      console.log("error === ", err);
+      setError(err instanceof Error ? err.message : "An error occurred while saving the password");
     }
   };
 
   const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue, resetForm } =
     useFormikHook(submit, validationSchema, initialValues);
 
-  const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
+  const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword)
 
   const getAllPasswordCategories = async () => {
     try {
@@ -103,7 +134,7 @@ const CreatePassword = () => {
         setDropdownItems(passwordCardTitles);
       }
     } catch (err) {
-      console.log("Error while getting password categories: ", err);
+      setError("Failed to load password categories");
     }
   };
 
@@ -112,10 +143,10 @@ const CreatePassword = () => {
   }, []);
 
   useEffect(() => {
-    if (parsedPasswordItem?.type) {
+    if (parsedPasswordItem?.type?.id) {
       setValue(parsedPasswordItem.type.id);
     }
-  }, []);
+  }, [parsedPasswordItem]);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -135,6 +166,8 @@ const CreatePassword = () => {
       />
       <KeyboardResponsiveHOC containerStyle={styles.mainContainer} scrollViewStyle={styles.scrollViewStyle}>
         <View style={styles.container}>
+          {error ? <ErrorMessage error={error} visible={true} /> : null}
+          
           <AppText text="Credentials" type="label" style={styles.heading} />
 
           <View style={styles.infoContainer}>
@@ -199,8 +232,9 @@ const CreatePassword = () => {
           />
 
           <AppButton
-            text={isLoading ? "" : "Save"}
+            text={isLoading ? "" : parsedPasswordItem ? "Update" : "Save"}
             onPress={handleSubmit}
+            disabled={isLoading || loadingPasswordCategories}
             RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
           />
         </View>

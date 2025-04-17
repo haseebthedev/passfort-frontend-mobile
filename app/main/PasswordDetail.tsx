@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Share } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -15,6 +15,7 @@ const PasswordDetail = () => {
   const { isLoading, deletePassword, getPasswordById } = usePasswordStore();
   const { item } = useLocalSearchParams<{ item?: string }>();
   const [passwordDetail, setPasswordDetail] = useState<PasswordItemType | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const passwordItem = typeof item === "string" ? JSON.parse(item) : null;
 
@@ -32,31 +33,93 @@ const PasswordDetail = () => {
   };
 
   const copyToClipboard = () => {
-    if (passwordDetail) {
-      Clipboard.setStringAsync(passwordItem?.password);
+    if (passwordDetail?.password) {
+      Clipboard.setStringAsync(passwordDetail.password);
     }
   };
 
   const onEditPasswordPress = async () => {
     router.push({
       pathname: "/CreatePassword",
-      params: { passwordItem: JSON.stringify(passwordItem) },
+      params: { passwordItem: JSON.stringify(passwordDetail) },
     });
   };
 
+  const refreshPasswordData = async () => {
+    if (!passwordItem?.id) return;
+    
+    try {
+      setIsRefreshing(true);
+      const updatedData = await getPasswordById(passwordItem.id);
+      if (updatedData) {
+        setPasswordDetail(updatedData);
+      }
+    } catch (err) {
+      console.log("Error refreshing password data: ", err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   const getPasswordItemById = async () => {
-    await getPasswordById(passwordItem.id).then((res) => setPasswordDetail(res));
+    if (passwordItem?.id) {
+      await getPasswordById(passwordItem.id).then((res) => setPasswordDetail(res));
+    } else if (passwordItem) {
+      setPasswordDetail(passwordItem);
+    }
+  };
+
+  const onSharePress = async () => {
+    if (!passwordDetail) return;
+
+    const shareContent = {
+      title: 'Password Details',
+      message: 
+`Platform: ${passwordDetail.platform || 'N/A'}
+${passwordDetail.siteAddress ? `Site: ${passwordDetail.siteAddress}` : ''}
+${passwordDetail.username ? `Username: ${passwordDetail.username}` : ''}
+Password: ${passwordDetail.password || 'N/A'}`
+    };
+
+    try {
+      await Share.share(shareContent);
+    } catch (error) {
+      console.log('Error sharing password details:', error);
+    }
   };
 
   useEffect(() => {
     getPasswordItemById();
   }, []);
 
+  useEffect(() => {
+    if (item) {
+      refreshPasswordData();
+    }
+  }, [item]);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Password Details" leftIconName="chevron-back" onLeftIconPress={onBackPress} />
+      <AppHeader 
+        title="Password Details" 
+        leftIconName="chevron-back" 
+        onLeftIconPress={onBackPress}
+        rightAccessory={
+          <RippleWrapper
+            onPress={refreshPasswordData}
+            style={styles.refreshButton}
+            containerStyle={styles.refreshButtonContainer}
+          >
+            <Feather 
+              name="refresh-cw" 
+              size={iconSize} 
+              color={colorPalette.primaryBg.primaryWhite} 
+            />
+          </RippleWrapper>
+        }
+      />
 
-      {isLoading ? (
+      {isLoading || isRefreshing ? (
         <LoadingIndicator />
       ) : (
         <View style={styles.container}>
@@ -91,7 +154,7 @@ const PasswordDetail = () => {
           </View>
 
           <View style={styles.passwordActionContainer}>
-            <AppText text={passwordItem?.password ?? ""} type="passwordText" numberOfLines={1} />
+            <AppText text={passwordDetail?.password ?? ""} type="passwordText" numberOfLines={1} />
             <SmallAppButton text="Copy" onPress={copyToClipboard} />
 
             <View style={styles.buttonsContainer}>
@@ -114,11 +177,15 @@ const PasswordDetail = () => {
                 />
               </RippleWrapper>
               <RippleWrapper
-                onPress={() => console.log("Share icon pressed")}
+                onPress={onSharePress}
                 style={styles.buttonContainer}
                 containerStyle={styles.containerStyle}
               >
-                <Fontisto name="share-a" size={iconSize - wp(1)} color={colorPalette.primaryBg.primaryWhite} />
+                <Fontisto 
+                  name="share-a" 
+                  size={iconSize - wp(1)} 
+                  color={colorPalette.primaryBg.primaryWhite} 
+                />
               </RippleWrapper>
             </View>
           </View>
@@ -177,5 +244,14 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     borderRadius: Spacing.xl,
+  },
+  refreshButton: {
+    width: wp(10),
+    height: wp(10),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  refreshButtonContainer: {
+    borderRadius: wp(5),
   },
 });

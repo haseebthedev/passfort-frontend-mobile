@@ -23,21 +23,11 @@ const RootLayout = () => {
 
   return (
     <>
-      {user ? (
-        <Stack initialRouteName="(tab)" screenOptions={{ headerShown: false, animation: "ios" }}>
-          <Stack.Screen name="(tab)" />
-          <Stack.Screen name="profile/EditProfile" />
-          <Stack.Screen name="Settings" />
-          <Stack.Screen name="PasswordDetail" />
-          <Stack.Screen name="CreatePassword" />
-          <Stack.Screen name="GeneratedPassword" />
-        </Stack>
-      ) : (
-        <Stack screenOptions={{ headerShown: false, animation: "ios" }}>
-          <Stack.Screen name="auth" />
-        </Stack>
-      )}
-
+      <Stack screenOptions={{ headerShown: false, animation: "ios" }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="auth" />
+        <Stack.Screen name="main" />
+      </Stack>
       <Toast position="bottom" />
     </>
   );

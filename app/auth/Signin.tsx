@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet, Keyboard, Alert } from "react-native";
 import { router } from "expo-router";
+import * as Crypto from 'expo-crypto';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Screens } from "@/enums";
 import { SigninI } from "@/interfaces";
 import { useAuthStore } from "@/store";
@@ -17,63 +19,100 @@ import {
   LoadingIndicator,
   TextInput,
 } from "@/components";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+const CREDENTIALS_KEY = 'encrypted_credentials';
+const REMEMBER_ME_KEY = 'remember_me';
 
 const Signin = () => {
   const { user, signin, isLoading } = useAuthStore();
-
   const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [isLoadingCredentials, setIsLoadingCredentials] = useState<boolean>(true);
 
   const validationSchema = signinValidationSchema;
   const initialValues: SigninI = { email: "", password: "" };
+
+  const encryptCredentials = async (email: string, password: string) => {
+    try {
+      const combined = `${email}:${password}`;
+      const digest = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        combined
+      );
+      return digest;
+    } catch (error) {
+      console.error('Encryption error:', error);
+      throw error;
+    }
+  };
+
+  const saveCredentials = async (email: string, password: string) => {
+    try {
+      const encrypted = await encryptCredentials(email, password);
+      await AsyncStorage.setItem(CREDENTIALS_KEY, encrypted);
+      await AsyncStorage.setItem(REMEMBER_ME_KEY, 'true');
+    } catch (error) {
+      console.error('Error saving credentials:', error);
+      Alert.alert('Error', 'Failed to save credentials');
+    }
+  };
+
+  const clearCredentials = async () => {
+    try {
+      await AsyncStorage.removeItem(CREDENTIALS_KEY);
+      await AsyncStorage.setItem(REMEMBER_ME_KEY, 'false');
+    } catch (error) {
+      console.error('Error clearing credentials:', error);
+    }
+  };
+
+  const loadSavedCredentials = async () => {
+    try {
+      const savedRememberMe = await AsyncStorage.getItem(REMEMBER_ME_KEY);
+      const savedCredentials = await AsyncStorage.getItem(CREDENTIALS_KEY);
+      
+      if (savedRememberMe === 'true' && savedCredentials) {
+        setRememberMe(true);
+        setFieldValue('email', '');
+        setFieldValue('password', '');
+      }
+    } catch (error) {
+      console.error('Error loading credentials:', error);
+    } finally {
+      setIsLoadingCredentials(false);
+    }
+  };
+
+  useEffect(() => {
+    loadSavedCredentials();
+  }, []);
 
   const submit = async ({ email, password }: SigninI) => {
     Keyboard.dismiss();
     try {
       await signin({ email, password });
-      router.push(Screens.Home);
-
+      
       if (rememberMe) {
-        await AsyncStorage.setItem("savedEmail", email);
-        await AsyncStorage.setItem("savedPassword", password);
-        await AsyncStorage.setItem("rememberMe", "true");
+        await saveCredentials(email, password);
       } else {
-        await AsyncStorage.removeItem("savedEmail");
-        await AsyncStorage.removeItem("savedPassword");
-        await AsyncStorage.setItem("rememberMe", "false");
+        await clearCredentials();
       }
 
-      // if (user?.isFirstSignIn) {
-      //   router.push(Screens.Onboarding);
-      // } else if (!user?.isFirstSignIn) {
-      //   router.push(Screens.BiometricAuth);
-      // } else {
-      //   router.push(Screens.BiometricAuth);
-      // }
+      router.push(Screens.BiometricAuth);
     } catch (err) {
       console.log("Signin Error: ", err);
     }
   };
 
-  useEffect(() => {
-    const loadSavedCredentials = async () => {
-      const savedEmail = await AsyncStorage.getItem("savedEmail");
-      const savedPassword = await AsyncStorage.getItem("savedPassword");
-      const savedRememberMe = await AsyncStorage.getItem("rememberMe");
-
-      if (savedEmail && savedPassword && savedRememberMe === "true") {
-        setFieldValue("email", savedEmail);
-        setFieldValue("password", savedPassword);
-        setRememberMe(true);
-      }
-    };
-    loadSavedCredentials();
-  }, []);
   const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue } = useFormikHook(
     submit,
     validationSchema,
     initialValues
   );
+
+  if (isLoadingCredentials) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -125,7 +164,7 @@ const Signin = () => {
           />
 
           <View style={styles.linkRow}>
-            <AppText text="Don’t have an account?" type="label" />
+            <AppText text="Don't have an account?" type="label" />
             <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="primaryLink" />
           </View>
         </View>

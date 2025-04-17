@@ -21,6 +21,7 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
       params: { item: JSON.stringify(item) },
     });
   };
+  
 
   return (
     <>

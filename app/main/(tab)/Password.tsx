@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshControl, SectionList, StyleSheet, View, ViewToken } from "react-native";
 import { groupByDate, hp } from "@/utils";
 import { usePasswordStore } from "@/store";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordItem } from "@/components";
 import { ListPagination, PasswordItemType } from "@/interfaces";
+import { router, useFocusEffect } from "expo-router";
 
 const LIMIT: number = 10;
 
@@ -89,6 +90,12 @@ const Password = () => {
   const renderLoader = () => {
     return state.listRefreshing && <LoadingIndicator />;
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, [])
+  );
 
   useEffect(() => {
     getAllPasswords(1);

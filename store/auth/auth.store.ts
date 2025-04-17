@@ -3,17 +3,22 @@ import { devtools, persist } from "zustand/middleware";
 import { EditProfileI, ForgetPasswordI, ResetPasswordI, SigninI, SignupI, UserI } from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
-import { AxiosError } from "axios";
 import { showToast } from "@/utils";
 
 type Store = {
   isLoading: boolean;
   user: UserI | null;
   error: string | null;
+  firstTimeUser: boolean;
+  hasSeenOnboarding: boolean;
+  biometricAuth: boolean;
 };
 
 type Action = {
   setUser: (user: UserI | null) => void;
+  setFirstTimeUser: (value: boolean) => void;
+  setHasSeenOnboarding: (value: boolean) => void;
+  setBiometricAuth: (value: boolean) => void;
   signin: (body: SigninI) => Promise<void>;
   signup: (body: SignupI) => Promise<void>;
   editProfile: (body: EditProfileI) => Promise<void>;
@@ -29,15 +34,20 @@ const useAuthStore = create<Store & Action>()(
         isLoading: false,
         user: null,
         error: null,
+        firstTimeUser: true,
+        hasSeenOnboarding: false,
+        biometricAuth: false,
 
         setUser: (user: UserI | null) => set({ user }),
+        setFirstTimeUser: (value: boolean) => set({ firstTimeUser: value }),
+        setHasSeenOnboarding: (value: boolean) => set({ hasSeenOnboarding: value }),
+        setBiometricAuth: (value: boolean) => set({ biometricAuth: value }),
 
         // Actions
         signin: async (body: SigninI) => {
           set({ isLoading: true });
           try {
             const response = await AxiosInstance.post("/auth/signin", body);
-
             const { user, token } = response.data.result;
 
             await AsyncStorage.setItem("UserToken", token);

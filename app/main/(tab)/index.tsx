@@ -53,7 +53,7 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
 const Home = () => {
   const { user } = useAuthStore();
 
-  const { getPasswords, getGroupedPasswords, isLoading } = usePasswordStore();
+  const { getPasswords, getGroupedPasswords, searchPasswords, isLoading } = usePasswordStore();
 
   const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -71,7 +71,9 @@ const Home = () => {
     }));
 
     try {
-      const response = await getPasswords({ page, limit: LIMIT });
+      const response = searchText 
+        ? await searchPasswords({ page, limit: LIMIT, searchTerm: searchText })
+        : await getPasswords({ page, limit: LIMIT });
 
       if (response?.docs) {
         setState((prev) => ({
@@ -111,6 +113,10 @@ const Home = () => {
 
   useEffect(() => {
     getAllPasswords(1);
+  }, [searchText]);
+
+  useEffect(() => {
+    getAllPasswords(1);
 
     return () => {
       setState({ ...state, docs: [], page: 1, hasNextPage: false });
@@ -133,6 +139,7 @@ const Home = () => {
       </View>
 
       <SearchInput value={searchText} onChangeText={setSearchText} />
+      
       {isLoading ? (
         <LoadingIndicator />
       ) : (

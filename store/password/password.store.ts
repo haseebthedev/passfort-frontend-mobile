@@ -17,6 +17,7 @@ type Action = {
   deletePassword: (id: string) => Promise<void>;
   getPasswordById: (id: string) => Promise<PasswordItemType>;
   getGroupedPasswords: () => Promise<PasswordsResponse>;
+  searchPasswords: ({ page, limit, searchTerm }: { page: number; limit: number; searchTerm: string }) => Promise<ListPagination<PasswordItemType>>;
 };
 
 const usePasswordStore = create<Store & Action>()(
@@ -138,6 +139,23 @@ const usePasswordStore = create<Store & Action>()(
             });
             showToast({ type: "error", text1: errorMessage });
 
+            throw new Error(errorMessage);
+          }
+        },
+
+        searchPasswords: async ({ page = 1, limit = 10, searchTerm }: { page: number; limit: number; searchTerm: string }) => {
+          set({ isLoading: true });
+          try {
+            const response = await AxiosInstance.get(`/password/search?q=${searchTerm}&page=${page}&limit=${limit}`);
+            set({ isLoading: false });
+            return response.data?.result;
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Failed to search passwords";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            showToast({ type: "error", text1: errorMessage });
             throw new Error(errorMessage);
           }
         },

@@ -6,19 +6,25 @@ import { Screens } from "@/enums";
 import { OnboardingData } from "@/constants";
 import { LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
+import { useAuthStore } from "@/store";
 
 const Onboarding = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const { setFirstTimeUser } = useAuthStore();
 
   const handleNext = () => {
     if (currentIndex < OnboardingData.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.push(Screens.Home);
+      setFirstTimeUser(false);
+      router.push(Screens.Signin);
     }
   };
 
-  const handleSkip = () => router.push(Screens.Home);
+  const handleSkip = () => {
+    setFirstTimeUser(false);
+    router.push(Screens.Signin);
+  };
 
   return (
     <GradientWrapper style={[LayoutStyles.horizontalSpacing]}>

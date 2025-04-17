@@ -45,12 +45,9 @@ const BiometricAuth = () => {
 
     if (biometricAuth) {
       setIsBiometricDone(true);
-      console.log("Biometric Authentication Success:", biometricAuth);
+      biometricAuth.success === true && isBiometricDone && router.push(Screens.Home);
     }
 
-    if (biometricAuth.success === true && isBiometricDone) {
-      router.push(Screens.Home);
-    }
   };
 
   const swipeUp = Gesture.Pan()
