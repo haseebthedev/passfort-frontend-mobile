@@ -7,7 +7,11 @@ import { useFormikHook } from "@/hooks";
 import { PasswordI, itemI } from "@/interfaces";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
 import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
-import { useAuthStore, usePasswordCategoryStore, usePasswordStore } from "@/store";
+import {
+  useAuthStore,
+  usePasswordCategoryStore,
+  usePasswordStore,
+} from "@/store";
 import {
   AppButton,
   AppHeader,
@@ -27,11 +31,14 @@ interface ParsedPasswordItem extends PasswordI {
 
 const CreatePassword = () => {
   const { passwordItem } = useLocalSearchParams<{ passwordItem: string }>();
-  const parsedPasswordItem: ParsedPasswordItem | null = passwordItem ? JSON.parse(passwordItem) : null;
+  const parsedPasswordItem: ParsedPasswordItem | null = passwordItem
+    ? JSON.parse(passwordItem)
+    : null;
 
   const { user } = useAuthStore();
   const { createPassword, isLoading, updatePassword } = usePasswordStore();
-  const { getPasswordCategories, isLoading: loadingPasswordCategories } = usePasswordCategoryStore();
+  const { getPasswordCategories, isLoading: loadingPasswordCategories } =
+    usePasswordCategoryStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
@@ -49,17 +56,22 @@ const CreatePassword = () => {
     platform: parsedPasswordItem?.platform ?? "",
     siteAddress: parsedPasswordItem?.siteAddress ?? "",
     email: (parsedPasswordItem?.email || parsedPasswordItem?.username) ?? "",
-    password: parsedPasswordItem?.password ?? "",
+    passwordText: parsedPasswordItem?.passwordText ?? "",
     createdAt: parsedPasswordItem?.createdAt ?? "",
     updatedAt: parsedPasswordItem?.updatedAt ?? "",
   };
 
-  const submit = async ({ platform, siteAddress, email, password }: PasswordI) => {
+  const submit = async ({
+    platform,
+    siteAddress,
+    email,
+    passwordText,
+  }: PasswordI) => {
     Keyboard.dismiss();
     setError("");
 
     try {
-      if (!value || !siteAddress || !password) {
+      if (!value || !siteAddress || !passwordText) {
         setError("Please fill in all required fields");
         return;
       }
@@ -70,22 +82,22 @@ const CreatePassword = () => {
           platform,
           siteAddress,
           username: email,
-          password,
+          passwordText,
         });
         setError("Password updated successfully");
 
         router.replace({
-          pathname: "/PasswordDetail",
-          params: { 
+          pathname: Screens.PasswordDetail,
+          params: {
             item: JSON.stringify({
               ...parsedPasswordItem,
               type: { ...parsedPasswordItem.type, id: value },
               platform,
               siteAddress,
               username: email,
-              password,
-            })
-          }
+              passwordText,
+            }),
+          },
         });
       } else {
         const filteredItem = dropdownItems.find((item) => item.value === value);
@@ -100,7 +112,7 @@ const CreatePassword = () => {
             title: filteredItem.label ?? "",
           },
           platform,
-          password,
+          passwordText,
           email: email || user?.name,
           siteAddress,
         });
@@ -113,14 +125,26 @@ const CreatePassword = () => {
       }
       router.back();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred while saving the password");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An error occurred while saving the password"
+      );
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue, resetForm } =
-    useFormikHook(submit, validationSchema, initialValues);
+  const {
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+    setFieldValue,
+    resetForm,
+  } = useFormikHook(submit, validationSchema, initialValues);
 
-  const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword)
+  const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
 
   const getAllPasswordCategories = async () => {
     try {
@@ -160,14 +184,21 @@ const CreatePassword = () => {
             style={styles.buttonStyle}
             containerStyle={styles.buttonContainer}
           >
-            <FontAwesome name="magic" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
+            <FontAwesome
+              name="magic"
+              size={iconSize}
+              color={colorPalette.primaryBg.secondaryLightGreen}
+            />
           </RippleWrapper>
         }
       />
-      <KeyboardResponsiveHOC containerStyle={styles.mainContainer} scrollViewStyle={styles.scrollViewStyle}>
+      <KeyboardResponsiveHOC
+        containerStyle={styles.mainContainer}
+        scrollViewStyle={styles.scrollViewStyle}
+      >
         <View style={styles.container}>
           {error ? <ErrorMessage error={error} visible={true} /> : null}
-          
+
           <AppText text="Credentials" type="label" style={styles.heading} />
 
           <View style={styles.infoContainer}>
@@ -183,51 +214,93 @@ const CreatePassword = () => {
                 setFieldValue("type", selectedValue as string);
               }}
             />
-            {touched.type?.id && errors.type?.id && <ErrorMessage error={errors.type.id} visible={touched.type?.id} />}
+            {touched.type?.id && errors.type?.id && (
+              <ErrorMessage error={errors.type.id} visible={touched.type?.id} />
+            )}
           </View>
 
-          <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
+          <AppText
+            text="Platform"
+            type="subHeading"
+            style={styles.infoHeading}
+          />
           <TextInput
             placeholder="Enter Your Platform"
             value={values.platform}
             onChangeText={handleChange("platform")}
             onBlur={() => setFieldTouched("platform")}
-            error={typeof errors.platform === "string" ? errors.platform : undefined}
-            visible={typeof touched.platform === "boolean" ? touched.platform : undefined}
+            error={
+              typeof errors.platform === "string" ? errors.platform : undefined
+            }
+            visible={
+              typeof touched.platform === "boolean"
+                ? touched.platform
+                : undefined
+            }
             inputStyle={styles.inputStyle}
           />
 
-          <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
+          <AppText
+            text="Site Address"
+            type="subHeading"
+            style={styles.infoHeading}
+          />
           <TextInput
             placeholder="http://"
             value={values.siteAddress}
             onChangeText={handleChange("siteAddress")}
             onBlur={() => setFieldTouched("siteAddress")}
-            error={typeof errors.siteAddress === "string" ? errors.siteAddress : undefined}
-            visible={typeof touched.siteAddress === "boolean" ? touched.siteAddress : undefined}
+            error={
+              typeof errors.siteAddress === "string"
+                ? errors.siteAddress
+                : undefined
+            }
+            visible={
+              typeof touched.siteAddress === "boolean"
+                ? touched.siteAddress
+                : undefined
+            }
             inputStyle={styles.inputStyle}
           />
 
-          <AppText text="Email / Username" type="subHeading" style={styles.infoHeading} />
+          <AppText
+            text="Email / Username"
+            type="subHeading"
+            style={styles.infoHeading}
+          />
           <TextInput
             placeholder="Enter Your email"
             value={values.email}
             onChangeText={handleChange("email")}
             onBlur={() => setFieldTouched("email")}
             error={typeof errors.email === "string" ? errors.email : undefined}
-            visible={typeof touched.email === "boolean" ? touched.email : undefined}
+            visible={
+              typeof touched.email === "boolean" ? touched.email : undefined
+            }
             inputStyle={styles.inputStyle}
           />
 
-          <AppText text="Password" type="subHeading" style={styles.infoHeading} />
+          <AppText
+            text="Password"
+            type="subHeading"
+            style={styles.infoHeading}
+          />
           <TextInput
             placeholder="******"
             icon="cycle"
-            value={values.password}
+            value={values.passwordText}
             onChangeText={handleChange("password")}
             onBlur={() => setFieldTouched("password")}
-            error={typeof errors.password === "string" ? errors.password : undefined}
-            visible={typeof touched.password === "boolean" ? touched.password : undefined}
+            error={
+              typeof errors.passwordText === "string"
+                ? errors.passwordText
+                : undefined
+            }
+            visible={
+              typeof touched.passwordText === "boolean"
+                ? touched.passwordText
+                : undefined
+            }
             inputStyle={styles.inputStyle}
           />
 
@@ -235,7 +308,11 @@ const CreatePassword = () => {
             text={isLoading ? "" : parsedPasswordItem ? "Update" : "Save"}
             onPress={handleSubmit}
             disabled={isLoading || loadingPasswordCategories}
-            RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+            RightAccessory={() =>
+              isLoading && (
+                <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
+              )
+            }
           />
         </View>
       </KeyboardResponsiveHOC>

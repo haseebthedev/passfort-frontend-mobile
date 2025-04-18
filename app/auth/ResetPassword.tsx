@@ -1,38 +1,63 @@
 import React from "react";
 import { View, StyleSheet, Keyboard } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
 import { ResetPasswordI } from "@/interfaces";
-import { hp, newPasswordValidation, wp } from "@/utils";
+import { hp, newPasswordValidation, showToast, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  TextInput,
+} from "@/components";
 
 const ResetPassword = () => {
+  const { email, authCode } = useLocalSearchParams<{
+    email: string;
+    authCode: string;
+  }>();
+
   const { isLoading, resetPassword } = useAuthStore();
 
   const validationSchema = newPasswordValidation;
-  const initialValues: ResetPasswordI = { newPassword: "", confirmPassword: "" };
+  const initialValues: ResetPasswordI = {
+    newPassword: "",
+    confirmPassword: "",
+  };
 
   const submit = async ({ newPassword, confirmPassword }: ResetPasswordI) => {
     Keyboard.dismiss();
     try {
-      await resetPassword({ newPassword, confirmPassword });
+      await resetPassword({ email, authCode, newPassword });
       router.push(Screens.Signin);
     } catch (err) {
-      console.log("Error while reseting password: ", err);
+      showToast({
+        type: "error",
+        text1: `Signin Error: , ${err}`,
+      });
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const {
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+  } = useFormikHook(submit, validationSchema, initialValues);
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Reset Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+      <AppHeader
+        title="Reset Password"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+      />
 
       <View style={styles.form}>
         <View style={styles.centerContent}>
@@ -66,7 +91,11 @@ const ResetPassword = () => {
           preset="filled"
           text={isLoading ? "" : "Continue"}
           onPress={handleSubmit}
-          RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+          RightAccessory={() =>
+            isLoading && (
+              <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
+            )
+          }
         />
       </View>
     </GradientWrapper>

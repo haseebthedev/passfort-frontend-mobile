@@ -1,11 +1,11 @@
 import React, { memo, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { router } from "expo-router";
-import { wp } from "@/utils";
+import { showToast, wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppFont } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { useAuthStore, usePasswordStore } from "@/store";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { ListPagination, PasswordGroup, PasswordItemType } from "@/interfaces";
 import {
   AppLogo,
@@ -33,7 +33,10 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
             <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
-          <RoundButton iconName="plus" onPress={() => router.push(Screens.CreatePassword)} />
+          <RoundButton
+            iconName="plus"
+            onPress={() => router.push(Screens.CreatePassword)}
+          />
         </View>
 
         <FlatList
@@ -45,7 +48,11 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
           contentContainerStyle={styles.passwordCardsContainer}
         />
       </View>
-      <AppText text="Recently Added" type="primaryHeading" style={styles.heading} />
+      <AppText
+        text="Recently Added"
+        type="primaryHeading"
+        style={styles.heading}
+      />
     </View>
   );
 });
@@ -53,7 +60,8 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
 const Home = () => {
   const { user } = useAuthStore();
 
-  const { getPasswords, getGroupedPasswords, searchPasswords, isLoading } = usePasswordStore();
+  const { getPasswords, getGroupedPasswords, searchPasswords, isLoading } =
+    usePasswordStore();
 
   const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -71,7 +79,7 @@ const Home = () => {
     }));
 
     try {
-      const response = searchText 
+      const response = searchText
         ? await searchPasswords({ page, limit: LIMIT, searchTerm: searchText })
         : await getPasswords({ page, limit: LIMIT });
 
@@ -97,7 +105,10 @@ const Home = () => {
         setGroupedPassword(response.result);
       }
     } catch (error) {
-      console.log("Error: ", error);
+      showToast({
+        type: "error",
+        text1: `Error: , ${error}`,
+      });
     }
   };
 
@@ -133,13 +144,17 @@ const Home = () => {
             numberOfLines={1}
             style={styles.username}
           />
-          <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
+          <AppText
+            text="Welcome to Password Manager"
+            type="regularSubHeading"
+            style={styles.welcomeText}
+          />
         </View>
         <AppLogo style={styles.appLogo} />
       </View>
 
       <SearchInput value={searchText} onChangeText={setSearchText} />
-      
+
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -148,7 +163,9 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <PasswordItem item={item} />}
           keyExtractor={(item) => item.id.toString()}
-          ListHeaderComponent={() => <HeaderComponent groupedPassword={groupedPassword} />}
+          ListHeaderComponent={() => (
+            <HeaderComponent groupedPassword={groupedPassword} />
+          )}
           ListEmptyComponent={
             !state.listRefreshing ? (
               <View style={styles.emptyContainer}>

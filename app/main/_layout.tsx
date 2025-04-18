@@ -13,6 +13,7 @@ const MainLayout = () => {
       <Stack.Screen name="PasswordDetail" />
       <Stack.Screen name="CreatePassword" />
       <Stack.Screen name="GeneratedPassword" />
+      <Stack.Screen name="Notifications" />
     </Stack>
   );
 };

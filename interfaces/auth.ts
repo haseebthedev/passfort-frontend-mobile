@@ -29,10 +29,21 @@ export type ResetPasswordI = {
   confirmPassword: string;
 };
 
+export type ResetPasswordParamI = {
+  email: string,
+  authCode: string,
+  newPassword: string;
+};
+
 export interface EditProfileI {
   profilePicture?: string;
   name?: string;
   dateOfBirth?: string | Date;
   country?: string | TranslationLanguageCodeMap;
   phoneNumber?: string;
+}
+
+export interface VerifyOtpI {
+  email: string;
+  authCode: string;
 }

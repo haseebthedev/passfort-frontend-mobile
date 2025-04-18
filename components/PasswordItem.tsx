@@ -1,44 +1,43 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
-import { Feather } from "@expo/vector-icons";
 import { AppText } from "./AppText";
+import { Screens } from "@/enums";
+import { RippleWrapper } from "./RippleWrapper";
 import { PasswordItemType } from "@/interfaces";
 import { getInitials, hp, wp } from "@/utils";
 import { colorPalette, Spacing } from "@/styles";
-import { RippleWrapper } from "./RippleWrapper";
 
 interface PasswordItemI {
   item: PasswordItemType;
 }
 
 export const PasswordItem = ({ item }: PasswordItemI) => {
-  const onCopyPasswordPress = () => {};
-
   const onPressItem = () => {
     router.push({
-      pathname: "/PasswordDetail",
+      pathname: Screens.PasswordDetail,
       params: { item: JSON.stringify(item) },
     });
   };
-  
 
   return (
     <>
       <RippleWrapper onPress={onPressItem} style={styles.passwordItemCard}>
         <View style={styles.passwordInfoContainer}>
           <View style={styles.imageContainer}>
-            <AppText text={getInitials(item.username ?? "User Name")} type="heading" />
+            <AppText
+              text={getInitials(item.username ?? "User Name")}
+              type="heading"
+            />
           </View>
-          <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
+          <AppText
+            text={item.username ?? "Username"}
+            type="subHeading"
+            style={styles.subHeading}
+            numberOfLines={1}
+          />
         </View>
       </RippleWrapper>
-
-      <View style={styles.copyButtonContainer}>
-        <RippleWrapper onPress={onCopyPasswordPress} style={styles.copyButton} containerStyle={styles.buttonContainer}>
-          <Feather name="copy" size={wp(5)} color={colorPalette.primaryBg.primaryWhite} style={styles.copyIcon} />
-        </RippleWrapper>
-      </View>
     </>
   );
 };
@@ -77,20 +76,6 @@ const styles = StyleSheet.create({
   },
   subHeading: {
     textTransform: "capitalize",
-    width: wp(63),
-  },
-  copyButtonContainer: {
-    position: "absolute",
-    right: wp(3),
-    top: hp(1.2),
-  },
-  copyButton: {
-    width: wp(12),
-    height: wp(12),
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  copyIcon: {
-    transform: [{ rotate: "90deg" }],
+    width: wp(65),
   },
 });

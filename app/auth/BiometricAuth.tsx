@@ -9,6 +9,7 @@ import { hp, wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppLogo, AppText, GradientWrapper } from "@/components";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { authenticateWithBiometrics } from "@/utils/biometricAuthService";
 
 const { height } = Dimensions.get("window");
 
@@ -19,35 +20,14 @@ const BiometricAuth = () => {
   const translateY = useSharedValue<number>(0);
 
   const handleBiometricAuth = async () => {
-    const isBiometricAvailable = await LocalAuthentication.hasHardwareAsync();
-
-    if (!isBiometricAvailable) {
-      Alert.alert("Biometric support is not available.");
-      return;
-    }
-
-    let biometricsSupported;
-    if (isBiometricAvailable) {
-      biometricsSupported = await LocalAuthentication.supportedAuthenticationTypesAsync();
-    }
-
-    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
-    if (!savedBiometrics) {
-      Alert.alert("Biometric record not found.");
-      return;
-    }
-
-    const biometricAuth = await LocalAuthentication.authenticateAsync({
-      promptMessage: "Login to Passfort with biometric.",
-      cancelLabel: "Cancel",
-      disableDeviceFallback: true,
+    const success = await authenticateWithBiometrics(() => {
+      setIsBiometricDone(true);
+      router.push(Screens.Home);
     });
 
-    if (biometricAuth) {
-      setIsBiometricDone(true);
-      biometricAuth.success === true && isBiometricDone && router.push(Screens.Home);
+    if (!success) {
+      setIsBiometricDone(false);
     }
-
   };
 
   const swipeUp = Gesture.Pan()
@@ -75,10 +55,11 @@ const BiometricAuth = () => {
   }, []);
 
   useEffect(() => {
-    async () => {
+    const checkBiometricSupport = async () => {
       const compatible = await LocalAuthentication.hasHardwareAsync();
       setIsBiometricSupported(compatible);
     };
+    checkBiometricSupport();
   }, []);
 
   return (

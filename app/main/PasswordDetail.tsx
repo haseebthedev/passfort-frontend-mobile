@@ -3,18 +3,28 @@ import { StyleSheet, View, Share } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
-import { hp, wp } from "@/utils";
+import { hp, showToast, wp } from "@/utils";
+import { Screens } from "@/enums";
+import { PasswordItemType } from "@/interfaces";
 import { usePasswordStore } from "@/store";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppHeader, AppText, GradientWrapper, LoadingIndicator, RippleWrapper, SmallAppButton } from "@/components";
-import { PasswordItemType } from "@/interfaces";
+import {
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  RippleWrapper,
+  SmallAppButton,
+} from "@/components";
 
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
   const { isLoading, deletePassword, getPasswordById } = usePasswordStore();
   const { item } = useLocalSearchParams<{ item?: string }>();
-  const [passwordDetail, setPasswordDetail] = useState<PasswordItemType | null>(null);
+  const [passwordDetail, setPasswordDetail] = useState<PasswordItemType | null>(
+    null
+  );
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const passwordItem = typeof item === "string" ? JSON.parse(item) : null;
@@ -28,26 +38,29 @@ const PasswordDetail = () => {
         router.back();
       }
     } catch (err) {
-      console.log("Error: ", err);
+      showToast({
+        type: "error",
+        text1: `Error: , ${err}`,
+      });
     }
   };
 
   const copyToClipboard = () => {
-    if (passwordDetail?.password) {
-      Clipboard.setStringAsync(passwordDetail.password);
+    if (passwordDetail?.passwordText) {
+      Clipboard.setStringAsync(passwordDetail.passwordText);
     }
   };
 
   const onEditPasswordPress = async () => {
     router.push({
-      pathname: "/CreatePassword",
+      pathname: Screens.CreatePassword,
       params: { passwordItem: JSON.stringify(passwordDetail) },
     });
   };
 
   const refreshPasswordData = async () => {
     if (!passwordItem?.id) return;
-    
+
     try {
       setIsRefreshing(true);
       const updatedData = await getPasswordById(passwordItem.id);
@@ -55,17 +68,26 @@ const PasswordDetail = () => {
         setPasswordDetail(updatedData);
       }
     } catch (err) {
-      console.log("Error refreshing password data: ", err);
+      showToast({
+        type: "error",
+        text1: `Error refreshing password data: , ${err}`,
+      });
     } finally {
       setIsRefreshing(false);
     }
   };
 
   const getPasswordItemById = async () => {
-    if (passwordItem?.id) {
-      await getPasswordById(passwordItem.id).then((res) => setPasswordDetail(res));
-    } else if (passwordItem) {
-      setPasswordDetail(passwordItem);
+    try {
+      if (passwordItem) {
+        const res = await getPasswordById(passwordItem.id);
+        setPasswordDetail(res);
+      }
+    } catch (err) {
+      showToast({
+        type: "error",
+        text1: `Error: , ${err}`,
+      });
     }
   };
 
@@ -73,24 +95,22 @@ const PasswordDetail = () => {
     if (!passwordDetail) return;
 
     const shareContent = {
-      title: 'Password Details',
-      message: 
-`Platform: ${passwordDetail.platform || 'N/A'}
-${passwordDetail.siteAddress ? `Site: ${passwordDetail.siteAddress}` : ''}
-${passwordDetail.username ? `Username: ${passwordDetail.username}` : ''}
-Password: ${passwordDetail.password || 'N/A'}`
+      title: "Password Details",
+      message: `Platform: ${passwordDetail.platform || "N/A"}
+${passwordDetail.siteAddress ? `Site: ${passwordDetail.siteAddress}` : ""}
+${passwordDetail.username ? `Username: ${passwordDetail.username}` : ""}
+Password: ${passwordDetail.passwordText || "N/A"}`,
     };
 
     try {
       await Share.share(shareContent);
     } catch (error) {
-      console.log('Error sharing password details:', error);
+      showToast({
+        type: "error",
+        text1: `Error sharing password details: , ${error}`,
+      });
     }
   };
-
-  useEffect(() => {
-    getPasswordItemById();
-  }, []);
 
   useEffect(() => {
     if (item) {
@@ -98,11 +118,15 @@ Password: ${passwordDetail.password || 'N/A'}`
     }
   }, [item]);
 
+  useEffect(() => {
+    getPasswordItemById();
+  }, []);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader 
-        title="Password Details" 
-        leftIconName="chevron-back" 
+      <AppHeader
+        title="Password Details"
+        leftIconName="chevron-back"
         onLeftIconPress={onBackPress}
         rightAccessory={
           <RippleWrapper
@@ -110,10 +134,10 @@ Password: ${passwordDetail.password || 'N/A'}`
             style={styles.refreshButton}
             containerStyle={styles.refreshButtonContainer}
           >
-            <Feather 
-              name="refresh-cw" 
-              size={iconSize} 
-              color={colorPalette.primaryBg.primaryWhite} 
+            <Feather
+              name="refresh-cw"
+              size={iconSize}
+              color={colorPalette.primaryBg.primaryWhite}
             />
           </RippleWrapper>
         }
@@ -126,35 +150,58 @@ Password: ${passwordDetail.password || 'N/A'}`
           <View style={styles.innerContainer}>
             {passwordDetail?.type.title && (
               <View style={styles.infoContainer}>
-                <AppText text="Type" type="subHeading" style={styles.infoHeading} />
+                <AppText
+                  text="Type"
+                  type="subHeading"
+                  style={styles.infoHeading}
+                />
                 <AppText text={passwordDetail?.type.title} type="default" />
               </View>
             )}
 
             {passwordDetail?.platform && (
               <View style={styles.infoContainer}>
-                <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
+                <AppText
+                  text="Platform"
+                  type="subHeading"
+                  style={styles.infoHeading}
+                />
                 <AppText text={passwordDetail?.platform} type="default" />
               </View>
             )}
 
             {passwordDetail?.siteAddress && (
               <View style={styles.infoContainer}>
-                <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
+                <AppText
+                  text="Site Address"
+                  type="subHeading"
+                  style={styles.infoHeading}
+                />
                 <AppText text={passwordDetail.siteAddress} type="default" />
               </View>
             )}
 
             {passwordDetail?.username && (
               <View style={styles.infoContainer}>
-                <AppText text="Username" type="subHeading" style={styles.infoHeading} />
+                <AppText
+                  text="Username"
+                  type="subHeading"
+                  style={styles.infoHeading}
+                />
                 <AppText text={passwordDetail.username} type="default" />
               </View>
             )}
           </View>
 
           <View style={styles.passwordActionContainer}>
-            <AppText text={passwordDetail?.password ?? ""} type="passwordText" numberOfLines={1} />
+            {passwordDetail?.passwordText && (
+              <AppText
+                text={passwordItem?.passwordText}
+                type="passwordText"
+                numberOfLines={1}
+              />
+            )}
+
             <SmallAppButton text="Copy" onPress={copyToClipboard} />
 
             <View style={styles.buttonsContainer}>
@@ -163,7 +210,11 @@ Password: ${passwordDetail.password || 'N/A'}`
                 style={styles.buttonContainer}
                 containerStyle={styles.containerStyle}
               >
-                <Feather name="trash-2" size={iconSize} color={colorPalette.primaryBg.primaryWhite} />
+                <Feather
+                  name="trash-2"
+                  size={iconSize}
+                  color={colorPalette.primaryBg.primaryWhite}
+                />
               </RippleWrapper>
               <RippleWrapper
                 onPress={onEditPasswordPress}
@@ -181,10 +232,10 @@ Password: ${passwordDetail.password || 'N/A'}`
                 style={styles.buttonContainer}
                 containerStyle={styles.containerStyle}
               >
-                <Fontisto 
-                  name="share-a" 
-                  size={iconSize - wp(1)} 
-                  color={colorPalette.primaryBg.primaryWhite} 
+                <Fontisto
+                  name="share-a"
+                  size={iconSize - wp(1)}
+                  color={colorPalette.primaryBg.primaryWhite}
                 />
               </RippleWrapper>
             </View>

@@ -30,7 +30,7 @@ export interface PasswordI {
   siteAddress?: string;
   email?: string;
   username?: string;
-  password: string;
+  passwordText: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -50,7 +50,7 @@ export interface updatePasswordI {
   platform?: string;
   siteAddress?: string;
   username?: string;
-  password?: string;
+  passwordText?: string;
 }
 
 export type PasswordItemType = {
@@ -60,7 +60,7 @@ export type PasswordItemType = {
   email?: string;
   siteAddress?: string;
   platform?: string;
-  password?: string;
+  passwordText?: string;
   icon?: ImageSourcePropType;
   date?: string | Date;
   createdAt?: string | Date;

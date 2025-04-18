@@ -4,10 +4,10 @@ import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import * as SplashScreen from "expo-splash-screen";
 import { Screens } from "@/enums";
+import { useAuthStore } from "@/store";
 import { passfortIcon } from "@/assets";
 import { loadFonts, wp } from "@/utils";
 import { GradientWrapper, LoadingIndicator } from "@/components";
-import { useAuthStore } from "@/store";
 
 export default function Index() {
   const router = useRouter();
@@ -24,36 +24,21 @@ export default function Index() {
     }
   };
 
-  // const redirectUser = async () => {
-  //   if (fontsLoaded) {
-  //     if (!user) {
-  //       if (firstTimeUser) {
-  //         router.push(Screens.Onboarding);
-  //       } else {
-  //         router.push(Screens.Signin);
-  //       }
-  //     } else {
-  //       router.push(Screens.Home);
-  //     }
-  //   }
-  // };
-
-    const redirectUser = async () => {
-      if (fontsLoaded) {
-        setTimeout(() => {
-          if (!user) {
-            if (firstTimeUser) {
-              router.push(Screens.Onboarding);
-            } else {
-              router.push(Screens.Signin);
-            }
+  const redirectUser = async () => {
+    if (fontsLoaded) {
+      setTimeout(() => {
+        if (!user) {
+          if (firstTimeUser) {
+            router.push(Screens.Onboarding);
           } else {
-            router.push(Screens.Home);
+            router.push(Screens.Signin);
           }
-        }, 2000); // 2 second delay
-      }
-    };
-  
+        } else {
+          router.push(Screens.Home);
+        }
+      }, 2000);
+    }
+  };
 
   useEffect(() => {
     async function prepare() {

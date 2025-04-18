@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, FlatList, ImageSourcePropType } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  FlatList,
+  ImageSourcePropType,
+  ActivityIndicator,
+} from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { profilePicture } from "@/assets";
-import { capitalize, wp } from "@/utils";
+import { capitalize, showToast, wp } from "@/utils";
 import { PasswordGroup, UserI } from "@/interfaces";
 import { colorPalette, Spacing } from "@/styles";
 import { useAuthStore, usePasswordStore } from "@/store";
-import { AppButton, AppHeader, AppText, GradientWrapper, PasswordCard } from "@/components";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  PasswordCard,
+} from "@/components";
 
 const Profile = () => {
   const { user } = useAuthStore();
@@ -20,7 +34,9 @@ const Profile = () => {
     country: user?.country ?? "N/A",
   };
 
-  const profileImage: ImageSourcePropType = user?.profilePicture ? { uri: user?.profilePicture } : profilePicture;
+  const profileImage: ImageSourcePropType = user?.profilePicture
+    ? { uri: user?.profilePicture }
+    : profilePicture;
 
   const onEditProfilePress = () => router.push(Screens.EditProfile);
 
@@ -32,7 +48,10 @@ const Profile = () => {
         setGroupedPassword(response.result);
       }
     } catch (error) {
-      console.log("Error: ", error);
+      showToast({
+        type: "error",
+        text1: `Error: , ${error}`,
+      });
     }
   };
 
@@ -42,26 +61,57 @@ const Profile = () => {
 
   return (
     <GradientWrapper style={styles.mainContainer}>
-      <AppHeader title="Profile" rightIconName="settings" onRightIconPress={() => router.push(Screens.Settings)} />
+      <AppHeader
+        title="Profile"
+        rightIconName="settings"
+        onRightIconPress={() => router.push(Screens.Settings)}
+      />
 
       <View style={styles.container}>
         <Image source={profileImage} style={styles.profilePicture} />
         <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
-        <AppButton text="Edit profile" preset="primaryLink" onPress={onEditProfilePress} />
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={groupedPassword ?? []}
-          renderItem={({ item }) => <PasswordCard item={item} />}
-          // keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.passwordCardsContainer}
+        <AppButton
+          text="Edit profile"
+          preset="primaryLink"
+          onPress={onEditProfilePress}
         />
+        {isLoading || groupedPassword.length === 0 ? (
+          <View style={styles.loadingContainer}>
+            <LoadingIndicator />
+          </View>
+        ) : (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={groupedPassword ?? []}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={({ item }) => <PasswordCard item={item} />}
+            contentContainerStyle={styles.passwordCardsContainer}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <AppText
+                  text="No password categories found"
+                  type="subHeading"
+                  style={styles.emptyText}
+                />
+              </View>
+            }
+          />
+        )}
       </View>
       <View style={styles.personalInfoContainer}>
         {Object.entries(userInfo).map(([key, value]) => (
           <View key={key}>
-            <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
-            <AppText text={String(value) ?? ""} type="detail" numberOfLines={1} />
+            <AppText
+              text={capitalize(key)}
+              type="subHeading"
+              style={styles.infoHeading}
+            />
+            <AppText
+              text={String(value) ?? ""}
+              type="detail"
+              numberOfLines={1}
+            />
           </View>
         ))}
       </View>
@@ -102,5 +152,21 @@ const styles = StyleSheet.create({
     color: colorPalette.primaryBg.primaryGrey,
     marginBottom: Spacing.xxs,
     fontWeight: "500",
+  },
+  loadingContainer: {
+    height: wp(30),
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: Spacing.md,
+  },
+  emptyContainer: {
+    width: wp(80),
+    height: wp(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    color: colorPalette.primaryBg.primaryGrey,
+    textAlign: "center",
   },
 });

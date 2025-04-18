@@ -1,9 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { RefreshControl, SectionList, StyleSheet, View, ViewToken } from "react-native";
+import {
+  RefreshControl,
+  SectionList,
+  StyleSheet,
+  View,
+  ViewToken,
+} from "react-native";
 import { groupByDate, hp } from "@/utils";
 import { usePasswordStore } from "@/store";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordItem } from "@/components";
+import {
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  PasswordItem,
+} from "@/components";
 import { ListPagination, PasswordItemType } from "@/interfaces";
 import { router, useFocusEffect } from "expo-router";
 
@@ -22,8 +34,14 @@ const Password = () => {
   });
 
   const viewableItemsConfig = useRef({
-    viewableItemsChanged: ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      const topSection = viewableItems.find((item: ViewToken) => item.isViewable && item.section);
+    viewableItemsChanged: ({
+      viewableItems,
+    }: {
+      viewableItems: ViewToken[];
+    }) => {
+      const topSection = viewableItems.find(
+        (item: ViewToken) => item.isViewable && item.section
+      );
       if (topSection) {
         setStickyHeader(topSection.section.title);
       }
@@ -110,19 +128,30 @@ const Password = () => {
       <AppHeader title="Your Passwords" />
       <SectionList
         sections={sections}
-        keyExtractor={(item, index) => (item?.id ? item.id.toString() : `item-${index}`)}
+        keyExtractor={(item, index) =>
+          item?.id ? item.id.toString() : `item-${index}`
+        }
         renderItem={({ item }) => <PasswordItem item={item} />}
         renderSectionHeader={({ section: { title } }) => (
-          <View style={[styles.sectionHeader, stickyHeader === title && styles.stickyHeader]}>
+          <View
+            style={[
+              styles.sectionHeader,
+              stickyHeader === title && styles.stickyHeader,
+            ]}
+          >
             <AppText text={title} type="description" />
           </View>
         )}
         showsVerticalScrollIndicator={false}
         stickySectionHeadersEnabled={true}
-        onViewableItemsChanged={viewableItemsConfig.current.viewableItemsChanged}
+        onViewableItemsChanged={
+          viewableItemsConfig.current.viewableItemsChanged
+        }
         onEndReached={loadMorePasswords}
         onEndReachedThreshold={0.5}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         ListFooterComponent={renderLoader}
         ListEmptyComponent={() =>
           !state.listRefreshing &&

@@ -5,9 +5,16 @@ import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
 import { ForgetPasswordI } from "@/interfaces";
-import { forgotPasswordValidation, hp, wp } from "@/utils";
+import { forgotPasswordValidation, hp, showToast, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  TextInput,
+} from "@/components";
 
 const ForgetPassword = () => {
   const { isLoading, forgetPassword } = useAuthStore();
@@ -18,20 +25,35 @@ const ForgetPassword = () => {
     Keyboard.dismiss();
     try {
       await forgetPassword({ email });
-      router.push(Screens.OtpVerification);
+      router.push({
+        pathname: Screens.OtpVerification,
+        params: {
+          email,
+        },
+      });
     } catch (err) {
-      console.log("Error while recovering password: ", err);
+      showToast({
+        type: "error",
+        text1: `Error while recovering password: , ${err}`,
+      });
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const {
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+  } = useFormikHook(submit, validationSchema, initialValues);
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Forget Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+      <AppHeader
+        title="Forget Password"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+      />
 
       <View style={styles.form}>
         <View style={styles.centerContent}>
@@ -55,7 +77,11 @@ const ForgetPassword = () => {
           text={isLoading ? "" : "Recover Password"}
           preset="filled"
           onPress={handleSubmit}
-          RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+          RightAccessory={() =>
+            isLoading && (
+              <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
+            )
+          }
         />
       </View>
     </GradientWrapper>

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { EditProfileI, ForgetPasswordI, ResetPasswordI, SigninI, SignupI, UserI } from "@/interfaces";
+import { EditProfileI, ForgetPasswordI, ResetPasswordParamI, SigninI, SignupI, UserI, VerifyOtpI } from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
 import { showToast } from "@/utils";
@@ -10,21 +10,20 @@ type Store = {
   user: UserI | null;
   error: string | null;
   firstTimeUser: boolean;
-  hasSeenOnboarding: boolean;
   biometricAuth: boolean;
 };
 
 type Action = {
   setUser: (user: UserI | null) => void;
   setFirstTimeUser: (value: boolean) => void;
-  setHasSeenOnboarding: (value: boolean) => void;
   setBiometricAuth: (value: boolean) => void;
   signin: (body: SigninI) => Promise<void>;
   signup: (body: SignupI) => Promise<void>;
   editProfile: (body: EditProfileI) => Promise<void>;
   forgetPassword: (body: ForgetPasswordI) => Promise<void>;
-  resetPassword: (body: ResetPasswordI) => Promise<void>;
+  resetPassword: (body: ResetPasswordParamI) => Promise<void>;
   reset: () => void;
+  verifyAuthCode: (body: VerifyOtpI) => Promise<void>; 
 };
 
 const useAuthStore = create<Store & Action>()(
@@ -35,12 +34,10 @@ const useAuthStore = create<Store & Action>()(
         user: null,
         error: null,
         firstTimeUser: true,
-        hasSeenOnboarding: false,
         biometricAuth: false,
 
         setUser: (user: UserI | null) => set({ user }),
         setFirstTimeUser: (value: boolean) => set({ firstTimeUser: value }),
-        setHasSeenOnboarding: (value: boolean) => set({ hasSeenOnboarding: value }),
         setBiometricAuth: (value: boolean) => set({ biometricAuth: value }),
 
         // Actions
@@ -119,7 +116,25 @@ const useAuthStore = create<Store & Action>()(
           }
         },
 
-        resetPassword: async (body: ResetPasswordI) => {
+        verifyAuthCode: async (body: VerifyOtpI) => {
+          set({ isLoading: true });
+          try {
+            await AxiosInstance.post("/auth/verify-otp", body);
+            set({ isLoading: false });
+            showToast({ type: "success", text1: "OTP verified successfully!" });
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Invalid or expired OTP";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            showToast({ type: "error", text1: errorMessage });
+
+            throw new Error(errorMessage);
+          }
+        },
+
+        resetPassword: async (body: ResetPasswordParamI) => {
           set({ isLoading: true });
           try {
             await AxiosInstance.post("/auth/reset-password", body);

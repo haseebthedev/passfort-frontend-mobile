@@ -5,7 +5,7 @@ import { Screens } from "@/enums";
 import { SignupI } from "@/interfaces";
 import { useAuthStore } from "@/store";
 import { useFormikHook } from "@/hooks";
-import { signupValidationSchema } from "@/utils";
+import { showToast, signupValidationSchema } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -29,15 +29,21 @@ const Signup = () => {
       await signup({ name, email, password });
       router.push(Screens.Signin);
     } catch (error) {
-      console.log("Signup Error: ", error);
+      showToast({
+        type: "error",
+        text1: `Signup Error: , ${error}`,
+      });
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const {
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+  } = useFormikHook(submit, validationSchema, initialValues);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -56,7 +62,9 @@ const Signup = () => {
               onChangeText={handleChange("name")}
               onBlur={() => setFieldTouched("name")}
               error={typeof errors.name === "string" ? errors.name : undefined}
-              visible={typeof touched.name === "boolean" ? touched.name : undefined}
+              visible={
+                typeof touched.name === "boolean" ? touched.name : undefined
+              }
             />
             <TextInput
               label="Email Address"
@@ -64,8 +72,12 @@ const Signup = () => {
               value={values.email}
               onChangeText={handleChange("email")}
               onBlur={() => setFieldTouched("email")}
-              error={typeof errors.email === "string" ? errors.email : undefined}
-              visible={typeof touched.email === "boolean" ? touched.email : undefined}
+              error={
+                typeof errors.email === "string" ? errors.email : undefined
+              }
+              visible={
+                typeof touched.email === "boolean" ? touched.email : undefined
+              }
             />
             <TextInput
               label="Password"
@@ -73,26 +85,48 @@ const Signup = () => {
               value={values.password}
               onChangeText={handleChange("password")}
               onBlur={() => setFieldTouched("password")}
-              error={typeof errors.password === "string" ? errors.password : undefined}
-              visible={typeof touched.password === "boolean" ? touched.password : undefined}
+              error={
+                typeof errors.password === "string"
+                  ? errors.password
+                  : undefined
+              }
+              visible={
+                typeof touched.password === "boolean"
+                  ? touched.password
+                  : undefined
+              }
               secureInput={true}
             />
 
             <AppButton
               text={isLoading ? "" : "Sign Up"}
               onPress={handleSubmit}
-              RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+              RightAccessory={() =>
+                isLoading && (
+                  <LoadingIndicator
+                    color={colorPalette.gradientBg.darkGreen02}
+                  />
+                )
+              }
             />
 
             <View style={styles.linkRow}>
               <AppText text="Already have an account?" type="label" />
-              <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
+              <AppButton
+                text="Sign In"
+                onPress={() => router.push(Screens.Signin)}
+                preset="primaryLink"
+              />
             </View>
           </View>
         </View>
       </KeyboardResponsiveHOC>
       <View style={styles.termsAndConditions}>
-        <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
+        <AppText
+          text="Terms & Conditions"
+          style={styles.conditions}
+          type="default"
+        />
         <AppText text=" and " type="default" />
         <AppText text="Privacy policy" style={styles.policy} type="default" />
       </View>

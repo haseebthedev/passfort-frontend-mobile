@@ -1,17 +1,36 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Image, ImageSourcePropType, Keyboard, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageSourcePropType,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { TranslationLanguageCodeMap } from "react-native-country-picker-modal";
-import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+} from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
 import { EditProfileI } from "@/interfaces";
 import { useFormikHook } from "@/hooks";
 import { profilePicture } from "@/assets";
 import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
-import { editProfileValidationSchema, formatDate, uploadImageToBackend, wp } from "@/utils";
+import {
+  editProfileValidationSchema,
+  formatDate,
+  showToast,
+  uploadImageToBackend,
+  wp,
+} from "@/utils";
 import {
   AppButton,
   AppHeader,
@@ -28,20 +47,29 @@ const EditProfile = () => {
   const { user, editProfile, isLoading } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [profileImage, setProfileImage] = useState<ImageSourcePropType>();
   const [selectedImage, setSelectedImage] = useState<ImageSourcePropType>();
-  const [selectedCountry, setSelectedCountry] = useState<TranslationLanguageCodeMap | string>("");
+  const [selectedCountry, setSelectedCountry] = useState<
+    TranslationLanguageCodeMap | string
+  >("");
   const [dateModalVisible, setDateModalVisible] = useState<boolean>(false);
   const [imagePickerVisible, setImagePickerVisible] = useState<boolean>(false);
-  const [countryModalVisible, setCountryModalVisible] = useState<boolean>(false);
+  const [countryModalVisible, setCountryModalVisible] =
+    useState<boolean>(false);
 
   const snapPoints = ["30%"];
 
   const handleOpenBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
 
   const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
     []
   );
 
@@ -52,7 +80,17 @@ const EditProfile = () => {
     phoneNumber: "",
   };
 
-  const submit = async ({ name, phoneNumber }: EditProfileI) => {
+  const handleDateChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ) => {
+    setDateModalVisible(false);
+    if (selectedDate) {
+      setDateOfBirth(selectedDate);
+    }
+  };
+
+  const handleProfileUpdate = async ({ name, phoneNumber }: EditProfileI) => {
     Keyboard.dismiss();
 
     try {
@@ -67,7 +105,7 @@ const EditProfile = () => {
         phoneNumber,
       };
 
-      if (dateOfBirth !== new Date()) {
+      if (dateOfBirth !== null) {
         dataToBeUpdate.dateOfBirth = dateOfBirth;
       }
 
@@ -78,15 +116,21 @@ const EditProfile = () => {
       await editProfile(dataToBeUpdate);
       router.back();
     } catch (err) {
-      console.log("Error while updating user data: ", err);
+      showToast({
+        type: "error",
+        text1: `Error while updating user data: , ${err}`,
+      });
     }
   };
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const {
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+  } = useFormikHook(handleProfileUpdate, validationSchema, initialValues);
 
   const onCancelPress = () => router.back();
 
@@ -110,11 +154,50 @@ const EditProfile = () => {
     }
   }, [user]);
 
+  const renderDatePicker = () => (
+    <TouchableOpacity
+      onPress={() => setDateModalVisible(true)}
+      style={[FormsStyle.formControl, styles.datePicker]}
+      activeOpacity={1}
+    >
+      <AppText
+        text={
+          dateOfBirth
+            ? formatDate(dateOfBirth.toString())
+            : "Select Date of Birth"
+        }
+        type="default"
+        style={dateOfBirth ? styles.selectedDate : styles.placeholder}
+      />
+    </TouchableOpacity>
+  );
+
+  const renderCountryPicker = () => (
+    <TouchableOpacity
+      onPress={() => setCountryModalVisible((prev) => !prev)}
+      style={[FormsStyle.formControl, styles.datePicker]}
+    >
+      <AppText
+        text={selectedCountry ? String(selectedCountry) : "Select Country"}
+        type={"default"}
+        style={selectedCountry ? styles.selectedDate : styles.placeholder}
+      />
+    </TouchableOpacity>
+  );
+
   return (
     <GestureHandlerRootView>
       <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-        <AppHeader title="Edit Profile" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
-        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
+        <AppHeader
+          title="Edit Profile"
+          leftIconName="chevron-back"
+          onLeftIconPress={() => router.back()}
+        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          style={styles.container}
+        >
           <View style={styles.alignCenter}>
             <Image source={profileImage} style={styles.profilePicture} />
             <View style={styles.editButton}>
@@ -123,7 +206,11 @@ const EditProfile = () => {
                 style={styles.changePicture}
                 containerStyle={styles.rippleContainer}
               >
-                <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
+                <Feather
+                  name="edit-3"
+                  size={wp(5)}
+                  color={colorPalette.primaryBg.secondaryLightGreen}
+                />
               </RippleWrapper>
             </View>
           </View>
@@ -135,7 +222,9 @@ const EditProfile = () => {
               onChangeText={handleChange("name")}
               onBlur={() => setFieldTouched("name")}
               error={typeof errors.name === "string" ? errors.name : undefined}
-              visible={typeof touched.name === "boolean" ? touched.name : undefined}
+              visible={
+                typeof touched.name === "boolean" ? touched.name : undefined
+              }
             />
             <TextInput
               label="Email Address"
@@ -146,39 +235,33 @@ const EditProfile = () => {
               editable={false}
             />
 
-            <AppText text="Date of Birth" type="label" style={FormsStyle.formLabel} />
-            <TouchableOpacity
-              onPress={() => setDateModalVisible(true)}
-              style={[FormsStyle.formControl, styles.datePicker]}
-              activeOpacity={1}
-            >
-              <AppText
-                text={dateOfBirth ? formatDate(dateOfBirth.toString()) : "Select Date"}
-                type="default"
-                style={dateOfBirth ? styles.selectedDate : styles.placeholder}
-              />
-            </TouchableOpacity>
+            <AppText
+              text="Date of Birth"
+              type="label"
+              style={FormsStyle.formLabel}
+            />
+            {renderDatePicker()}
 
             <AppText text="Country" type="label" style={FormsStyle.formLabel} />
-
-            <TouchableOpacity
-              onPress={() => setCountryModalVisible((prev) => !prev)}
-              style={[FormsStyle.formControl, styles.datePicker]}
-            >
-              <AppText
-                text={selectedCountry ? String(selectedCountry) : "Select Country"}
-                type={"default"}
-                style={selectedCountry ? styles.selectedDate : styles.placeholder}
-              />
-            </TouchableOpacity>
+            {renderCountryPicker()}
 
             <AppButton
               text={isLoading ? "" : "Save"}
               onPress={handleSubmit}
               preset="filled"
-              RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+              RightAccessory={() =>
+                isLoading && (
+                  <LoadingIndicator
+                    color={colorPalette.gradientBg.darkGreen02}
+                  />
+                )
+              }
             />
-            <AppButton text="Cancel" preset="noUnderline" onPress={onCancelPress} />
+            <AppButton
+              text="Cancel"
+              preset="noUnderline"
+              onPress={onCancelPress}
+            />
           </View>
         </ScrollView>
       </GradientWrapper>
@@ -194,15 +277,10 @@ const EditProfile = () => {
 
       {dateModalVisible && (
         <DateTimePicker
-          value={dateOfBirth}
+          value={dateOfBirth || new Date()}
           mode="date"
           display="default"
-          onChange={(event: DateTimePickerEvent, selectedDate?: Date) => {
-            setDateModalVisible(false);
-            if (selectedDate) {
-              setDateOfBirth(selectedDate);
-            }
-          }}
+          onChange={handleDateChange}
         />
       )}
 
