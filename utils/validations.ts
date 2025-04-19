@@ -36,15 +36,6 @@ export const editProfileValidationSchema = yup.object().shape({
     .optional()
     .typeError("Invalid date format (YYYY-MM-DD)"),
   country: yup.string().min(3).optional().label("Country"),
-
-  phoneNumber: yup
-    .string()
-    .optional()
-    .matches(
-      /^\+?[\d\s()-]{7,15}$/,
-      "Phone number must be between 7 and 15 digits, and can include spaces, dashes, or parentheses."
-    )
-    .label("Phone Number"),
 });
 
 export const createPasswordValidationSchema = yup.object().shape({
@@ -58,7 +49,7 @@ export const createPasswordValidationSchema = yup.object().shape({
     .url("Please enter a valid URL starting with http:// or https://")
     .label("Site Address"),
   email: yup.string().optional().label("Email Address"),
-  password: yup
+  passwordText: yup
     .string()
     .required("Password is required!")
     .matches(
@@ -66,7 +57,7 @@ export const createPasswordValidationSchema = yup.object().shape({
       "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number "
     )
     .min(8)
-    .label("Password"),
+    .label("passwordText"),
 });
 
 export const forgotPasswordValidation = yup.object().shape({

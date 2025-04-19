@@ -21,7 +21,7 @@ export type PasswordCategoryType = {
 
 export interface PasswordI {
   type: {
-    id: string;
+    _id: string;
     icon?: string;
     title: string;
     updatedAt?: string;
@@ -54,7 +54,7 @@ export interface updatePasswordI {
 }
 
 export type PasswordItemType = {
-  id: string;
+  _id: string;
   type: PasswordCategoryType;
   username?: string;
   email?: string;

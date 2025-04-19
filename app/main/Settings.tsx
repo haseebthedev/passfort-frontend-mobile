@@ -2,10 +2,9 @@ import React from "react";
 import { StyleSheet, View, Switch, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { wp } from "@/utils";
+import { wp, handleBiometricToggle } from "@/utils";
 import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
-import { handleBiometricToggle } from "@/utils/biometricAuthService";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
 

@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
-import { showToast } from "@/utils";
+import { showToast } from "@/utils/toastService";
 import { useAuthStore } from "@/store/auth/auth.store";
 
 export const handleBiometricToggle = async (value: boolean) => {

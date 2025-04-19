@@ -60,8 +60,14 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
 const Home = () => {
   const { user } = useAuthStore();
 
-  const { getPasswords, getGroupedPasswords, searchPasswords, isLoading } =
-    usePasswordStore();
+  const {
+    getPasswords,
+    getGroupedPasswords,
+    searchPasswords,
+    getRecentPasswords,
+    isLoading,
+    recentPasswords,
+  } = usePasswordStore();
 
   const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -114,12 +120,17 @@ const Home = () => {
 
   const handleRefresh = async () => {
     setState((prev) => ({ ...prev, listRefreshing: true }));
-    await Promise.all([getAllGroupedPasswords(), getAllPasswords(1)]);
+    await Promise.all([
+      getAllGroupedPasswords(),
+      getAllPasswords(1),
+      getRecentPasswords(),
+    ]);
     setState((prev) => ({ ...prev, listRefreshing: false }));
   };
 
   useEffect(() => {
     getAllGroupedPasswords();
+    getRecentPasswords();
   }, []);
 
   useEffect(() => {
@@ -159,10 +170,10 @@ const Home = () => {
         <LoadingIndicator />
       ) : (
         <FlatList
-          data={state.docs}
+          data={recentPasswords ?? []}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <PasswordItem item={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          // keyExtractor={(item) => item._id.toString()}
           ListHeaderComponent={() => (
             <HeaderComponent groupedPassword={groupedPassword} />
           )}
@@ -226,5 +237,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: Spacing.md,
+  },
+  recentPasswordsContainer: {
+    marginBottom: Spacing.lg,
+  },
+  recentPasswordsList: {
+    gap: Spacing.md,
   },
 });

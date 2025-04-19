@@ -27,6 +27,7 @@ import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
 import {
   editProfileValidationSchema,
   formatDate,
+  hp,
   showToast,
   uploadImageToBackend,
   wp,
@@ -43,6 +44,8 @@ import {
   TextInput,
 } from "@/components";
 
+const PROFILE_IMAGE_SIZE = wp(35);
+
 const EditProfile = () => {
   const { user, editProfile, isLoading } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -50,6 +53,7 @@ const EditProfile = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [profileImage, setProfileImage] = useState<ImageSourcePropType>();
   const [selectedImage, setSelectedImage] = useState<ImageSourcePropType>();
+  const [disableSaveButton, setDisableSaveButton] = useState<boolean>(false);
   const [selectedCountry, setSelectedCountry] = useState<
     TranslationLanguageCodeMap | string
   >("");
@@ -77,7 +81,6 @@ const EditProfile = () => {
   const initialValues: EditProfileI = {
     name: user?.name ?? "",
     dateOfBirth: user?.dateOfBirth ?? "",
-    phoneNumber: "",
   };
 
   const handleDateChange = (
@@ -90,11 +93,12 @@ const EditProfile = () => {
     }
   };
 
-  const handleProfileUpdate = async ({ name, phoneNumber }: EditProfileI) => {
+  const handleProfileUpdate = async ({ name }: EditProfileI) => {
     Keyboard.dismiss();
+    setDisableSaveButton(true);
 
     try {
-      let updatedPicture = null;
+      let updatedPicture: string | null = null;
       if (selectedImage) {
         updatedPicture = await uploadImageToBackend(selectedImage);
       }
@@ -102,7 +106,6 @@ const EditProfile = () => {
       const dataToBeUpdate: EditProfileI = {
         name,
         country: selectedCountry,
-        phoneNumber,
       };
 
       if (dateOfBirth !== null) {
@@ -115,11 +118,15 @@ const EditProfile = () => {
 
       await editProfile(dataToBeUpdate);
       router.back();
-    } catch (err) {
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown error occurred";
       showToast({
         type: "error",
-        text1: `Error while updating user data: , ${err}`,
+        text1: `Error while updating user data: ${errorMessage}`,
       });
+    } finally {
+      setDisableSaveButton(false);
     }
   };
 
@@ -199,7 +206,9 @@ const EditProfile = () => {
           style={styles.container}
         >
           <View style={styles.alignCenter}>
-            <Image source={profileImage} style={styles.profilePicture} />
+            <View style={styles.profilePictureContainer}>
+              <Image source={profileImage} style={styles.profilePicture} />
+            </View>
             <View style={styles.editButton}>
               <RippleWrapper
                 onPress={handleOpenBottomSheet}
@@ -246,11 +255,12 @@ const EditProfile = () => {
             {renderCountryPicker()}
 
             <AppButton
-              text={isLoading ? "" : "Save"}
+              text={disableSaveButton ? "" : "Save"}
               onPress={handleSubmit}
               preset="filled"
+              disabled={isLoading || disableSaveButton}
               RightAccessory={() =>
-                isLoading && (
+                (isLoading || disableSaveButton) && (
                   <LoadingIndicator
                     color={colorPalette.gradientBg.darkGreen02}
                   />
@@ -300,10 +310,20 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.lg,
   },
   alignCenter: { alignItems: "center" },
+  profilePictureContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: PROFILE_IMAGE_SIZE + wp(2) * 2,
+    height: PROFILE_IMAGE_SIZE + wp(2) * 2,
+    borderRadius: (PROFILE_IMAGE_SIZE + wp(2) * 2) / 2,
+    borderColor: colorPalette.primaryBg.primaryLightGreen,
+    borderWidth: wp(0.5),
+    marginBottom: Spacing.sm,
+  },
   profilePicture: {
-    width: wp(35),
-    height: wp(35),
-    borderRadius: wp(19),
+    width: PROFILE_IMAGE_SIZE,
+    height: PROFILE_IMAGE_SIZE,
+    borderRadius: PROFILE_IMAGE_SIZE / 2,
   },
   form: {
     flex: 1,
@@ -311,7 +331,7 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: "absolute",
-    bottom: 0,
+    bottom: hp(2),
     right: wp(28),
   },
   changePicture: {

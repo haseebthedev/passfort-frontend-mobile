@@ -7,5 +7,6 @@ export * from "./passwords";
 export * from "./image";
 export * from "./cloudinary";
 export * from "./toastService";
-export * from "./biometricAuthService"
+export * from "./auth/biometricAuthService"
 export * from './security/encryption'
+export * from './permissions'

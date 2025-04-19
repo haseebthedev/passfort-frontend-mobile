@@ -71,7 +71,7 @@ const Signin = () => {
     } catch (err) {
       showToast({
         type: "error",
-        text1: `Signin Error: , ${err}`,
+        text1: `Signin ${err}`,
       });
     }
   };

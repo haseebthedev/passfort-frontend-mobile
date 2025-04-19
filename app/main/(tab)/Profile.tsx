@@ -5,14 +5,13 @@ import {
   Image,
   FlatList,
   ImageSourcePropType,
-  ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { profilePicture } from "@/assets";
-import { capitalize, showToast, wp } from "@/utils";
 import { PasswordGroup, UserI } from "@/interfaces";
 import { colorPalette, Spacing } from "@/styles";
+import { capitalize, hp, showToast, wp } from "@/utils";
 import { useAuthStore, usePasswordStore } from "@/store";
 import {
   AppButton,
@@ -22,6 +21,8 @@ import {
   LoadingIndicator,
   PasswordCard,
 } from "@/components";
+
+const PROFILE_IMAGE_SIZE = wp(26);
 
 const Profile = () => {
   const { user } = useAuthStore();
@@ -68,7 +69,9 @@ const Profile = () => {
       />
 
       <View style={styles.container}>
-        <Image source={profileImage} style={styles.profilePicture} />
+        <View style={styles.profilePictureContainer}>
+          <Image source={profileImage} style={styles.profilePicture} />
+        </View>
         <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
         <AppButton
           text="Edit profile"
@@ -128,12 +131,24 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
+  profilePictureContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: PROFILE_IMAGE_SIZE + wp(2) * 2,
+    height: PROFILE_IMAGE_SIZE + wp(2) * 2,
+    borderRadius: (PROFILE_IMAGE_SIZE + wp(2) * 2) / 2,
+    borderColor: colorPalette.primaryBg.primaryLightGreen,
+    borderWidth: wp(0.5),
+    marginBottom: Spacing.sm,
+  },
   profilePicture: {
-    width: wp(26),
-    height: wp(26),
+    width: PROFILE_IMAGE_SIZE,
+    height: PROFILE_IMAGE_SIZE,
     marginTop: Spacing.lg,
     marginBottom: Spacing.md,
-    borderRadius: wp(26),
+    borderRadius: PROFILE_IMAGE_SIZE / 2,
+    position: "absolute",
+    top: hp(-2.3),
   },
   passwordCardsContainer: {
     marginVertical: Spacing.md,

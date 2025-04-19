@@ -26,7 +26,7 @@ import {
 } from "@/components";
 
 interface ParsedPasswordItem extends PasswordI {
-  id?: string;
+  _id?: string;
 }
 
 const CreatePassword = () => {
@@ -49,7 +49,7 @@ const CreatePassword = () => {
   const initialValues: PasswordI = {
     type: {
       icon: parsedPasswordItem?.type?.icon ?? "",
-      id: parsedPasswordItem?.type?.id ?? "",
+      _id: parsedPasswordItem?.type?._id ?? "",
       title: parsedPasswordItem?.type?.title ?? "",
       updatedAt: parsedPasswordItem?.type?.updatedAt ?? "",
     },
@@ -71,34 +71,20 @@ const CreatePassword = () => {
     setError("");
 
     try {
-      if (!value || !siteAddress || !passwordText) {
+      if (!value || !passwordText) {
         setError("Please fill in all required fields");
         return;
       }
 
-      if (parsedPasswordItem?.id) {
-        await updatePassword(parsedPasswordItem.id, {
+      if (parsedPasswordItem?._id) {
+        await updatePassword(parsedPasswordItem._id, {
           type: value,
           platform,
           siteAddress,
           username: email,
           passwordText,
         });
-        setError("Password updated successfully");
-
-        router.replace({
-          pathname: Screens.PasswordDetail,
-          params: {
-            item: JSON.stringify({
-              ...parsedPasswordItem,
-              type: { ...parsedPasswordItem.type, id: value },
-              platform,
-              siteAddress,
-              username: email,
-              passwordText,
-            }),
-          },
-        });
+        router.back();
       } else {
         const filteredItem = dropdownItems.find((item) => item.value === value);
         if (!filteredItem) {
@@ -108,7 +94,7 @@ const CreatePassword = () => {
 
         await createPassword({
           type: {
-            id: filteredItem.value,
+            _id: filteredItem.value,
             title: filteredItem.label ?? "",
           },
           platform,
@@ -116,14 +102,10 @@ const CreatePassword = () => {
           email: email || user?.name,
           siteAddress,
         });
-        setError("Password created successfully");
-      }
-
-      if (!parsedPasswordItem?.id) {
         resetForm();
         setValue("");
+        router.back();
       }
-      router.back();
     } catch (err) {
       setError(
         err instanceof Error
@@ -167,8 +149,8 @@ const CreatePassword = () => {
   }, []);
 
   useEffect(() => {
-    if (parsedPasswordItem?.type?.id) {
-      setValue(parsedPasswordItem.type.id);
+    if (parsedPasswordItem?.type?._id) {
+      setValue(parsedPasswordItem.type._id);
     }
   }, [parsedPasswordItem]);
 
@@ -197,8 +179,6 @@ const CreatePassword = () => {
         scrollViewStyle={styles.scrollViewStyle}
       >
         <View style={styles.container}>
-          {error ? <ErrorMessage error={error} visible={true} /> : null}
-
           <AppText text="Credentials" type="label" style={styles.heading} />
 
           <View style={styles.infoContainer}>
@@ -214,8 +194,11 @@ const CreatePassword = () => {
                 setFieldValue("type", selectedValue as string);
               }}
             />
-            {touched.type?.id && errors.type?.id && (
-              <ErrorMessage error={errors.type.id} visible={touched.type?.id} />
+            {touched.type?._id && errors.type?._id && (
+              <ErrorMessage
+                error={errors.type._id}
+                visible={touched.type?._id}
+              />
             )}
           </View>
 
@@ -289,8 +272,8 @@ const CreatePassword = () => {
             placeholder="******"
             icon="cycle"
             value={values.passwordText}
-            onChangeText={handleChange("password")}
-            onBlur={() => setFieldTouched("password")}
+            onChangeText={handleChange("passwordText")}
+            onBlur={() => setFieldTouched("passwordText")}
             error={
               typeof errors.passwordText === "string"
                 ? errors.passwordText

@@ -40,7 +40,6 @@ export interface EditProfileI {
   name?: string;
   dateOfBirth?: string | Date;
   country?: string | TranslationLanguageCodeMap;
-  phoneNumber?: string;
 }
 
 export interface VerifyOtpI {

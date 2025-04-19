@@ -3,18 +3,28 @@ import { View, StyleSheet, Alert, Dimensions } from "react-native";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import * as LocalAuthentication from "expo-local-authentication";
-import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
-import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { hp, wp } from "@/utils";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
+import Animated, {
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { authenticateWithBiometrics, hp, wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppLogo, AppText, GradientWrapper } from "@/components";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
-import { authenticateWithBiometrics } from "@/utils/biometricAuthService";
 
 const { height } = Dimensions.get("window");
 
 const BiometricAuth = () => {
-  const [isBiometricSupported, setIsBiometricSupported] = useState<boolean>(false);
+  const [isBiometricSupported, setIsBiometricSupported] =
+    useState<boolean>(false);
   const [isBiometricDone, setIsBiometricDone] = useState<boolean>(false);
 
   const translateY = useSharedValue<number>(0);
@@ -70,7 +80,11 @@ const BiometricAuth = () => {
         <GestureDetector gesture={swipeUp}>
           <Animated.View style={[styles.innerContainer, animatedSwipeupStyle]}>
             <View style={styles.circleContainer}>
-              <AntDesign name="arrowup" size={iconSize} style={styles.iconStyle} />
+              <AntDesign
+                name="arrowup"
+                size={iconSize}
+                style={styles.iconStyle}
+              />
             </View>
             <AppText text="Swipe up to sign in" />
           </Animated.View>

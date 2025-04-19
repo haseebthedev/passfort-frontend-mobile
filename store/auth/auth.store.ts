@@ -3,7 +3,7 @@ import { devtools, persist } from "zustand/middleware";
 import { EditProfileI, ForgetPasswordI, ResetPasswordParamI, SigninI, SignupI, UserI, VerifyOtpI } from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
-import { showToast } from "@/utils";
+import { showToast } from "@/utils/toastService";
 
 type Store = {
   isLoading: boolean;
@@ -19,11 +19,11 @@ type Action = {
   setBiometricAuth: (value: boolean) => void;
   signin: (body: SigninI) => Promise<void>;
   signup: (body: SignupI) => Promise<void>;
-  editProfile: (body: EditProfileI) => Promise<void>;
+  editProfile: (body: EditProfileI) => Promise<string>;
   forgetPassword: (body: ForgetPasswordI) => Promise<void>;
   resetPassword: (body: ResetPasswordParamI) => Promise<void>;
-  reset: () => void;
   verifyAuthCode: (body: VerifyOtpI) => Promise<void>; 
+  reset: () => void;
 };
 
 const useAuthStore = create<Store & Action>()(
@@ -87,6 +87,8 @@ const useAuthStore = create<Store & Action>()(
             const response = await AxiosInstance.patch("/user/me", body);
             set({ user: response.data.result, isLoading: false });
             showToast({ type: "success", text1: "Profile updated successfully!" });
+
+            return "Success"
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Something went wrong";
             set({

@@ -34,7 +34,7 @@ const PasswordDetail = () => {
   const onDeletePasswordPress = async () => {
     try {
       if (passwordDetail) {
-        await deletePassword(passwordDetail.id);
+        await deletePassword(passwordDetail._id);
         router.back();
       }
     } catch (err) {
@@ -59,11 +59,11 @@ const PasswordDetail = () => {
   };
 
   const refreshPasswordData = async () => {
-    if (!passwordItem?.id) return;
+    if (!passwordItem?._id) return;
 
     try {
       setIsRefreshing(true);
-      const updatedData = await getPasswordById(passwordItem.id);
+      const updatedData = await getPasswordById(passwordItem._id);
       if (updatedData) {
         setPasswordDetail(updatedData);
       }
@@ -80,7 +80,7 @@ const PasswordDetail = () => {
   const getPasswordItemById = async () => {
     try {
       if (passwordItem) {
-        const res = await getPasswordById(passwordItem.id);
+        const res = await getPasswordById(passwordItem._id);
         setPasswordDetail(res);
       }
     } catch (err) {
@@ -196,7 +196,7 @@ Password: ${passwordDetail.passwordText || "N/A"}`,
           <View style={styles.passwordActionContainer}>
             {passwordDetail?.passwordText && (
               <AppText
-                text={passwordItem?.passwordText}
+                text={passwordDetail?.passwordText}
                 type="passwordText"
                 numberOfLines={1}
               />

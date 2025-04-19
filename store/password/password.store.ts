@@ -8,6 +8,10 @@ import { showToast } from "@/utils";
 type Store = {
   isLoading: boolean;
   error: string | null;
+  recentPasswords: PasswordItemType[];
+  passwords: PasswordItemType[];
+  hasNextPage: boolean;
+  currentPage: number;
 };
 
 type Action = {
@@ -18,6 +22,8 @@ type Action = {
   getPasswordById: (id: string) => Promise<PasswordItemType>;
   getGroupedPasswords: () => Promise<PasswordsResponse>;
   searchPasswords: ({ page, limit, searchTerm }: { page: number; limit: number; searchTerm: string }) => Promise<ListPagination<PasswordItemType>>;
+  getRecentPasswords: () => Promise<void>;
+  resetPasswords: () => void;
 };
 
 const usePasswordStore = create<Store & Action>()(
@@ -26,14 +32,23 @@ const usePasswordStore = create<Store & Action>()(
       (set) => ({
         isLoading: false,
         error: null,
-        pagination: null,
+        recentPasswords: [],
+        passwords: [],
+        hasNextPage: false,
+        currentPage: 1,
 
         getPasswords: async ({ page = 1, limit = 10 }: { page: number; limit: number }) => {
           set({ isLoading: true });
 
           try {
             const response = await AxiosInstance.get(`/password/passwords?page=${page}&limit=${limit}`);
-            set({ isLoading: false });
+            
+            set((state) => ({ 
+              isLoading: false,
+              passwords: page === 1 ? response.data?.result?.docs : [...state.passwords, ...response.data?.result?.docs],
+              hasNextPage: response.data?.result?.hasNextPage,
+              currentPage: page
+            }));
             return response.data?.result;
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to fetch passwords";
@@ -49,14 +64,17 @@ const usePasswordStore = create<Store & Action>()(
           set({ isLoading: true });
           const formattedPasswordData = {
             ...passwordData,
-            type: passwordData.type?.id.toString(),
+            type: passwordData.type?._id.toString(),
             username: passwordData.email,
           };
           delete formattedPasswordData.email;
 
           try {
             const response = await AxiosInstance.post("/password/create-password", formattedPasswordData);
-            set({ isLoading: false });
+            set((state) => ({ 
+              isLoading: false,
+              recentPasswords: [response.data.result, ...state.recentPasswords].slice(0, 4)
+            }));
             showToast({ type: "success", text1: "Successfully Created Password!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to create password";
@@ -74,8 +92,17 @@ const usePasswordStore = create<Store & Action>()(
           set({ isLoading: true });
           try {
             const res = await AxiosInstance.patch(`/password/${id}`, passwordData);
+            
+            set((state) => ({ 
+              isLoading: false,
+              passwords: state.passwords.map(password => 
+                password._id === id ? { ...password, ...res.data.result } : password
+              ),
+              recentPasswords: state.recentPasswords.map(password => 
+                password._id === id ? { ...password, ...res.data.result } : password
+              )
+            }));
 
-            set({ isLoading: false });
             showToast({ type: "success", text1: "Successfully Updated Password!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to update password";
@@ -83,6 +110,7 @@ const usePasswordStore = create<Store & Action>()(
               isLoading: false,
               error: errorMessage,
             });
+            
             showToast({ type: "error", text1: errorMessage });
             throw new Error(errorMessage);
           }
@@ -92,7 +120,11 @@ const usePasswordStore = create<Store & Action>()(
           set({ isLoading: true });
           try {
             await AxiosInstance.delete(`/password/${id}`);
-            set({ isLoading: false });
+            set((state) => ({ 
+              isLoading: false,
+              passwords: state.passwords.filter(password => password._id !== id),
+              recentPasswords: state.recentPasswords.filter(password => password._id !== id)
+            }));
             showToast({ type: "success", text1: "Successfully Deleted Password!" });
           } catch (error: any) {
             const errorMessage = error.response?.data?.message || "Failed to delete password";
@@ -158,6 +190,32 @@ const usePasswordStore = create<Store & Action>()(
             showToast({ type: "error", text1: errorMessage });
             throw new Error(errorMessage);
           }
+        },
+
+        getRecentPasswords: async () => {
+          set({ isLoading: true });
+          try {
+            const response = await AxiosInstance.get(`/password/passwords?page=1&limit=4`);
+            set({ 
+              isLoading: false,
+              recentPasswords: response.data?.result?.docs || []
+            });
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Failed to fetch recent passwords";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            throw new Error(errorMessage);
+          }
+        },
+
+        resetPasswords: () => {
+          set({
+            passwords: [],
+            currentPage: 1,
+            hasNextPage: false
+          });
         },
       }),
 

@@ -1,5 +1,4 @@
-import { PasswordItemType, PasswordStatType } from "@/interfaces";
-import { apps, social, wallets, bank, education, email, shopping, stream } from "@/assets";
+import {  PasswordStatType } from "@/interfaces";
 
 export const PasswordStats_Data: PasswordStatType[] = [
   { id: "1", label: "Characters", number: "00" },

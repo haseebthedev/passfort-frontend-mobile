@@ -21,6 +21,7 @@ interface ButtonProps extends PressableProps {
   RightAccessory?: ComponentType<ButtonAccessoryProps>;
   LeftAccessory?: ComponentType<ButtonAccessoryProps>;
   onPress: () => void;
+  disabled?: boolean;
 }
 
 export function AppButton(props: ButtonProps) {
@@ -34,18 +35,23 @@ export function AppButton(props: ButtonProps) {
     LeftAccessory,
     onPress,
     preset = "default",
+    disabled,
     ...rest
   } = props;
 
   const getContainerStyle = () => containerPresets[preset];
 
-  const getViewStyle = () => [viewPresets[preset], style];
+  const getViewStyle = () => [
+    viewPresets[preset],
+    style,
+    disabled && { opacity: 0.5 }
+  ];
 
   const getTextStyle = () => [textPresets[preset], textStyle];
 
   return (
     <RippleWrapper
-      onPress={onPress}
+      onPress={disabled ? undefined : onPress}
       style={getViewStyle()}
       rippleColor={
         preset === "default" || preset === "filled"
