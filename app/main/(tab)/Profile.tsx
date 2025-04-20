@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  FlatList,
-  ImageSourcePropType,
-} from "react-native";
+import React from "react";
+import { View, StyleSheet, Image, FlatList } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { profilePicture } from "@/assets";
-import { PasswordGroup, UserI } from "@/interfaces";
-import { colorPalette, Spacing } from "@/styles";
-import { capitalize, hp, showToast, wp } from "@/utils";
-import { useAuthStore, usePasswordStore } from "@/store";
+import { useProfile } from "@/hooks";
+import { capitalize, hp, wp } from "@/utils";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -25,43 +17,16 @@ import {
 const PROFILE_IMAGE_SIZE = wp(26);
 
 const Profile = () => {
-  const { user } = useAuthStore();
-  const { getGroupedPasswords, isLoading } = usePasswordStore();
-  const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
-
-  const userInfo: UserI = {
-    name: user?.name ?? "N/A",
-    email: user?.email ?? "N/A",
-    country: user?.country ?? "N/A",
-  };
-
-  const profileImage: ImageSourcePropType = user?.profilePicture
-    ? { uri: user?.profilePicture }
-    : profilePicture;
-
-  const onEditProfilePress = () => router.push(Screens.EditProfile);
-
-  const getAllGroupedPasswords = async () => {
-    try {
-      const response = await getGroupedPasswords();
-
-      if (response.result) {
-        setGroupedPassword(response.result);
-      }
-    } catch (error) {
-      showToast({
-        type: "error",
-        text1: `Error: , ${error}`,
-      });
-    }
-  };
-
-  useEffect(() => {
-    getAllGroupedPasswords();
-  }, []);
+  const {
+    userInfo,
+    profileImage,
+    groupedPassword,
+    isLoading,
+    handleEditProfile,
+  } = useProfile();
 
   return (
-    <GradientWrapper style={styles.mainContainer}>
+    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader
         title="Profile"
         rightIconName="settings"
@@ -72,35 +37,33 @@ const Profile = () => {
         <View style={styles.profilePictureContainer}>
           <Image source={profileImage} style={styles.profilePicture} />
         </View>
-        <AppText text={`${user?.name ?? "User Name"}`} type="heading" />
+        <AppText text={`${userInfo.name}`} type="heading" />
         <AppButton
           text="Edit profile"
           preset="primaryLink"
-          onPress={onEditProfilePress}
+          onPress={handleEditProfile}
         />
-        {isLoading || groupedPassword.length === 0 ? (
-          <View style={styles.loadingContainer}>
-            <LoadingIndicator />
-          </View>
-        ) : (
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={groupedPassword ?? []}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={({ item }) => <PasswordCard item={item} />}
-            contentContainerStyle={styles.passwordCardsContainer}
-            ListEmptyComponent={
-              <View style={styles.emptyContainer}>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={groupedPassword ?? []}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item }) => <PasswordCard item={item} />}
+          contentContainerStyle={styles.passwordCardsContainer}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              {isLoading ? (
+                <LoadingIndicator />
+              ) : (
                 <AppText
                   text="No password categories found"
                   type="subHeading"
                   style={styles.emptyText}
                 />
-              </View>
-            }
-          />
-        )}
+              )}
+            </View>
+          }
+        />
       </View>
       <View style={styles.personalInfoContainer}>
         {Object.entries(userInfo).map(([key, value]) => (
@@ -125,9 +88,6 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    paddingHorizontal: Spacing.md,
-  },
   container: {
     alignItems: "center",
   },

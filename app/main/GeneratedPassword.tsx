@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import * as Clipboard from "expo-clipboard";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { PasswordStats_Data } from "@/constants";
-import { PasswordStatType, PasswordType } from "@/interfaces";
-import { AppFont, generateRandomPassword, handleCharacterChange, hp, updatePasswordType, wp } from "@/utils";
+import { useGeneratePassword } from "@/hooks";
+import { AppFont, handleCharacterChange, hp, wp } from "@/utils";
 import {
   colorPalette,
   getPasswordTypeContainerStyle,
@@ -25,24 +25,16 @@ import {
 } from "@/components";
 
 const GeneratedPassword = () => {
-  const [count, setCount] = useState<number>(0);
-  const [passwordType, setPasswordType] = useState<PasswordType>("WEAK");
-  const [selectedCard, setSelectedCard] = useState<PasswordStatType>(PasswordStats_Data[0]);
-  const [passwordStats, setPasswordStats] = useState<PasswordStatType[]>(PasswordStats_Data);
-  const [randomPassword, setRandomPassword] = useState<string>("");
-
-  const selectedCardNumber = selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number : "00";
-
-  const handleCardPress = (item: PasswordStatType) => setSelectedCard(item);
-
-  const generatePassword = () => {
-    const charLength = Number(passwordStats[0]?.number);
-    const numLength = Number(passwordStats[1]?.number);
-    const symbolsLength = Number(passwordStats[2]?.number);
-
-    const password = generateRandomPassword(charLength, numLength, symbolsLength);
-    setRandomPassword(password);
-  };
+  const {
+    count,
+    selectedCard,
+    passwordStats,
+    randomPassword,
+    passwordType,
+    setPasswordStats,
+    handleCardPress,
+    generatePassword,
+  } = useGeneratePassword();
 
   const copyToClipboard = () => {
     if (randomPassword) {
@@ -51,41 +43,51 @@ const GeneratedPassword = () => {
     }
   };
 
-  const updatePasswordTypeCallback = useCallback(() => {
-    const type = updatePasswordType(passwordStats);
-    setPasswordType(type);
-  }, [passwordStats]);
-
-  useEffect(() => {
-    updatePasswordTypeCallback();
-  }, [passwordStats, updatePasswordTypeCallback]);
-
-  useEffect(() => {
-    setCount(Number(selectedCardNumber));
-  }, [selectedCard, passwordStats]);
-
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Generate" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+      <AppHeader
+        title="Generate"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+      />
 
       <View style={styles.headingContainer}>
         <AppText text="New Password" type="label" style={styles.heading} />
       </View>
 
-      <View style={[styles.passwordTypeContainer, getPasswordTypeContainerStyle(passwordType)]}>
-        <AppText text={passwordType} style={getPasswordTypeTextStyle(passwordType)} type="regularSubHeading" />
+      <View
+        style={[
+          styles.passwordTypeContainer,
+          getPasswordTypeContainerStyle(passwordType),
+        ]}
+      >
+        <AppText
+          text={passwordType}
+          style={getPasswordTypeTextStyle(passwordType)}
+          type="regularSubHeading"
+        />
       </View>
 
       <ArcSlider count={count} />
 
       <View style={styles.passwordDetails}>
         <AppText
-          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.label || "Select" : "Select"}
+          text={
+            selectedCard
+              ? passwordStats.find((stat) => stat.id === selectedCard.id)
+                  ?.label || "Select"
+              : "Select"
+          }
           style={styles.passwordDetailLabel}
           type="label"
         />
         <AppText
-          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number || "00" : "00"}
+          text={
+            selectedCard
+              ? passwordStats.find((stat) => stat.id === selectedCard.id)
+                  ?.number || "00"
+              : "00"
+          }
           type="passwordLength"
         />
 
@@ -94,17 +96,37 @@ const GeneratedPassword = () => {
             containerStyle={styles.arrowButtonContainer}
             style={styles.actionButton}
             disabled={selectedCard ? false : true}
-            onPress={() => handleCharacterChange("decrement", selectedCard?.label || "Characters", setPasswordStats)}
+            onPress={() =>
+              handleCharacterChange(
+                "decrement",
+                selectedCard?.label || "Characters",
+                setPasswordStats
+              )
+            }
           >
-            <Ionicons name="chevron-back" style={LayoutStyles.headerIcon} size={iconSize} />
+            <Ionicons
+              name="chevron-back"
+              style={LayoutStyles.headerIcon}
+              size={iconSize}
+            />
           </RippleWrapper>
           <RippleWrapper
             containerStyle={styles.arrowButtonContainer}
             style={styles.actionButton}
             disabled={selectedCard ? false : true}
-            onPress={() => handleCharacterChange("increment", selectedCard?.label || "Characters", setPasswordStats)}
+            onPress={() =>
+              handleCharacterChange(
+                "increment",
+                selectedCard?.label || "Characters",
+                setPasswordStats
+              )
+            }
           >
-            <Ionicons name="chevron-forward" style={LayoutStyles.headerIcon} size={iconSize} />
+            <Ionicons
+              name="chevron-forward"
+              style={LayoutStyles.headerIcon}
+              size={iconSize}
+            />
           </RippleWrapper>
         </View>
       </View>
@@ -121,7 +143,11 @@ const GeneratedPassword = () => {
           ))}
         </View>
 
-        <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
+        <AppText
+          text={randomPassword}
+          type="passwordText"
+          style={styles.passwordText}
+        />
         <View style={styles.buttonContainer}>
           <SmallAppButton text="Copy" onPress={copyToClipboard} />
           <SmallAppButton text="Generate" onPress={generatePassword} />

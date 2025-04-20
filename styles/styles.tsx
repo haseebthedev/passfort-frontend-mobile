@@ -183,7 +183,7 @@ export const GradientColors = [
 export const LayoutStyles = StyleSheet.create({
   pageContainer: {
     flex: 1,
-    paddingTop: wp(10),
+    paddingTop: wp(2),
   },
   headerNavContainer: {
     flexDirection: "row",

@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import {
   Image,
-  ImageSourcePropType,
-  Keyboard,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -11,7 +9,6 @@ import {
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { TranslationLanguageCodeMap } from "react-native-country-picker-modal";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -20,18 +17,8 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
-import { EditProfileI } from "@/interfaces";
-import { useFormikHook } from "@/hooks";
-import { profilePicture } from "@/assets";
 import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
-import {
-  editProfileValidationSchema,
-  formatDate,
-  hp,
-  showToast,
-  uploadImageToBackend,
-  wp,
-} from "@/utils";
+import { formatDate, hp, wp } from "@/utils";
 import {
   AppButton,
   AppHeader,
@@ -43,26 +30,40 @@ import {
   RippleWrapper,
   TextInput,
 } from "@/components";
+import { useEditProfile } from "@/hooks";
 
 const PROFILE_IMAGE_SIZE = wp(35);
 
 const EditProfile = () => {
-  const { user, editProfile, isLoading } = useAuthStore();
+  const { user } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
-  const [profileImage, setProfileImage] = useState<ImageSourcePropType>();
-  const [selectedImage, setSelectedImage] = useState<ImageSourcePropType>();
-  const [disableSaveButton, setDisableSaveButton] = useState<boolean>(false);
-  const [selectedCountry, setSelectedCountry] = useState<
-    TranslationLanguageCodeMap | string
-  >("");
-  const [dateModalVisible, setDateModalVisible] = useState<boolean>(false);
-  const [imagePickerVisible, setImagePickerVisible] = useState<boolean>(false);
-  const [countryModalVisible, setCountryModalVisible] =
-    useState<boolean>(false);
-
   const snapPoints = ["30%"];
+
+  const {
+    dateOfBirth,
+    profileImage,
+    selectedImage,
+    disableSaveButton,
+    selectedCountry,
+    dateModalVisible,
+    imagePickerVisible,
+    countryModalVisible,
+    isLoading,
+    errors,
+    touched,
+    values,
+    setProfileImage,
+    setSelectedImage,
+    setDateModalVisible,
+    setImagePickerVisible,
+    setCountryModalVisible,
+    setSelectedCountry,
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    handleDateChange,
+    handleCancel,
+  } = useEditProfile();
 
   const handleOpenBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
 
@@ -76,90 +77,6 @@ const EditProfile = () => {
     ),
     []
   );
-
-  const validationSchema = editProfileValidationSchema;
-  const initialValues: EditProfileI = {
-    name: user?.name ?? "",
-    dateOfBirth: user?.dateOfBirth ?? "",
-  };
-
-  const handleDateChange = (
-    event: DateTimePickerEvent,
-    selectedDate?: Date
-  ) => {
-    setDateModalVisible(false);
-    if (selectedDate) {
-      setDateOfBirth(selectedDate);
-    }
-  };
-
-  const handleProfileUpdate = async ({ name }: EditProfileI) => {
-    Keyboard.dismiss();
-    setDisableSaveButton(true);
-
-    try {
-      let updatedPicture: string | null = null;
-      if (selectedImage) {
-        updatedPicture = await uploadImageToBackend(selectedImage);
-      }
-
-      const dataToBeUpdate: EditProfileI = {
-        name,
-        country: selectedCountry,
-      };
-
-      if (dateOfBirth !== null) {
-        dataToBeUpdate.dateOfBirth = dateOfBirth;
-      }
-
-      if (updatedPicture) {
-        dataToBeUpdate.profilePicture = updatedPicture;
-      }
-
-      await editProfile(dataToBeUpdate);
-      router.back();
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-      showToast({
-        type: "error",
-        text1: `Error while updating user data: ${errorMessage}`,
-      });
-    } finally {
-      setDisableSaveButton(false);
-    }
-  };
-
-  const {
-    handleChange,
-    handleSubmit,
-    setFieldTouched,
-    errors,
-    touched,
-    values,
-  } = useFormikHook(handleProfileUpdate, validationSchema, initialValues);
-
-  const onCancelPress = () => router.back();
-
-  useEffect(() => {
-    if (user?.dateOfBirth) {
-      setDateOfBirth(new Date(user.dateOfBirth));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (user?.country) {
-      setSelectedCountry(user?.country);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user?.profilePicture) {
-      setProfileImage({ uri: user.profilePicture });
-    } else {
-      setProfileImage(profilePicture);
-    }
-  }, [user]);
 
   const renderDatePicker = () => (
     <TouchableOpacity
@@ -181,7 +98,7 @@ const EditProfile = () => {
 
   const renderCountryPicker = () => (
     <TouchableOpacity
-      onPress={() => setCountryModalVisible((prev) => !prev)}
+      onPress={() => setCountryModalVisible((prev: boolean) => !prev)}
       style={[FormsStyle.formControl, styles.datePicker]}
     >
       <AppText
@@ -270,7 +187,7 @@ const EditProfile = () => {
             <AppButton
               text="Cancel"
               preset="noUnderline"
-              onPress={onCancelPress}
+              onPress={handleCancel}
             />
           </View>
         </ScrollView>
@@ -290,7 +207,13 @@ const EditProfile = () => {
           value={dateOfBirth || new Date()}
           mode="date"
           display="default"
-          onChange={handleDateChange}
+          onChange={(event: DateTimePickerEvent, selectedDate?: Date) => {
+            if (event.type === "set") {
+              handleDateChange(selectedDate);
+            } else {
+              setDateModalVisible(false);
+            }
+          }}
         />
       )}
 

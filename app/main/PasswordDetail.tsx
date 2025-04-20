@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, View, Share } from "react-native";
-import * as Clipboard from "expo-clipboard";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
-import { hp, showToast, wp } from "@/utils";
 import { Screens } from "@/enums";
-import { PasswordItemType } from "@/interfaces";
-import { usePasswordStore } from "@/store";
+import { usePasswordDetail } from "@/hooks";
+import { hp, showToast, wp } from "@/utils";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppHeader,
@@ -20,107 +18,53 @@ import {
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
-  const { isLoading, deletePassword, getPasswordById } = usePasswordStore();
-  const { item } = useLocalSearchParams<{ item?: string }>();
-  const [passwordDetail, setPasswordDetail] = useState<PasswordItemType | null>(
-    null
-  );
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const passwordItem = typeof item === "string" ? JSON.parse(item) : null;
-
+  const {
+    passwordDetail,
+    isLoading,
+    isRefreshing,
+    refreshPasswordData,
+    handleDeletePassword,
+    handleSharePassword,
+    handleEditPassword,
+    handleCopyToClipboard,
+  } = usePasswordDetail();
   const onBackPress = useCallback(() => router.back(), []);
 
-  const onDeletePasswordPress = async () => {
-    try {
-      if (passwordDetail) {
-        await deletePassword(passwordDetail._id);
-        router.back();
-      }
-    } catch (err) {
-      showToast({
-        type: "error",
-        text1: `Error: , ${err}`,
-      });
-    }
+  const renderInfo = (label: string, value?: string) => {
+    if (!value) return null;
+    return (
+      <View style={styles.infoContainer}>
+        <AppText text={label} type="subHeading" style={styles.infoHeading} />
+        <AppText text={value} type="default" />
+      </View>
+    );
   };
 
-  const copyToClipboard = () => {
-    if (passwordDetail?.passwordText) {
-      Clipboard.setStringAsync(passwordDetail.passwordText);
-    }
-  };
-
-  const onEditPasswordPress = async () => {
-    router.push({
-      pathname: Screens.CreatePassword,
-      params: { passwordItem: JSON.stringify(passwordDetail) },
-    });
-  };
-
-  const refreshPasswordData = async () => {
-    if (!passwordItem?._id) return;
-
-    try {
-      setIsRefreshing(true);
-      const updatedData = await getPasswordById(passwordItem._id);
-      if (updatedData) {
-        setPasswordDetail(updatedData);
-      }
-    } catch (err) {
-      showToast({
-        type: "error",
-        text1: `Error refreshing password data: , ${err}`,
-      });
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
-  const getPasswordItemById = async () => {
-    try {
-      if (passwordItem) {
-        const res = await getPasswordById(passwordItem._id);
-        setPasswordDetail(res);
-      }
-    } catch (err) {
-      showToast({
-        type: "error",
-        text1: `Error: , ${err}`,
-      });
-    }
-  };
-
-  const onSharePress = async () => {
-    if (!passwordDetail) return;
-
-    const shareContent = {
-      title: "Password Details",
-      message: `Platform: ${passwordDetail.platform || "N/A"}
-${passwordDetail.siteAddress ? `Site: ${passwordDetail.siteAddress}` : ""}
-${passwordDetail.username ? `Username: ${passwordDetail.username}` : ""}
-Password: ${passwordDetail.passwordText || "N/A"}`,
+  const renderIconButton = (
+    iconName: string,
+    IconComponent:
+      | typeof Feather
+      | typeof Fontisto
+      | typeof MaterialCommunityIcons,
+    onPress: () => void,
+    sizeOverride?: number
+  ) => {
+    const iconProps = {
+      name: iconName as any,
+      size: sizeOverride ?? iconSize,
+      color: colorPalette.primaryBg.primaryWhite,
     };
 
-    try {
-      await Share.share(shareContent);
-    } catch (error) {
-      showToast({
-        type: "error",
-        text1: `Error sharing password details: , ${error}`,
-      });
-    }
+    return (
+      <RippleWrapper
+        onPress={onPress}
+        style={styles.buttonContainer}
+        containerStyle={styles.containerStyle}
+      >
+        <IconComponent {...iconProps} />
+      </RippleWrapper>
+    );
   };
-
-  useEffect(() => {
-    if (item) {
-      refreshPasswordData();
-    }
-  }, [item]);
-
-  useEffect(() => {
-    getPasswordItemById();
-  }, []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -148,96 +92,36 @@ Password: ${passwordDetail.passwordText || "N/A"}`,
       ) : (
         <View style={styles.container}>
           <View style={styles.innerContainer}>
-            {passwordDetail?.type.title && (
-              <View style={styles.infoContainer}>
-                <AppText
-                  text="Type"
-                  type="subHeading"
-                  style={styles.infoHeading}
-                />
-                <AppText text={passwordDetail?.type.title} type="default" />
-              </View>
-            )}
-
-            {passwordDetail?.platform && (
-              <View style={styles.infoContainer}>
-                <AppText
-                  text="Platform"
-                  type="subHeading"
-                  style={styles.infoHeading}
-                />
-                <AppText text={passwordDetail?.platform} type="default" />
-              </View>
-            )}
-
-            {passwordDetail?.siteAddress && (
-              <View style={styles.infoContainer}>
-                <AppText
-                  text="Site Address"
-                  type="subHeading"
-                  style={styles.infoHeading}
-                />
-                <AppText text={passwordDetail.siteAddress} type="default" />
-              </View>
-            )}
-
-            {passwordDetail?.username && (
-              <View style={styles.infoContainer}>
-                <AppText
-                  text="Username"
-                  type="subHeading"
-                  style={styles.infoHeading}
-                />
-                <AppText text={passwordDetail.username} type="default" />
-              </View>
-            )}
+            {renderInfo("Type", passwordDetail?.type?.title)}
+            {renderInfo("Platform", passwordDetail?.platform)}
+            {renderInfo("Site Address", passwordDetail?.siteAddress)}
+            {renderInfo("Username", passwordDetail?.username)}
           </View>
 
           <View style={styles.passwordActionContainer}>
             {passwordDetail?.passwordText && (
               <AppText
-                text={passwordDetail?.passwordText}
+                text={passwordDetail.passwordText}
                 type="passwordText"
                 numberOfLines={1}
               />
             )}
 
-            <SmallAppButton text="Copy" onPress={copyToClipboard} />
+            <SmallAppButton text="Copy" onPress={handleCopyToClipboard} />
 
             <View style={styles.buttonsContainer}>
-              <RippleWrapper
-                onPress={onDeletePasswordPress}
-                style={styles.buttonContainer}
-                containerStyle={styles.containerStyle}
-              >
-                <Feather
-                  name="trash-2"
-                  size={iconSize}
-                  color={colorPalette.primaryBg.primaryWhite}
-                />
-              </RippleWrapper>
-              <RippleWrapper
-                onPress={onEditPasswordPress}
-                style={styles.buttonContainer}
-                containerStyle={styles.containerStyle}
-              >
-                <MaterialCommunityIcons
-                  name="square-edit-outline"
-                  size={iconSize}
-                  color={colorPalette.primaryBg.primaryWhite}
-                />
-              </RippleWrapper>
-              <RippleWrapper
-                onPress={onSharePress}
-                style={styles.buttonContainer}
-                containerStyle={styles.containerStyle}
-              >
-                <Fontisto
-                  name="share-a"
-                  size={iconSize - wp(1)}
-                  color={colorPalette.primaryBg.primaryWhite}
-                />
-              </RippleWrapper>
+              {renderIconButton("trash-2", Feather, handleDeletePassword)}
+              {renderIconButton(
+                "square-edit-outline",
+                MaterialCommunityIcons,
+                handleEditPassword
+              )}
+              {renderIconButton(
+                "share-a",
+                Fontisto,
+                handleSharePassword,
+                iconSize - wp(1)
+              )}
             </View>
           </View>
         </View>

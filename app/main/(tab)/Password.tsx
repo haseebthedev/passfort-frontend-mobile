@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   RefreshControl,
   SectionList,
@@ -16,13 +16,18 @@ import {
   LoadingIndicator,
   PasswordItem,
 } from "@/components";
-import { ListPagination, PasswordItemType } from "@/interfaces";
-import { router, useFocusEffect } from "expo-router";
 
 const LIMIT: number = 10;
 
 const Password = () => {
-  const { getPasswords, isLoading, passwords, hasNextPage, currentPage, resetPasswords } = usePasswordStore();
+  const {
+    getPasswords,
+    isLoading,
+    passwords,
+    hasNextPage,
+    currentPage,
+    resetPasswords,
+  } = usePasswordStore();
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [stickyHeader, setStickyHeader] = useState<string | null>(null);
@@ -73,12 +78,6 @@ const Password = () => {
     }
     return null;
   };
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     onRefresh();
-  //   }, [])
-  // );
 
   useEffect(() => {
     getPasswords({ page: 1, limit: LIMIT });

@@ -152,7 +152,7 @@ const CreatePassword = () => {
     if (parsedPasswordItem?.type?._id) {
       setValue(parsedPasswordItem.type._id);
     }
-  }, [parsedPasswordItem]);
+  }, []);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>

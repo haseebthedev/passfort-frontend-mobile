@@ -1,12 +1,13 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { router } from "expo-router";
-import { showToast, wp } from "@/utils";
+import { wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppFont } from "@/utils";
-import { useAuthStore, usePasswordStore } from "@/store";
+import { useAuthStore } from "@/store";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { ListPagination, PasswordGroup, PasswordItemType } from "@/interfaces";
+import { PasswordGroup } from "@/interfaces";
+import { usePasswordManagement } from "@/hooks";
 import {
   AppLogo,
   AppText,
@@ -18,15 +19,13 @@ import {
   SearchInput,
 } from "@/components";
 
-const LIMIT: number = 10;
-
 interface HeaderComponentI {
   groupedPassword: PasswordGroup[];
 }
 
 const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
   return (
-    <View>
+    <>
       <View style={styles.passwordCards}>
         <View style={styles.passwordsHeader}>
           <View>
@@ -42,10 +41,13 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={groupedPassword}
+          data={groupedPassword ?? []}
           renderItem={({ item }) => <PasswordCard item={item} />}
           keyExtractor={(item) => item._id.toString()}
           contentContainerStyle={styles.passwordCardsContainer}
+          ListEmptyComponent={
+            <AppText text="No passwords found!" type="default" />
+          }
         />
       </View>
       <AppText
@@ -53,97 +55,21 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
         type="primaryHeading"
         style={styles.heading}
       />
-    </View>
+    </>
   );
 });
 
 const Home = () => {
   const { user } = useAuthStore();
-
   const {
-    getPasswords,
-    getGroupedPasswords,
-    searchPasswords,
-    getRecentPasswords,
+    groupedPassword,
+    searchText,
+    setSearchText,
+    state,
     isLoading,
     recentPasswords,
-  } = usePasswordStore();
-
-  const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
-  const [searchText, setSearchText] = useState<string>("");
-  const [state, setState] = useState<ListPagination<PasswordItemType>>({
-    docs: [],
-    page: 1,
-    hasNextPage: false,
-    listRefreshing: false,
-  });
-
-  const getAllPasswords = async (page = 1) => {
-    setState((prev) => ({
-      ...prev,
-      listRefreshing: true,
-    }));
-
-    try {
-      const response = searchText
-        ? await searchPasswords({ page, limit: LIMIT, searchTerm: searchText })
-        : await getPasswords({ page, limit: LIMIT });
-
-      if (response?.docs) {
-        setState((prev) => ({
-          ...prev,
-          docs: page === 1 ? response.docs : [...prev.docs, ...response.docs],
-          page: response.hasNextPage ? page + 1 : prev.page,
-          hasNextPage: response.hasNextPage,
-          listRefreshing: false,
-        }));
-      }
-    } catch (error) {
-      console.error("Error fetching passwords:", error);
-      setState((prev) => ({ ...prev, listRefreshing: false }));
-    }
-  };
-
-  const getAllGroupedPasswords = async () => {
-    try {
-      const response = await getGroupedPasswords();
-      if (response.result) {
-        setGroupedPassword(response.result);
-      }
-    } catch (error) {
-      showToast({
-        type: "error",
-        text1: `Error: , ${error}`,
-      });
-    }
-  };
-
-  const handleRefresh = async () => {
-    setState((prev) => ({ ...prev, listRefreshing: true }));
-    await Promise.all([
-      getAllGroupedPasswords(),
-      getAllPasswords(1),
-      getRecentPasswords(),
-    ]);
-    setState((prev) => ({ ...prev, listRefreshing: false }));
-  };
-
-  useEffect(() => {
-    getAllGroupedPasswords();
-    getRecentPasswords();
-  }, []);
-
-  useEffect(() => {
-    getAllPasswords(1);
-  }, [searchText]);
-
-  useEffect(() => {
-    getAllPasswords(1);
-
-    return () => {
-      setState({ ...state, docs: [], page: 1, hasNextPage: false });
-    };
-  }, []);
+    handleRefresh,
+  } = usePasswordManagement();
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -166,28 +92,26 @@ const Home = () => {
 
       <SearchInput value={searchText} onChangeText={setSearchText} />
 
-      {isLoading ? (
-        <LoadingIndicator />
-      ) : (
-        <FlatList
-          data={recentPasswords ?? []}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <PasswordItem item={item} />}
-          // keyExtractor={(item) => item._id.toString()}
-          ListHeaderComponent={() => (
-            <HeaderComponent groupedPassword={groupedPassword} />
-          )}
-          ListEmptyComponent={
-            !state.listRefreshing ? (
-              <View style={styles.emptyContainer}>
-                <AppText text="No passwords found!" type="default" />
-              </View>
-            ) : null
-          }
-          refreshing={state.listRefreshing}
-          onRefresh={handleRefresh}
-        />
-      )}
+      <FlatList
+        data={recentPasswords ?? []}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <PasswordItem item={item} />}
+        // keyExtractor={(item) => item._id.toString()}
+        ListHeaderComponent={() => (
+          <HeaderComponent groupedPassword={groupedPassword} />
+        )}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            {isLoading ? (
+              <LoadingIndicator />
+            ) : !state.listRefreshing ? (
+              <AppText text="No passwords found!" type="default" />
+            ) : null}
+          </View>
+        }
+        refreshing={state.listRefreshing}
+        onRefresh={handleRefresh}
+      />
     </GradientWrapper>
   );
 };
