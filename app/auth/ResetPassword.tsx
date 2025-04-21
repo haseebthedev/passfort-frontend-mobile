@@ -1,11 +1,8 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { Screens } from "@/enums";
-import { useAuthStore } from "@/store";
-import { useFormikHook } from "@/hooks";
-import { ResetPasswordI } from "@/interfaces";
-import { hp, newPasswordValidation, showToast, wp } from "@/utils";
+import { hp, wp } from "@/utils";
+import { useResetPassword } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -22,35 +19,15 @@ const ResetPassword = () => {
     authCode: string;
   }>();
 
-  const { isLoading, resetPassword } = useAuthStore();
-
-  const validationSchema = newPasswordValidation;
-  const initialValues: ResetPasswordI = {
-    newPassword: "",
-    confirmPassword: "",
-  };
-
-  const submit = async ({ newPassword, confirmPassword }: ResetPasswordI) => {
-    Keyboard.dismiss();
-    try {
-      await resetPassword({ email, authCode, newPassword });
-      router.push(Screens.Signin);
-    } catch (err) {
-      showToast({
-        type: "error",
-        text1: `Signin Error: , ${err}`,
-      });
-    }
-  };
-
   const {
+    isLoading,
     handleChange,
     handleSubmit,
     setFieldTouched,
     errors,
     touched,
-    values,
-  } = useFormikHook(submit, validationSchema, initialValues);
+  } = useResetPassword(email, authCode);
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader

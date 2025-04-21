@@ -5,9 +5,9 @@ import { wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppFont } from "@/utils";
 import { useAuthStore } from "@/store";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { PasswordGroup } from "@/interfaces";
 import { usePasswordManagement } from "@/hooks";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppLogo,
   AppText,

@@ -1,81 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Keyboard, TextInput } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import { hp, showToast, wp } from "@/utils";
-import { Screens } from "@/enums";
+import React from "react";
+import { View, StyleSheet, TextInput } from "react-native";
+import { useLocalSearchParams, router } from "expo-router";
+import { hp, wp } from "@/utils";
+import { useOtpVerification } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
-import { useAuthStore } from "@/store";
-
-const TIMER: number = 50;
 
 const OtpVerification = () => {
-  const { verifyAuthCode } = useAuthStore();
   const { email } = useLocalSearchParams<{ email: string }>();
 
-  const [timer, setTimer] = useState<number>(TIMER);
-  const [disableVerifyBtn, setDisableVerifyBtn] = useState<boolean>(false);
-  const [disableResetBtn, setDisableResetBtn] = useState<boolean>(true);
-  const input1 = useRef<TextInput>(null);
-  const input2 = useRef<TextInput>(null);
-  const input3 = useRef<TextInput>(null);
-  const input4 = useRef<TextInput>(null);
-  const input5 = useRef<TextInput>(null);
-  const input6 = useRef<TextInput>(null);
-
-  const [otp, setOtp] = useState({
-    1: "",
-    2: "",
-    3: "",
-    4: "",
-    5: "",
-    6: "",
-  });
-
-  const isOtpComplete = Object.values(otp).every((digit) => digit !== "");
-
-  const onPressVerifyHandler = async () => {
-    Keyboard.dismiss();
-    let verificationCode = Object.values(otp).join("");
-
-    try {
-      await verifyAuthCode({ email, authCode: verificationCode });
-
-      if (isOtpComplete) {
-        router.push({
-          pathname: Screens.ResetPassword,
-          params: {
-            email,
-            authCode: verificationCode,
-          },
-        });
-      }
-    } catch (err) {
-      showToast({
-        type: "error",
-        text1: `Error while recovering password: , ${err}`,
-      });
-    }
-  };
-
-  const onPressResendCodeHandler = () => {
-    if (timer === 0) {
-      setTimer(TIMER);
-    }
-  };
-
-  useEffect(() => {
-    let counter: NodeJS.Timeout | undefined;
-    if (timer === 0) {
-      clearInterval(counter);
-      setDisableResetBtn(false);
-    } else {
-      counter = setInterval(() => setTimer((prev) => prev - 1), 1000);
-      setDisableResetBtn(true);
-    }
-    setDisableVerifyBtn(!isOtpComplete);
-    return () => clearInterval(counter);
-  }, [timer]);
+  const {
+    timer,
+    otp,
+    setOtp,
+    disableVerifyBtn,
+    disableResetBtn,
+    input1,
+    input2,
+    input3,
+    input4,
+    input5,
+    input6,
+    onPressVerifyHandler,
+    onPressResendCodeHandler,
+  } = useOtpVerification(email);
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>

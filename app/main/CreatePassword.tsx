@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Keyboard, StyleSheet, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import { Screens } from "@/enums";
-import { useFormikHook } from "@/hooks";
-import { PasswordI, itemI } from "@/interfaces";
+import { AppFont, hp, wp } from "@/utils";
+import { useCreatePassword } from "@/hooks";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
-import { AppFont, createPasswordValidationSchema, hp, wp } from "@/utils";
-import {
-  useAuthStore,
-  usePasswordCategoryStore,
-  usePasswordStore,
-} from "@/store";
 import {
   AppButton,
   AppHeader,
@@ -25,97 +18,16 @@ import {
   TextInput,
 } from "@/components";
 
-interface ParsedPasswordItem extends PasswordI {
-  _id?: string;
-}
-
 const CreatePassword = () => {
-  const { passwordItem } = useLocalSearchParams<{ passwordItem: string }>();
-  const parsedPasswordItem: ParsedPasswordItem | null = passwordItem
-    ? JSON.parse(passwordItem)
-    : null;
-
-  const { user } = useAuthStore();
-  const { createPassword, isLoading, updatePassword } = usePasswordStore();
-  const { getPasswordCategories, isLoading: loadingPasswordCategories } =
-    usePasswordCategoryStore();
-
-  const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
-  const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
-  const [error, setError] = useState<string>("");
-
-  const validationSchema = createPasswordValidationSchema;
-  const initialValues: PasswordI = {
-    type: {
-      icon: parsedPasswordItem?.type?.icon ?? "",
-      _id: parsedPasswordItem?.type?._id ?? "",
-      title: parsedPasswordItem?.type?.title ?? "",
-      updatedAt: parsedPasswordItem?.type?.updatedAt ?? "",
-    },
-    platform: parsedPasswordItem?.platform ?? "",
-    siteAddress: parsedPasswordItem?.siteAddress ?? "",
-    email: (parsedPasswordItem?.email || parsedPasswordItem?.username) ?? "",
-    passwordText: parsedPasswordItem?.passwordText ?? "",
-    createdAt: parsedPasswordItem?.createdAt ?? "",
-    updatedAt: parsedPasswordItem?.updatedAt ?? "",
-  };
-
-  const submit = async ({
-    platform,
-    siteAddress,
-    email,
-    passwordText,
-  }: PasswordI) => {
-    Keyboard.dismiss();
-    setError("");
-
-    try {
-      if (!value || !passwordText) {
-        setError("Please fill in all required fields");
-        return;
-      }
-
-      if (parsedPasswordItem?._id) {
-        await updatePassword(parsedPasswordItem._id, {
-          type: value,
-          platform,
-          siteAddress,
-          username: email,
-          passwordText,
-        });
-        router.back();
-      } else {
-        const filteredItem = dropdownItems.find((item) => item.value === value);
-        if (!filteredItem) {
-          setError("Please select a valid password type");
-          return;
-        }
-
-        await createPassword({
-          type: {
-            _id: filteredItem.value,
-            title: filteredItem.label ?? "",
-          },
-          platform,
-          passwordText,
-          email: email || user?.name,
-          siteAddress,
-        });
-        resetForm();
-        setValue("");
-        router.back();
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "An error occurred while saving the password"
-      );
-    }
-  };
-
   const {
+    open,
+    setOpen,
+    value,
+    setValue,
+    dropdownItems,
+    error,
+    isLoading,
+    loadingPasswordCategories,
     handleChange,
     handleSubmit,
     setFieldTouched,
@@ -123,36 +35,9 @@ const CreatePassword = () => {
     touched,
     values,
     setFieldValue,
-    resetForm,
-  } = useFormikHook(submit, validationSchema, initialValues);
-
-  const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
-
-  const getAllPasswordCategories = async () => {
-    try {
-      const response = await getPasswordCategories();
-      if (response) {
-        const passwordCardTitles = response.map((item) => ({
-          label: item.title,
-          value: item.id,
-        }));
-
-        setDropdownItems(passwordCardTitles);
-      }
-    } catch (err) {
-      setError("Failed to load password categories");
-    }
-  };
-
-  useEffect(() => {
-    getAllPasswordCategories();
-  }, []);
-
-  useEffect(() => {
-    if (parsedPasswordItem?.type?._id) {
-      setValue(parsedPasswordItem.type._id);
-    }
-  }, []);
+    onGeneratePasswordPress,
+    parsedPasswordItem,
+  } = useCreatePassword();
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -191,13 +76,21 @@ const CreatePassword = () => {
               setFieldValue={setFieldValue}
               setValue={(selectedValue) => {
                 setValue(selectedValue as string);
-                setFieldValue("type", selectedValue as string);
+                const selectedItem = dropdownItems.find(
+                  (item) => item.value === selectedValue
+                );
+                setFieldValue("type", {
+                  _id: selectedValue as string,
+                  title: selectedItem?.label ?? "",
+                  icon: "",
+                  updatedAt: new Date().toISOString(),
+                });
               }}
             />
             {touched.type?._id && errors.type?._id && (
               <ErrorMessage
                 error={errors.type._id}
-                visible={touched.type?._id}
+                visible={touched.type._id}
               />
             )}
           </View>

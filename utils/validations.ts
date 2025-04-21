@@ -60,6 +60,31 @@ export const createPasswordValidationSchema = yup.object().shape({
     .label("passwordText"),
 });
 
+export const editPasswordValidationSchema = yup.object().shape({
+  type: yup
+    .object()
+    .shape({
+      _id: yup.string().label("Type"),
+    })
+    .nullable()
+    .label("Type"),
+  platform: yup.string().min(3).label("Platform"),
+  siteAddress: yup
+    .string()
+    .url("Please enter a valid URL starting with http:// or https://")
+    .label("Site Address"),
+  email: yup.string().label("Email Address"),
+  passwordText: yup
+    .string()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number"
+    )
+    .min(8)
+    .label("Password"),
+});
+
+
 export const forgotPasswordValidation = yup.object().shape({
   email: yup.string().required("Email is required!").email(),
 });

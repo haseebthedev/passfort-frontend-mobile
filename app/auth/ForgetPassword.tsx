@@ -1,11 +1,8 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { Screens } from "@/enums";
-import { useAuthStore } from "@/store";
-import { useFormikHook } from "@/hooks";
-import { ForgetPasswordI } from "@/interfaces";
-import { forgotPasswordValidation, hp, showToast, wp } from "@/utils";
+import { hp, wp } from "@/utils";
+import { useForgetPassword } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -17,36 +14,15 @@ import {
 } from "@/components";
 
 const ForgetPassword = () => {
-  const { isLoading, forgetPassword } = useAuthStore();
-  const validationSchema = forgotPasswordValidation;
-  const initialValues: ForgetPasswordI = { email: "" };
-
-  const submit = async ({ email }: ForgetPasswordI) => {
-    Keyboard.dismiss();
-    try {
-      await forgetPassword({ email });
-      router.push({
-        pathname: Screens.OtpVerification,
-        params: {
-          email,
-        },
-      });
-    } catch (err) {
-      showToast({
-        type: "error",
-        text1: `Error while recovering password: , ${err}`,
-      });
-    }
-  };
-
   const {
+    isLoading,
     handleChange,
     handleSubmit,
     setFieldTouched,
     errors,
     touched,
-    values,
-  } = useFormikHook(submit, validationSchema, initialValues);
+  } = useForgetPassword();
+
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
       <AppHeader

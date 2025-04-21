@@ -17,8 +17,9 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
-import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
+import { useEditProfile } from "@/hooks";
 import { formatDate, hp, wp } from "@/utils";
+import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -30,7 +31,6 @@ import {
   RippleWrapper,
   TextInput,
 } from "@/components";
-import { useEditProfile } from "@/hooks";
 
 const PROFILE_IMAGE_SIZE = wp(35);
 

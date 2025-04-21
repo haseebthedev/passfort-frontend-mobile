@@ -16,11 +16,11 @@ export const usePasswordDetail = () => {
   const passwordItem = typeof item === 'string' ? JSON.parse(item) : null;
 
   const refreshPasswordData = async () => {
-    if (!passwordItem?._id) return;
+    if (!passwordItem?.id) return;
 
     try {
       setIsRefreshing(true);
-      const updatedData = await getPasswordById(passwordItem._id);
+      const updatedData = await getPasswordById(passwordItem.id);
       if (updatedData) {
         setPasswordDetail(updatedData);
       }
@@ -36,32 +36,28 @@ export const usePasswordDetail = () => {
 
   const getPasswordItemById = async () => {
     try {
-      if (passwordItem) {
-        const res = await getPasswordById(passwordItem._id);
+      if (passwordItem?.id) {
+        const res = await getPasswordById(passwordItem.id);
         setPasswordDetail(res);
       }
     } catch (err) {
       showToast({
         type: 'error',
-        text1: `Error fetching password: ${err}`,
+        text1: `${err}`,
       });
     }
   };
 
   useEffect(() => {
-    getPasswordItemById();
-  }, []);
-
-  useEffect(() => {
-    if (item) {
-      refreshPasswordData();
+    if (passwordItem?.id) {
+      getPasswordItemById();
     }
-  }, [item]);
+  }, [passwordItem?.id]);
 
   const handleDeletePassword = async () => {
     try {
       if (passwordDetail) {
-        await deletePassword(passwordDetail._id);
+        await deletePassword(passwordDetail.id);
         router.back()
       }
     } catch (err) {
@@ -75,42 +71,41 @@ export const usePasswordDetail = () => {
   const handleSharePassword = async () => {
     if (!passwordDetail) return;
    
-       const shareContent = {
-         title: "Password Details",
-         message: `Platform: ${passwordDetail.platform || "N/A"}
-   ${passwordDetail.siteAddress ? `Site: ${passwordDetail.siteAddress}` : ""}
-   ${passwordDetail.username ? `Username: ${passwordDetail.username}` : ""}
-   Password: ${passwordDetail.passwordText || "N/A"}`,
-       };
+    const shareContent = {
+      title: "Password Details",
+      message: `Platform: ${passwordDetail.platform || "N/A"}
+${passwordDetail.siteAddress ? `Site: ${passwordDetail.siteAddress}` : ""}
+${passwordDetail.username ? `Username: ${passwordDetail.username}` : ""}
+Password: ${passwordDetail.passwordText || "N/A"}`,
+    };
    
-       try {
-         await Share.share(shareContent);
-       } catch (error) {
-         showToast({
-           type: "error",
-           text1: `Error sharing password details: , ${error}`,
-         });
-       }
+    try {
+      await Share.share(shareContent);
+    } catch (error) {
+      showToast({
+        type: "error",
+        text1: `Error sharing password details: , ${error}`,
+      });
+    }
   };
 
   const handleEditPassword = async () => {
-      router.push({
-        pathname: Screens.CreatePassword,
-        params: { passwordItem: JSON.stringify(passwordDetail) },
-      });
-    };
+    router.push({
+      pathname: Screens.CreatePassword,
+      params: { passwordItem: JSON.stringify(passwordDetail) },
+    });
+  };
 
-    const handleCopyToClipboard = () => {
-        if (passwordDetail?.passwordText) {
-          Clipboard.setStringAsync(passwordDetail.passwordText);
-        }
-      };
+  const handleCopyToClipboard = () => {
+    if (passwordDetail?.passwordText) {
+      Clipboard.setStringAsync(passwordDetail.passwordText);
+    }
+  };
 
   return {
     passwordDetail,
     isLoading,
     isRefreshing,
-    
     refreshPasswordData,
     handleDeletePassword,
     handleSharePassword,

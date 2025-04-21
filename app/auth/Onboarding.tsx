@@ -9,8 +9,8 @@ import { LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
 
 const Onboarding = () => {
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const { setFirstTimeUser } = useAuthStore();
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const handleNext = () => {
     if (currentIndex < OnboardingData.length - 1) {

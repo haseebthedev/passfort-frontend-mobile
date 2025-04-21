@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Alert, Dimensions } from "react-native";
-import { router } from "expo-router";
+import React from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import * as LocalAuthentication from "expo-local-authentication";
 import {
   Gesture,
   GestureDetector,
@@ -15,30 +13,16 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { authenticateWithBiometrics, hp, wp } from "@/utils";
-import { Screens } from "@/enums";
+import { hp, wp } from "@/utils";
+import { useBiometricAuth } from "@/hooks";
 import { AppLogo, AppText, GradientWrapper } from "@/components";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
 
 const { height } = Dimensions.get("window");
 
 const BiometricAuth = () => {
-  const [isBiometricSupported, setIsBiometricSupported] =
-    useState<boolean>(false);
-  const [isBiometricDone, setIsBiometricDone] = useState<boolean>(false);
-
+  const { handleBiometricAuth } = useBiometricAuth();
   const translateY = useSharedValue<number>(0);
-
-  const handleBiometricAuth = async () => {
-    const success = await authenticateWithBiometrics(() => {
-      setIsBiometricDone(true);
-      router.push(Screens.Home);
-    });
-
-    if (!success) {
-      setIsBiometricDone(false);
-    }
-  };
 
   const swipeUp = Gesture.Pan()
     .onBegin(() => {
@@ -62,14 +46,6 @@ const BiometricAuth = () => {
       transform: [{ translateY: translateY.value }],
       opacity: opacity,
     };
-  }, []);
-
-  useEffect(() => {
-    const checkBiometricSupport = async () => {
-      const compatible = await LocalAuthentication.hasHardwareAsync();
-      setIsBiometricSupported(compatible);
-    };
-    checkBiometricSupport();
   }, []);
 
   return (

@@ -54,7 +54,7 @@ export interface updatePasswordI {
 }
 
 export type PasswordItemType = {
-  _id: string;
+  id: string;
   type: PasswordCategoryType;
   username?: string;
   email?: string;

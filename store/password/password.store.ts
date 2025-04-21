@@ -96,10 +96,10 @@ const usePasswordStore = create<Store & Action>()(
             set((state) => ({ 
               isLoading: false,
               passwords: state.passwords.map(password => 
-                password._id === id ? { ...password, ...res.data.result } : password
+                password.id === id ? { ...password, ...res.data.result } : password
               ),
               recentPasswords: state.recentPasswords.map(password => 
-                password._id === id ? { ...password, ...res.data.result } : password
+                password.id === id ? { ...password, ...res.data.result } : password
               )
             }));
 
@@ -122,8 +122,8 @@ const usePasswordStore = create<Store & Action>()(
             await AxiosInstance.delete(`/password/${id}`);
             set((state) => ({ 
               isLoading: false,
-              passwords: state.passwords.filter(password => password._id !== id),
-              recentPasswords: state.recentPasswords.filter(password => password._id !== id)
+              passwords: state.passwords.filter(password => password.id !== id),
+              recentPasswords: state.recentPasswords.filter(password => password.id !== id)
             }));
             showToast({ type: "success", text1: "Successfully Deleted Password!" });
           } catch (error: any) {

@@ -1,11 +1,8 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { SignupI } from "@/interfaces";
-import { useAuthStore } from "@/store";
-import { useFormikHook } from "@/hooks";
-import { showToast, signupValidationSchema } from "@/utils";
+import { useSignup } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -18,24 +15,6 @@ import {
 } from "@/components";
 
 const Signup = () => {
-  const { signup, isLoading } = useAuthStore();
-
-  const validationSchema = signupValidationSchema;
-  const initialValues: SignupI = { name: "", email: "", password: "" };
-
-  const submit = async ({ name, email, password }: SignupI) => {
-    Keyboard.dismiss();
-    try {
-      await signup({ name, email, password });
-      router.push(Screens.Signin);
-    } catch (error) {
-      showToast({
-        type: "error",
-        text1: `Signup Error: , ${error}`,
-      });
-    }
-  };
-
   const {
     handleChange,
     handleSubmit,
@@ -43,7 +22,8 @@ const Signup = () => {
     errors,
     touched,
     values,
-  } = useFormikHook(submit, validationSchema, initialValues);
+    isLoading,
+  } = useSignup();
 
   return (
     <GradientWrapper style={LayoutStyles.horizontalSpacing}>
@@ -156,7 +136,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-
   linkRow: {
     flexDirection: "row",
     alignItems: "center",
