@@ -1,22 +1,15 @@
-import { useState, useEffect } from 'react';
-import { ListPagination, PasswordGroup, PasswordItemType } from '@/interfaces';
-import { usePasswordStore } from '@/store';
-import { showToast } from '@/utils';
+import { useState, useEffect } from "react";
+import { ListPagination, PasswordGroup, PasswordItemType } from "@/interfaces";
+import { usePasswordStore } from "@/store";
+import { showToast } from "@/utils";
 
 const LIMIT = 10;
 
 export const usePasswordManagement = () => {
-  const {
-    getPasswords,
-    getGroupedPasswords,
-    searchPasswords,
-    getRecentPasswords,
-    isLoading,
-    recentPasswords,
-  } = usePasswordStore();
+  const { getPasswords, getGroupedPasswords, searchPasswords, getRecentPasswords, isLoading, recentPasswords } = usePasswordStore();
 
   const [groupedPassword, setGroupedPassword] = useState<PasswordGroup[]>([]);
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
   const [state, setState] = useState<ListPagination<PasswordItemType>>({
     docs: [],
     page: 1,
@@ -45,7 +38,7 @@ export const usePasswordManagement = () => {
         }));
       }
     } catch (error) {
-      console.error('Error fetching passwords:', error);
+      console.error("Error fetching passwords:", error);
       setState((prev) => ({ ...prev, listRefreshing: false }));
     }
   };
@@ -58,7 +51,7 @@ export const usePasswordManagement = () => {
       }
     } catch (error) {
       showToast({
-        type: 'error',
+        type: "error",
         text1: `Error: , ${error}`,
       });
     }
@@ -66,11 +59,7 @@ export const usePasswordManagement = () => {
 
   const handleRefresh = async () => {
     setState((prev) => ({ ...prev, listRefreshing: true }));
-    await Promise.all([
-      getAllGroupedPasswords(),
-      getAllPasswords(1),
-      getRecentPasswords(),
-    ]);
+    await Promise.all([getAllGroupedPasswords(), getAllPasswords(1), getRecentPasswords(searchText)]);
     setState((prev) => ({ ...prev, listRefreshing: false }));
   };
 
@@ -80,16 +69,43 @@ export const usePasswordManagement = () => {
   }, []);
 
   useEffect(() => {
-    getAllPasswords(1);
+    const fetchData = async () => {
+      setState((prev) => ({
+        ...prev,
+        listRefreshing: true,
+      }));
+
+      try {
+        const response = searchText
+          ? await searchPasswords({ page: 1, limit: LIMIT, searchTerm: searchText })
+          : await getPasswords({ page: 1, limit: LIMIT });
+
+        if (response?.docs) {
+          setState((prev) => ({
+            ...prev,
+            docs: response.docs,
+            page: response.hasNextPage ? 2 : 1,
+            hasNextPage: response.hasNextPage,
+            listRefreshing: false,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching passwords:", error);
+        setState((prev) => ({ ...prev, listRefreshing: false }));
+      }
+    };
+
+    fetchData();
   }, [searchText]);
 
   useEffect(() => {
     getAllPasswords(1);
+    getRecentPasswords(searchText);
 
     return () => {
       setState({ ...state, docs: [], page: 1, hasNextPage: false });
     };
-  }, []);
+  }, [searchText]);
 
   return {
     groupedPassword,
@@ -100,4 +116,4 @@ export const usePasswordManagement = () => {
     recentPasswords,
     handleRefresh,
   };
-}; 
+};

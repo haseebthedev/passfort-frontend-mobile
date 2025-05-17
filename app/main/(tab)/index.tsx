@@ -8,16 +8,7 @@ import { useAuthStore } from "@/store";
 import { PasswordGroup } from "@/interfaces";
 import { usePasswordManagement } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import {
-  AppLogo,
-  AppText,
-  GradientWrapper,
-  LoadingIndicator,
-  PasswordCard,
-  PasswordItem,
-  RoundButton,
-  SearchInput,
-} from "@/components";
+import { AppLogo, AppText, GradientWrapper, LoadingIndicator, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
 
 interface HeaderComponentI {
   groupedPassword: PasswordGroup[];
@@ -32,10 +23,7 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
             <AppText text="Manage" type="label" style={styles.label} />
             <AppText text="Your Passwords" type="heading" />
           </View>
-          <RoundButton
-            iconName="plus"
-            onPress={() => router.push(Screens.CreatePassword)}
-          />
+          <RoundButton iconName="plus" onPress={() => router.push(Screens.CreatePassword)} />
         </View>
 
         <FlatList
@@ -45,47 +33,24 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
           renderItem={({ item }) => <PasswordCard item={item} />}
           keyExtractor={(item) => item._id.toString()}
           contentContainerStyle={styles.passwordCardsContainer}
-          ListEmptyComponent={
-            <AppText text="No passwords found!" type="default" />
-          }
+          ListEmptyComponent={<AppText text="No passwords found!" type="default" />}
         />
       </View>
-      <AppText
-        text="Recently Added"
-        type="primaryHeading"
-        style={styles.heading}
-      />
+      <AppText text="Recently Added" type="primaryHeading" style={styles.heading} />
     </>
   );
 });
 
 const Home = () => {
   const { user } = useAuthStore();
-  const {
-    groupedPassword,
-    searchText,
-    setSearchText,
-    state,
-    isLoading,
-    recentPasswords,
-    handleRefresh,
-  } = usePasswordManagement();
+  const { groupedPassword, searchText, setSearchText, state, isLoading, recentPasswords, handleRefresh } = usePasswordManagement();
 
   return (
     <GradientWrapper>
       <View style={styles.greetingContainer}>
         <View>
-          <AppText
-            text={`Hello ${user?.name ?? "Username"}`}
-            type="heading"
-            numberOfLines={1}
-            style={styles.username}
-          />
-          <AppText
-            text="Welcome to Password Manager"
-            type="regularSubHeading"
-            style={styles.welcomeText}
-          />
+          <AppText text={`Hello ${user?.name ?? "Username"}`} type="heading" numberOfLines={1} style={styles.username} />
+          <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
         </View>
         <AppLogo style={styles.appLogo} />
       </View>
@@ -97,16 +62,10 @@ const Home = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <PasswordItem item={item} />}
         // keyExtractor={(item) => item._id.toString()}
-        ListHeaderComponent={() => (
-          <HeaderComponent groupedPassword={groupedPassword} />
-        )}
+        ListHeaderComponent={() => <HeaderComponent groupedPassword={groupedPassword} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            {isLoading ? (
-              <LoadingIndicator />
-            ) : !state.listRefreshing ? (
-              <AppText text="No passwords found!" type="default" />
-            ) : null}
+            {isLoading ? <LoadingIndicator /> : !state.listRefreshing ? <AppText text="No passwords found!" type="default" /> : null}
           </View>
         }
         refreshing={state.listRefreshing}

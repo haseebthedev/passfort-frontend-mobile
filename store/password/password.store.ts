@@ -22,7 +22,7 @@ type Action = {
   getPasswordById: (id: string) => Promise<PasswordItemType>;
   getGroupedPasswords: () => Promise<PasswordsResponse>;
   searchPasswords: ({ page, limit, searchTerm }: { page: number; limit: number; searchTerm: string }) => Promise<ListPagination<PasswordItemType>>;
-  getRecentPasswords: () => Promise<void>;
+  getRecentPasswords: (searchTerm?: string) => Promise<void>;
   resetPasswords: () => void;
 };
 
@@ -192,10 +192,13 @@ const usePasswordStore = create<Store & Action>()(
           }
         },
 
-        getRecentPasswords: async () => {
+        getRecentPasswords: async (searchTerm?: string) => {
           set({ isLoading: true });
           try {
-            const response = await AxiosInstance.get(`/password/passwords?page=1&limit=4`);
+            const response = searchTerm
+              ? await AxiosInstance.get(`/password/search?q=${searchTerm}&page=1&limit=4`)
+              : await AxiosInstance.get(`/password/passwords?page=1&limit=4`);
+            
             set({ 
               isLoading: false,
               recentPasswords: response.data?.result?.docs || []
