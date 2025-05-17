@@ -49,23 +49,12 @@ const CreatePassword = () => {
         leftIconName="chevron-back"
         onLeftIconPress={() => router.back()}
         rightAccessory={
-          <RippleWrapper
-            onPress={onGeneratePasswordPress}
-            style={styles.buttonStyle}
-            containerStyle={styles.buttonContainer}
-          >
-            <FontAwesome
-              name="magic"
-              size={iconSize}
-              color={colorPalette.primaryBg.secondaryLightGreen}
-            />
+          <RippleWrapper onPress={onGeneratePasswordPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
+            <FontAwesome name="magic" size={iconSize} color={colorPalette.primaryBg.secondaryLightGreen} />
           </RippleWrapper>
         }
       />
-      <KeyboardResponsiveHOC
-        containerStyle={styles.mainContainer}
-        scrollViewStyle={styles.scrollViewStyle}
-      >
+      <KeyboardResponsiveHOC containerStyle={styles.mainContainer} scrollViewStyle={styles.scrollViewStyle}>
         <View style={styles.container}>
           <AppText text="Credentials" type="label" style={styles.heading} />
 
@@ -79,9 +68,7 @@ const CreatePassword = () => {
               setFieldValue={setFieldValue}
               setValue={(selectedValue) => {
                 setValue(selectedValue as string);
-                const selectedItem = dropdownItems.find(
-                  (item) => item.value === selectedValue
-                );
+                const selectedItem = dropdownItems.find((item) => item.value === selectedValue);
                 setFieldValue("type", {
                   _id: selectedValue as string,
                   title: selectedItem?.label ?? "",
@@ -90,96 +77,51 @@ const CreatePassword = () => {
                 });
               }}
             />
-            {touched.type?._id && errors.type?._id && (
-              <ErrorMessage
-                error={errors.type._id}
-                visible={touched.type._id}
-              />
-            )}
+            {touched.type?._id && errors.type?._id && <ErrorMessage error={errors.type._id} visible={touched.type._id} />}
           </View>
 
-          <AppText
-            text="Platform"
-            type="subHeading"
-            style={styles.infoHeading}
-          />
+          <AppText text="Platform" type="subHeading" style={styles.infoHeading} />
           <TextInput
             placeholder="Enter Your Platform"
             value={values.platform}
             onChangeText={handleChange("platform")}
             onBlur={() => setFieldTouched("platform")}
-            error={
-              typeof errors.platform === "string" ? errors.platform : undefined
-            }
-            visible={
-              typeof touched.platform === "boolean"
-                ? touched.platform
-                : undefined
-            }
+            error={typeof errors.platform === "string" ? errors.platform : undefined}
+            visible={typeof touched.platform === "boolean" ? touched.platform : undefined}
             inputStyle={styles.inputStyle}
           />
 
-          <AppText
-            text="Site Address"
-            type="subHeading"
-            style={styles.infoHeading}
-          />
+          <AppText text="Site Address" type="subHeading" style={styles.infoHeading} />
           <TextInput
             placeholder="http://"
             value={values.siteAddress}
             onChangeText={handleChange("siteAddress")}
             onBlur={() => setFieldTouched("siteAddress")}
-            error={
-              typeof errors.siteAddress === "string"
-                ? errors.siteAddress
-                : undefined
-            }
-            visible={
-              typeof touched.siteAddress === "boolean"
-                ? touched.siteAddress
-                : undefined
-            }
+            error={typeof errors.siteAddress === "string" ? errors.siteAddress : undefined}
+            visible={typeof touched.siteAddress === "boolean" ? touched.siteAddress : undefined}
             inputStyle={styles.inputStyle}
           />
 
-          <AppText
-            text="Email / Username"
-            type="subHeading"
-            style={styles.infoHeading}
-          />
+          <AppText text="Email / Username" type="subHeading" style={styles.infoHeading} />
           <TextInput
             placeholder="Enter Your email"
             value={values.email}
             onChangeText={handleChange("email")}
             onBlur={() => setFieldTouched("email")}
             error={typeof errors.email === "string" ? errors.email : undefined}
-            visible={
-              typeof touched.email === "boolean" ? touched.email : undefined
-            }
+            visible={typeof touched.email === "boolean" ? touched.email : undefined}
             inputStyle={styles.inputStyle}
           />
 
-          <AppText
-            text="Password"
-            type="subHeading"
-            style={styles.infoHeading}
-          />
+          <AppText text="Password" type="subHeading" style={styles.infoHeading} />
           <TextInput
             placeholder="******"
             icon="cycle"
             value={values.passwordText}
             onChangeText={handleChange("passwordText")}
             onBlur={() => setFieldTouched("passwordText")}
-            error={
-              typeof errors.passwordText === "string"
-                ? errors.passwordText
-                : undefined
-            }
-            visible={
-              typeof touched.passwordText === "boolean"
-                ? touched.passwordText
-                : undefined
-            }
+            error={typeof errors.passwordText === "string" ? errors.passwordText : undefined}
+            visible={typeof touched.passwordText === "boolean" ? touched.passwordText : undefined}
             inputStyle={styles.inputStyle}
           />
 
@@ -187,11 +129,7 @@ const CreatePassword = () => {
             text={isLoading ? "" : parsedPasswordItem ? "Update" : "Save"}
             onPress={handleSubmit}
             disabled={isLoading || loadingPasswordCategories}
-            RightAccessory={() =>
-              isLoading && (
-                <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
-              )
-            }
+            RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
           />
         </View>
       </KeyboardResponsiveHOC>
@@ -233,10 +171,7 @@ const createStyles = (theme: Theme, mode: string) =>
     inputStyle: {
       color: theme.text,
       borderColor: theme.primaryBorder,
-      backgroundColor:
-        mode === "dark"
-          ? colorPalette.primaryBg.secondaryLightGreenBg
-          : colorPalette.primaryBg.primaryLighterGreenBg,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.secondaryLightGreenBg : colorPalette.primaryBg.primaryLighterGreenBg,
     },
     buttonContainer: {
       borderRadius: Spacing.lg,

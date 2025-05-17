@@ -1,6 +1,6 @@
 import { StyleProp, Text, type TextProps, TextStyle } from "react-native";
 import { AppFont } from "@/utils";
-import { Typography } from "@/styles";
+import { FormsStyle, Typography } from "@/styles";
 import { useTheme } from "@/hooks"; // <-- Import useTheme
 import { Theme } from "@/interfaces";
 
@@ -21,7 +21,8 @@ export type AppTextI = TextProps & {
     | "passwordText"
     | "passwordLength"
     | "errorText"
-    | "detail";
+    | "detail"
+    | "formLabel";
   style?: StyleProp<TextStyle>;
 };
 
@@ -48,14 +49,10 @@ const getTypeStyles = (theme: Theme) =>
     errorText: { ...Typography(theme).errorText, color: theme.error },
     detail: { ...Typography(theme).detail, color: theme.text },
     passwordLength: { ...Typography(theme).passwordLength, color: theme.text },
+    formLabel: { ...FormsStyle(theme).formLabel, ...Typography(theme).label },
   } as Record<NonNullable<AppTextI["type"]>, TextStyle>);
 
-export const AppText = ({
-  text,
-  style,
-  type = "default",
-  ...rest
-}: AppTextI) => {
+export const AppText = ({ text, style, type = "default", ...rest }: AppTextI) => {
   const { theme } = useTheme();
   const typeStyles = getTypeStyles(theme);
 

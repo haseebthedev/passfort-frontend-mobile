@@ -1,25 +1,14 @@
 import React, { useCallback, useRef } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-} from "@gorhom/bottom-sheet";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
 import { useEditProfile, useTheme } from "@/hooks";
 import { formatDate, hp, wp } from "@/utils";
-import { colorPalette, FormsStyle, Spacing } from "@/styles";
+import { colorPalette, FormsStyle, Spacing, Typography } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -69,13 +58,7 @@ const EditProfile = () => {
   const handleOpenBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
 
   const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-      />
-    ),
+    (props: BottomSheetBackdropProps) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
     []
   );
 
@@ -86,11 +69,7 @@ const EditProfile = () => {
       activeOpacity={1}
     >
       <AppText
-        text={
-          dateOfBirth
-            ? formatDate(dateOfBirth.toString())
-            : "Select Date of Birth"
-        }
+        text={dateOfBirth ? formatDate(dateOfBirth.toString()) : "Select Date of Birth"}
         type="default"
         style={dateOfBirth ? styles.selectedDate : styles.placeholder}
       />
@@ -113,31 +92,15 @@ const EditProfile = () => {
   return (
     <GestureHandlerRootView>
       <GradientWrapper>
-        <AppHeader
-          title="Edit Profile"
-          leftIconName="chevron-back"
-          onLeftIconPress={() => router.back()}
-        />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          style={styles.container}
-        >
+        <AppHeader title="Edit Profile" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" style={styles.container}>
           <View style={styles.alignCenter}>
             <View style={styles.profilePictureContainer}>
               <Image source={profileImage} style={styles.profilePicture} />
             </View>
             <View style={styles.editButton}>
-              <RippleWrapper
-                onPress={handleOpenBottomSheet}
-                style={styles.changePicture}
-                containerStyle={styles.rippleContainer}
-              >
-                <Feather
-                  name="edit-3"
-                  size={wp(5)}
-                  color={colorPalette.primaryBg.secondaryLightGreen}
-                />
+              <RippleWrapper onPress={handleOpenBottomSheet} style={styles.changePicture} containerStyle={styles.rippleContainer}>
+                <Feather name="edit-3" size={wp(5)} color={colorPalette.primaryBg.secondaryLightGreen} />
               </RippleWrapper>
             </View>
           </View>
@@ -149,9 +112,7 @@ const EditProfile = () => {
               onChangeText={handleChange("name")}
               onBlur={() => setFieldTouched("name")}
               error={typeof errors.name === "string" ? errors.name : undefined}
-              visible={
-                typeof touched.name === "boolean" ? touched.name : undefined
-              }
+              visible={typeof touched.name === "boolean" ? touched.name : undefined}
             />
             <TextInput
               label="Email Address"
@@ -162,18 +123,10 @@ const EditProfile = () => {
               editable={false}
             />
 
-            <AppText
-              text="Date of Birth"
-              type="label"
-              style={FormsStyle(theme).formLabel}
-            />
+            <AppText text="Date of Birth" type="formLabel" />
             {renderDatePicker()}
 
-            <AppText
-              text="Country"
-              type="label"
-              style={FormsStyle(theme).formLabel}
-            />
+            <AppText text="Country" type="formLabel" />
             {renderCountryPicker()}
 
             <AppButton
@@ -181,19 +134,9 @@ const EditProfile = () => {
               onPress={handleSubmit}
               preset="filled"
               disabled={isLoading || disableSaveButton}
-              RightAccessory={() =>
-                (isLoading || disableSaveButton) && (
-                  <LoadingIndicator
-                    color={colorPalette.gradientBg.darkGreen02}
-                  />
-                )
-              }
+              RightAccessory={() => (isLoading || disableSaveButton) && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
             />
-            <AppButton
-              text="Cancel"
-              preset="noUnderline"
-              onPress={handleCancel}
-            />
+            <AppButton text="Cancel" preset="noUnderline" onPress={handleCancel} />
           </View>
         </ScrollView>
       </GradientWrapper>

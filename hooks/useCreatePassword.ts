@@ -70,36 +70,36 @@ export const useCreatePassword = () => {
         return;
       }
 
+      const filteredItem = dropdownItems.find((item) => item.value === value);
+      if (!filteredItem) {
+        setError("Please select a valid password type");
+        return;
+      }
+
       if (parsedPasswordItem?.id) {
         await updatePassword(parsedPasswordItem.id, {
-          type: value,
+          type: filteredItem.value,
           platform,
           siteAddress,
           username: email,
           passwordText,
         });
-        router.back();
       } else {
-        const filteredItem = dropdownItems.find((item) => item.value === value);
-        if (!filteredItem) {
-          setError("Please select a valid password type");
-          return;
-        }
-
         await createPassword({
           type: {
             _id: filteredItem.value,
             title: filteredItem.label ?? "",
           },
           platform,
-          passwordText,
-          email: email || user?.name,
           siteAddress,
+          email,
+          passwordText,
         });
-        resetForm();
-        setValue("");
-        router.back();
       }
+      
+      resetForm();
+      setValue("");
+      router.back();
     } catch (err) {
       setError(
         err instanceof Error

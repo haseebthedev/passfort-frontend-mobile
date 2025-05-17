@@ -9,7 +9,7 @@ import { useFormikHook } from './useFormik';
 import { profilePicture } from '@/assets';
 
 export const useEditProfile = () => {
-  const { user, editProfile, isLoading } = useAuthStore();
+  const { user, editProfile, isLoading, biometricAuth } = useAuthStore();
 
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [profileImage, setProfileImage] = useState<ImageSourcePropType>();
@@ -24,6 +24,7 @@ export const useEditProfile = () => {
   const initialValues: EditProfileI = {
     name: user?.name ?? '',
     dateOfBirth: user?.dateOfBirth ?? '',
+    biometricEnabled: biometricAuth,
   };
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export const useEditProfile = () => {
       const dataToBeUpdate: EditProfileI = {
         name: values.name,
         country: selectedCountry,
+        biometricEnabled: biometricAuth,
       };
 
       if (dateOfBirth !== null) {

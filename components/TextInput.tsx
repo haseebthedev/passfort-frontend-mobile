@@ -11,15 +11,9 @@ import {
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { AppText } from "./AppText";
-import { ErrorMessage } from "./ErrorMessage";
-import {
-  colorPalette,
-  FormsStyle,
-  iconSize,
-  Spacing,
-  Typography,
-} from "@/styles";
 import { useTheme } from "@/hooks";
+import { ErrorMessage } from "./ErrorMessage";
+import { colorPalette, FormsStyle, iconSize, Spacing } from "@/styles";
 
 interface TextInputI extends TextInputProps {
   label?: string;
@@ -44,9 +38,7 @@ export const TextInput: React.FC<TextInputI> = ({
   ...props
 }) => {
   const { theme, mode } = useTheme();
-  const [isPasswordVisible, setPasswordVisible] = useState<boolean>(
-    !secureInput
-  );
+  const [isPasswordVisible, setPasswordVisible] = useState<boolean>(!secureInput);
 
   const handleIconPress = () => {
     setPasswordVisible((prev) => !prev);
@@ -55,12 +47,7 @@ export const TextInput: React.FC<TextInputI> = ({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && (
-        <AppText
-          text={label}
-          style={[FormsStyle(theme).formLabel, Typography(theme).label]}
-        />
-      )}
+      {label && <AppText text={label} type="formLabel" />}
       <View style={styles.inputWrapper}>
         <InputText
           style={[FormsStyle(theme).formControl, inputStyle]}
@@ -74,11 +61,7 @@ export const TextInput: React.FC<TextInputI> = ({
               <Entypo
                 name={isPasswordVisible ? "eye" : "eye-with-line"}
                 size={iconSize}
-                color={
-                  mode === "dark"
-                    ? colorPalette.primaryBg.primaryGrey
-                    : colorPalette.primaryBg.borderColor2
-                }
+                color={mode === "dark" ? colorPalette.primaryBg.primaryGrey : colorPalette.primaryBg.borderColor2}
               />
             </View>
           </TouchableWithoutFeedback>

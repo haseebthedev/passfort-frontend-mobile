@@ -40,6 +40,7 @@ export interface EditProfileI {
   name?: string;
   dateOfBirth?: string | Date;
   country?: string | TranslationLanguageCodeMap;
+  biometricEnabled?: boolean;
 }
 
 export interface VerifyOtpI {

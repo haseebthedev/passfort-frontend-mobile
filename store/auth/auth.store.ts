@@ -1,14 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import {
-  EditProfileI,
-  ForgetPasswordI,
-  ResetPasswordParamI,
-  SigninI,
-  SignupI,
-  UserI,
-  VerifyOtpI,
-} from "@/interfaces";
+import { EditProfileI, ForgetPasswordI, ResetPasswordParamI, SigninI, SignupI, UserI, VerifyOtpI } from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
 import { showToast } from "@/utils/toastService";
@@ -51,8 +43,7 @@ const useAuthStore = create<Store & Action>()(
         setUser: (user: UserI | null) => set({ user }),
         setFirstTimeUser: (value: boolean) => set({ firstTimeUser: value }),
         setBiometricAuth: (value: boolean) => set({ biometricAuth: value }),
-        setDarkModeEnabled: (value: boolean) =>
-          set({ isDarkModeEnabled: value }),
+        setDarkModeEnabled: (value: boolean) => set({ isDarkModeEnabled: value }),
 
         // Actions
         signin: async (body: SigninI) => {
@@ -66,8 +57,7 @@ const useAuthStore = create<Store & Action>()(
             set({ user, isLoading: false });
             showToast({ type: "success", text1: "Signin Successfully!" });
           } catch (error: any) {
-            const errorMessage =
-              error.response?.data?.message || "Something went wrong";
+            const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
@@ -88,8 +78,7 @@ const useAuthStore = create<Store & Action>()(
               text1: "Successfully Signup Now Sign In!",
             });
           } catch (error: any) {
-            const errorMessage =
-              error.response?.data?.message || "Something went wrong";
+            const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
@@ -104,6 +93,7 @@ const useAuthStore = create<Store & Action>()(
           set({ isLoading: true });
           try {
             const response = await AxiosInstance.patch("/user/me", body);
+
             set({ user: response.data.result, isLoading: false });
             showToast({
               type: "success",
@@ -112,8 +102,7 @@ const useAuthStore = create<Store & Action>()(
 
             return "Success";
           } catch (error: any) {
-            const errorMessage =
-              error.response?.data?.message || "Something went wrong";
+            const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
@@ -130,8 +119,7 @@ const useAuthStore = create<Store & Action>()(
             await AxiosInstance.post("/auth/forget-password", body);
             set({ isLoading: false });
           } catch (error: any) {
-            const errorMessage =
-              error.response?.data?.message || "Something went wrong";
+            const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
@@ -149,8 +137,7 @@ const useAuthStore = create<Store & Action>()(
             set({ isLoading: false });
             showToast({ type: "success", text1: "OTP verified successfully!" });
           } catch (error: any) {
-            const errorMessage =
-              error.response?.data?.message || "Invalid or expired OTP";
+            const errorMessage = error.response?.data?.message || "Invalid or expired OTP";
             set({
               isLoading: false,
               error: errorMessage,
@@ -167,8 +154,7 @@ const useAuthStore = create<Store & Action>()(
             await AxiosInstance.post("/auth/reset-password", body);
             set({ isLoading: false });
           } catch (error: any) {
-            const errorMessage =
-              error.response?.data?.message || "Something went wrong";
+            const errorMessage = error.response?.data?.message || "Something went wrong";
             set({
               isLoading: false,
               error: errorMessage,
@@ -185,12 +171,8 @@ const useAuthStore = create<Store & Action>()(
       {
         name: "authStore",
         storage: {
-          getItem: (name) =>
-            AsyncStorage.getItem(name).then(
-              (value) => value && JSON.parse(value)
-            ),
-          setItem: (name, value) =>
-            AsyncStorage.setItem(name, JSON.stringify(value)),
+          getItem: (name) => AsyncStorage.getItem(name).then((value) => value && JSON.parse(value)),
+          setItem: (name, value) => AsyncStorage.setItem(name, JSON.stringify(value)),
           removeItem: (name) => AsyncStorage.removeItem(name),
         },
       }

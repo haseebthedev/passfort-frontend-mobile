@@ -40,7 +40,7 @@ export const editProfileValidationSchema = yup.object().shape({
 
 export const createPasswordValidationSchema = yup.object().shape({
   type: yup.object().shape({
-    id: yup.string().required("Please select a type.").label("Type"),
+    _id: yup.string().required("Please select a type.").label("Type"),
   }),
   platform: yup.string().optional().min(3).label("Platform"),
   siteAddress: yup
