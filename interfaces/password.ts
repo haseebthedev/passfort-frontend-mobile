@@ -1,4 +1,6 @@
-import { ImageSourcePropType } from "react-native";
+import { Theme } from "./theme";
+import { ImageSourcePropType, ViewStyle } from "react-native";
+import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type ListPagination<T> = {
   docs: T[];
@@ -74,3 +76,40 @@ export type PasswordStatType = {
 };
 
 export type PasswordType = "WEAK" | "MODERATE" | "STRONG";
+
+// password detail screen's related types
+
+export interface InfoItemPropsI {
+  label: string;
+  value?: string;
+  theme: Theme;
+  style: ViewStyle;
+}
+
+export interface IconButtonPropsI {
+  iconName: string;
+  IconComponent: typeof Feather | typeof Fontisto | typeof MaterialCommunityIcons;
+  onPress: () => void;
+  sizeOverride?: number;
+  theme: Theme;
+  mode: string;
+  buttonStyle: ViewStyle;
+  containerStyle: ViewStyle;
+}
+
+export interface PasswordInfoPropsI {
+  passwordDetail: any;
+  theme: Theme;
+  styles: any;
+}
+
+export interface PasswordActionsPropsI {
+  passwordDetail: any;
+  onCopy: () => void;
+  onDelete: () => void;
+  onEdit: () => void;
+  onShare: () => void;
+  theme: Theme;
+  mode: string;
+  styles: any;
+}

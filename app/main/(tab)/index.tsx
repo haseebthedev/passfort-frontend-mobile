@@ -7,7 +7,7 @@ import { AppFont } from "@/utils";
 import { useAuthStore } from "@/store";
 import { PasswordGroup } from "@/interfaces";
 import { usePasswordManagement } from "@/hooks";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, Spacing } from "@/styles";
 import { AppLogo, AppText, GradientWrapper, LoadingIndicator, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
 
 interface HeaderComponentI {
