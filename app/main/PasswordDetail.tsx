@@ -1,11 +1,10 @@
 import React, { useCallback } from "react";
-import { StyleSheet, View, Share } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Screens } from "@/enums";
-import { usePasswordDetail } from "@/hooks";
-import { hp, showToast, wp } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { usePasswordDetail, useTheme } from "@/hooks";
+import { hp, wp } from "@/utils";
+import { colorPalette, Spacing } from "@/styles";
 import {
   AppHeader,
   AppText,
@@ -14,10 +13,13 @@ import {
   RippleWrapper,
   SmallAppButton,
 } from "@/components";
+import { Theme } from "@/interfaces";
 
 const iconSize = wp(5.5);
 
 const PasswordDetail = () => {
+  const { theme, mode } = useTheme();
+  const styles = createStyles(theme, mode);
   const {
     passwordDetail,
     isLoading,
@@ -34,7 +36,7 @@ const PasswordDetail = () => {
     if (!value) return null;
     return (
       <View style={styles.infoContainer}>
-        <AppText text={label} type="subHeading" style={styles.infoHeading} />
+        <AppText text={label} type="subHeading" />
         <AppText text={value} type="default" />
       </View>
     );
@@ -52,7 +54,7 @@ const PasswordDetail = () => {
     const iconProps = {
       name: iconName as any,
       size: sizeOverride ?? iconSize,
-      color: colorPalette.primaryBg.primaryWhite,
+      color: theme.icon,
     };
 
     return (
@@ -67,7 +69,7 @@ const PasswordDetail = () => {
   };
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Password Details"
         leftIconName="chevron-back"
@@ -78,11 +80,7 @@ const PasswordDetail = () => {
             style={styles.refreshButton}
             containerStyle={styles.refreshButtonContainer}
           >
-            <Feather
-              name="refresh-cw"
-              size={iconSize}
-              color={colorPalette.primaryBg.primaryWhite}
-            />
+            <Feather name="refresh-cw" size={iconSize} color={theme.icon} />
           </RippleWrapper>
         }
       />
@@ -132,61 +130,65 @@ const PasswordDetail = () => {
 
 export default PasswordDetail;
 
-const styles = StyleSheet.create({
-  container: {
-    borderWidth: wp(0.2),
-    backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
-    borderColor: colorPalette.primaryBg.borderColor2,
-    borderRadius: hp(2),
-    padding: Spacing.xs,
-    marginTop: Spacing.xs,
-  },
-  innerContainer: {
-    borderWidth: wp(0.2),
-    borderColor: colorPalette.primaryBg.borderColor2,
-    backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
-    borderRadius: hp(2.1),
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.md,
-  },
-  infoContainer: {
-    marginTop: Spacing.lg,
-    gap: Spacing.sm,
-    borderBottomWidth: hp(0.1),
-    borderBlockColor: colorPalette.primaryBg.borderColor2,
-    paddingBottom: hp(0.7),
-  },
-  infoHeading: {
-    color: colorPalette.primaryBg.secondayGrey,
-  },
-  passwordActionContainer: {
-    padding: Spacing.lg,
-    alignItems: "center",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    gap: Spacing.lg,
-  },
-  buttonContainer: {
-    width: wp(14),
-    height: wp(14),
-    borderRadius: wp(7),
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: wp(0.2),
-    backgroundColor: colorPalette.primaryBg.secondaryLightGreenBg,
-    borderColor: colorPalette.primaryBg.borderColor2,
-  },
-  containerStyle: {
-    borderRadius: Spacing.xl,
-  },
-  refreshButton: {
-    width: wp(10),
-    height: wp(10),
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  refreshButtonContainer: {
-    borderRadius: wp(5),
-  },
-});
+const createStyles = (theme: Theme, mode: string) =>
+  StyleSheet.create({
+    container: {
+      borderWidth: wp(0.2),
+      backgroundColor: theme.cardBg,
+      borderColor: theme.cardsBorder,
+      borderRadius: hp(2),
+      padding: Spacing.xs,
+      marginTop: Spacing.xs,
+    },
+    innerContainer: {
+      borderWidth: wp(0.2),
+      borderColor: theme.cardsBorder,
+      backgroundColor:
+        mode === "dark"
+          ? colorPalette.primaryBg.secondaryLightGreenBg
+          : colorPalette.primaryBg.primaryLighterGreenBg,
+      borderRadius: hp(2.1),
+      paddingHorizontal: Spacing.md,
+      paddingBottom: Spacing.md,
+    },
+    infoContainer: {
+      marginTop: Spacing.lg,
+      gap: Spacing.sm,
+      borderBottomWidth: hp(0.1),
+      borderBlockColor: theme.cardsBorder,
+      paddingBottom: hp(0.7),
+    },
+    passwordActionContainer: {
+      padding: Spacing.lg,
+      alignItems: "center",
+    },
+    buttonsContainer: {
+      flexDirection: "row",
+      gap: Spacing.lg,
+    },
+    buttonContainer: {
+      width: wp(14),
+      height: wp(14),
+      borderRadius: wp(7),
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: wp(0.2),
+      backgroundColor:
+        mode === "dark"
+          ? colorPalette.primaryBg.secondaryLightGreenBg
+          : colorPalette.primaryBg.secondaryLightGreen,
+      borderColor: theme.cardsBorder,
+    },
+    containerStyle: {
+      borderRadius: Spacing.xl,
+    },
+    refreshButton: {
+      width: wp(10),
+      height: wp(10),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    refreshButtonContainer: {
+      borderRadius: wp(5),
+    },
+  });

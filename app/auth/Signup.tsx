@@ -26,7 +26,7 @@ const Signup = () => {
   } = useSignup();
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <KeyboardResponsiveHOC containerStyle={styles.container}>
         <View style={styles.form}>
           <AppLogo />

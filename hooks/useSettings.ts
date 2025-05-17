@@ -2,20 +2,16 @@ import { handleBiometricToggle } from "@/utils";
 import { useState } from "react";
 
 export const useSettings = () => {
-      const [darkMode, setDarkMode] = useState<boolean>(false);
-      const [notifications, setNotifications] = useState<boolean>(true);
+  const [notifications, setNotifications] = useState<boolean>(true);
 
-      const onBiometricToggle = async (value: boolean) => {
-        await handleBiometricToggle(value);
-      };
+  const onBiometricToggle = async (value: boolean) => {
+    await handleBiometricToggle(value);
+  };
 
-return {
-    darkMode,
+  return {
     notifications,
 
-    setDarkMode,
     setNotifications,
-    onBiometricToggle
-}
-
-}
+    onBiometricToggle,
+  };
+};

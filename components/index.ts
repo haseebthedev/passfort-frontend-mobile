@@ -21,7 +21,8 @@ export * from "./BottomSheetHOC";
 export * from "./BiometricAuthModal";
 export * from "./ImagePickerModal";
 export * from "./CountryPickerModal";
-export * from './PrivacyPolicyListItem'
-export * from './AppSwitch'
-export * from './SettingSection'
-export * from './SettingItem'
+export * from "./PrivacyPolicyListItem";
+export * from "./AppSwitch";
+export * from "./SettingSection";
+export * from "./SettingItem";
+export * from "./AppStatusBar";

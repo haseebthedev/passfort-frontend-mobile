@@ -12,7 +12,14 @@ import {
 import { Entypo } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { ErrorMessage } from "./ErrorMessage";
-import { colorPalette, FormsStyle, iconSize, Spacing, Typography } from "@/styles";
+import {
+  colorPalette,
+  FormsStyle,
+  iconSize,
+  Spacing,
+  Typography,
+} from "@/styles";
+import { useTheme } from "@/hooks";
 
 interface TextInputI extends TextInputProps {
   label?: string;
@@ -36,7 +43,10 @@ export const TextInput: React.FC<TextInputI> = ({
   visible,
   ...props
 }) => {
-  const [isPasswordVisible, setPasswordVisible] = useState<boolean>(!secureInput);
+  const { theme, mode } = useTheme();
+  const [isPasswordVisible, setPasswordVisible] = useState<boolean>(
+    !secureInput
+  );
 
   const handleIconPress = () => {
     setPasswordVisible((prev) => !prev);
@@ -45,11 +55,16 @@ export const TextInput: React.FC<TextInputI> = ({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <AppText text={label} style={[FormsStyle.formLabel, Typography.label]} />}
+      {label && (
+        <AppText
+          text={label}
+          style={[FormsStyle(theme).formLabel, Typography(theme).label]}
+        />
+      )}
       <View style={styles.inputWrapper}>
         <InputText
-          style={[FormsStyle.formControl, inputStyle]}
-          placeholderTextColor={colorPalette.primaryBg.primaryGrey}
+          style={[FormsStyle(theme).formControl, inputStyle]}
+          placeholderTextColor={theme.label}
           secureTextEntry={secureInput && !isPasswordVisible}
           {...props}
         />
@@ -59,7 +74,11 @@ export const TextInput: React.FC<TextInputI> = ({
               <Entypo
                 name={isPasswordVisible ? "eye" : "eye-with-line"}
                 size={iconSize}
-                color={colorPalette.primaryBg.primaryGrey}
+                color={
+                  mode === "dark"
+                    ? colorPalette.primaryBg.primaryGrey
+                    : colorPalette.primaryBg.borderColor2
+                }
               />
             </View>
           </TouchableWithoutFeedback>

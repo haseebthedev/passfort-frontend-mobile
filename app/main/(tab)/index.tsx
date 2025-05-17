@@ -72,7 +72,7 @@ const Home = () => {
   } = usePasswordManagement();
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <View style={styles.greetingContainer}>
         <View>
           <AppText

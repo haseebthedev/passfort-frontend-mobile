@@ -3,19 +3,27 @@ import { Image, StyleSheet, View } from "react-native";
 import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
-import { PasswordGroup } from "@/interfaces";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { PasswordGroup, Theme } from "@/interfaces";
+import { colorPalette, LayoutStyles, Spacing, theme } from "@/styles";
+import { useTheme } from "@/hooks";
 
 interface PasswordCardI {
   item: PasswordGroup;
 }
 
 export const PasswordCard = ({ item }: PasswordCardI) => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   return (
     <RippleWrapper onPress={() => {}}>
       <View style={styles.card}>
         <View style={styles.iconContainer}>
-          {item?.type.icon && <Image source={{ uri: item?.type.icon }} style={LayoutStyles.cardIcon} />}
+          {item?.type.icon && (
+            <Image
+              source={{ uri: item?.type.icon }}
+              style={LayoutStyles(theme).cardIcon}
+            />
+          )}
         </View>
         <AppText text={item.type.title} type="subHeading" numberOfLines={1} />
         <AppText
@@ -29,30 +37,31 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.md,
-    alignItems: "center",
-    borderWidth: wp(0.1),
-    backgroundColor: "rgba(126, 244, 150, 0.05)",
-    borderColor: colorPalette.primaryBg.borderColor2,
-    borderRadius: Spacing.md,
-    width: wp(90) / 3.25,
-    paddingHorizontal: Spacing.xs,
-  },
-  iconContainer: {
-    width: wp(11),
-    height: wp(11),
-    backgroundColor: colorPalette.gradientBg.lightGreen,
-    borderRadius: wp(7),
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: Spacing.xs,
-    elevation: 1,
-  },
-  subTitle: {
-    color: colorPalette.primaryBg.secondayGrey,
-    paddingTop: Spacing.xxs,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    card: {
+      paddingTop: Spacing.md,
+      paddingBottom: Spacing.md,
+      alignItems: "center",
+      borderWidth: wp(0.1),
+      backgroundColor: theme.cardBg,
+      borderColor: theme.cardsBorder,
+      borderRadius: Spacing.md,
+      width: wp(90) / 3.25,
+      paddingHorizontal: Spacing.xs,
+    },
+    iconContainer: {
+      width: wp(11),
+      height: wp(11),
+      backgroundColor: colorPalette.gradientBg.lightGreen,
+      borderRadius: wp(7),
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: Spacing.xs,
+      elevation: 1,
+    },
+    subTitle: {
+      color: colorPalette.primaryBg.secondayGrey,
+      paddingTop: Spacing.xxs,
+    },
+  });

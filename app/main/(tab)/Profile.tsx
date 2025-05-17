@@ -1,10 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Image, FlatList } from "react-native";
 import { router } from "expo-router";
+import { Theme } from "@/interfaces";
 import { Screens } from "@/enums";
-import { useProfile } from "@/hooks";
 import { capitalize, hp, wp } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { useProfile, useTheme } from "@/hooks";
+import { colorPalette, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -17,6 +18,8 @@ import {
 const PROFILE_IMAGE_SIZE = wp(26);
 
 const Profile = () => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const {
     userInfo,
     profileImage,
@@ -26,7 +29,7 @@ const Profile = () => {
   } = useProfile();
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Profile"
         rightIconName="settings"
@@ -87,61 +90,61 @@ const Profile = () => {
 
 export default Profile;
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-  },
-  profilePictureContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: PROFILE_IMAGE_SIZE + wp(2) * 2,
-    height: PROFILE_IMAGE_SIZE + wp(2) * 2,
-    borderRadius: (PROFILE_IMAGE_SIZE + wp(2) * 2) / 2,
-    borderColor: colorPalette.primaryBg.primaryLightGreen,
-    borderWidth: wp(0.5),
-    marginBottom: Spacing.sm,
-  },
-  profilePicture: {
-    width: PROFILE_IMAGE_SIZE,
-    height: PROFILE_IMAGE_SIZE,
-    marginTop: Spacing.lg,
-    marginBottom: Spacing.md,
-    borderRadius: PROFILE_IMAGE_SIZE / 2,
-    position: "absolute",
-    top: hp(-2.3),
-  },
-  passwordCardsContainer: {
-    marginVertical: Spacing.md,
-    gap: Spacing.md,
-  },
-  personalInfoContainer: {
-    backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
-    padding: Spacing.md,
-    borderWidth: wp(0.1),
-    borderColor: colorPalette.primaryBg.borderColor2,
-    borderRadius: Spacing.xs,
-    marginVertical: Spacing.xs,
-    gap: Spacing.md,
-  },
-  infoHeading: {
-    color: colorPalette.primaryBg.primaryGrey,
-    marginBottom: Spacing.xxs,
-    fontWeight: "500",
-  },
-  loadingContainer: {
-    height: wp(30),
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: Spacing.md,
-  },
-  emptyContainer: {
-    width: wp(80),
-    height: wp(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  emptyText: {
-    color: colorPalette.primaryBg.primaryGrey,
-    textAlign: "center",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      alignItems: "center",
+    },
+    profilePictureContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      width: PROFILE_IMAGE_SIZE + wp(2) * 2,
+      height: PROFILE_IMAGE_SIZE + wp(2) * 2,
+      borderRadius: (PROFILE_IMAGE_SIZE + wp(2) * 2) / 2,
+      borderColor: colorPalette.primaryBg.primaryLightGreen,
+      borderWidth: wp(0.5),
+      marginBottom: Spacing.sm,
+    },
+    profilePicture: {
+      width: PROFILE_IMAGE_SIZE,
+      height: PROFILE_IMAGE_SIZE,
+      marginTop: Spacing.lg,
+      marginBottom: Spacing.md,
+      borderRadius: PROFILE_IMAGE_SIZE / 2,
+      position: "absolute",
+      top: hp(-2.3),
+    },
+    passwordCardsContainer: {
+      marginVertical: Spacing.md,
+      gap: Spacing.md,
+    },
+    personalInfoContainer: {
+      padding: Spacing.md,
+      borderWidth: wp(0.1),
+      backgroundColor: theme.cardBg,
+      borderColor: theme.cardsBorder,
+      borderRadius: Spacing.xs,
+      marginVertical: Spacing.xs,
+      gap: Spacing.md,
+    },
+    infoHeading: {
+      color: theme.subHeading,
+      marginBottom: Spacing.xxs,
+      fontWeight: "500",
+    },
+    loadingContainer: {
+      height: wp(30),
+      justifyContent: "center",
+      alignItems: "center",
+      marginVertical: Spacing.md,
+    },
+    emptyContainer: {
+      width: wp(80),
+      height: wp(30),
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    emptyText: {
+      textAlign: "center",
+    },
+  });

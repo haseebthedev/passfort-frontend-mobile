@@ -3,8 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { AppFont, hp, wp } from "@/utils";
-import { useCreatePassword } from "@/hooks";
-import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { useCreatePassword, useTheme } from "@/hooks";
+import { colorPalette, iconSize, Spacing, theme } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -17,8 +17,11 @@ import {
   RippleWrapper,
   TextInput,
 } from "@/components";
+import { Theme } from "@/interfaces";
 
 const CreatePassword = () => {
+  const { theme, mode } = useTheme();
+  const styles = createStyles(theme, mode);
   const {
     open,
     setOpen,
@@ -40,7 +43,7 @@ const CreatePassword = () => {
   } = useCreatePassword();
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title={parsedPasswordItem ? "Edit Password" : "New Password"}
         leftIconName="chevron-back"
@@ -198,45 +201,50 @@ const CreatePassword = () => {
 
 export default CreatePassword;
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
-  scrollViewStyle: {
-    flexGrow: 1,
-  },
-  container: {
-    borderWidth: wp(0.2),
-    backgroundColor: colorPalette.primaryBg.primaryLightGreenBg,
-    borderColor: colorPalette.primaryBg.borderColor2,
-    borderRadius: hp(2),
-    padding: Spacing.md,
-    marginBottom: Spacing.xl,
-  },
-  heading: {
-    fontFamily: AppFont.semiBold,
-    marginBottom: Spacing.smd,
-  },
-  infoHeading: {
-    color: colorPalette.primaryBg.secondayGrey,
-    marginBottom: Spacing.xs,
-  },
-  infoContainer: {
-    marginBottom: Spacing.md,
-  },
-  infoContainerWithError: {
-    marginBottom: Spacing.xs,
-  },
-  inputStyle: {
-    backgroundColor: colorPalette.primaryBg.primaryBg,
-  },
-  buttonContainer: {
-    borderRadius: Spacing.lg,
-  },
-  buttonStyle: {
-    width: wp(12),
-    height: wp(12),
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const createStyles = (theme: Theme, mode: string) =>
+  StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+    },
+    scrollViewStyle: {
+      flexGrow: 1,
+    },
+    container: {
+      borderWidth: wp(0.2),
+      backgroundColor: theme.cardBg,
+      borderColor: theme.cardsBorder,
+      borderRadius: hp(2),
+      padding: Spacing.md,
+      marginBottom: Spacing.xl,
+    },
+    heading: {
+      fontFamily: AppFont.semiBold,
+      marginBottom: Spacing.smd,
+    },
+    infoHeading: {
+      marginBottom: Spacing.xs,
+    },
+    infoContainer: {
+      marginBottom: Spacing.md,
+    },
+    infoContainerWithError: {
+      marginBottom: Spacing.xs,
+    },
+    inputStyle: {
+      color: theme.text,
+      borderColor: theme.primaryBorder,
+      backgroundColor:
+        mode === "dark"
+          ? colorPalette.primaryBg.secondaryLightGreenBg
+          : colorPalette.primaryBg.primaryLighterGreenBg,
+    },
+    buttonContainer: {
+      borderRadius: Spacing.lg,
+    },
+    buttonStyle: {
+      width: wp(12),
+      height: wp(12),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });

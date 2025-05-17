@@ -3,9 +3,8 @@ import { StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Screens } from "@/enums";
-import { useSettings } from "@/hooks";
+import { useSettings, useTheme } from "@/hooks";
 import { useAuthStore } from "@/store";
-import { colorPalette, LayoutStyles } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -16,14 +15,10 @@ import {
 } from "@/components";
 
 const Settings = () => {
-  const { reset, biometricAuth } = useAuthStore();
-  const {
-    darkMode,
-    setDarkMode,
-    onBiometricToggle,
-    notifications,
-    setNotifications,
-  } = useSettings();
+  const { theme } = useTheme();
+  const { onBiometricToggle, notifications, setNotifications } = useSettings();
+  const { reset, biometricAuth, isDarkModeEnabled, setDarkModeEnabled } =
+    useAuthStore();
 
   const onLogoutPress = async () => {
     await reset();
@@ -31,7 +26,7 @@ const Settings = () => {
   };
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Settings"
         leftIconName="chevron-back"
@@ -43,7 +38,10 @@ const Settings = () => {
           icon="moon"
           title="Dark Mode"
           rightComponent={
-            <AppSwitch value={darkMode} onValueChange={setDarkMode} />
+            <AppSwitch
+              value={isDarkModeEnabled}
+              onValueChange={setDarkModeEnabled}
+            />
           }
         />
       </SettingsSection>
@@ -76,11 +74,7 @@ const Settings = () => {
           icon="person"
           title="Account Information"
           rightComponent={
-            <Ionicons
-              name="chevron-forward"
-              size={24}
-              color={colorPalette.primaryBg.primaryWhite}
-            />
+            <Ionicons name="chevron-forward" size={24} color={theme.icon} />
           }
           onPress={() => router.push(Screens.Profile)}
         />
@@ -88,11 +82,7 @@ const Settings = () => {
           icon="shield-checkmark"
           title="Privacy Policy"
           rightComponent={
-            <Ionicons
-              name="chevron-forward"
-              size={24}
-              color={colorPalette.primaryBg.primaryWhite}
-            />
+            <Ionicons name="chevron-forward" size={24} color={theme.icon} />
           }
           onPress={() => router.push(Screens.PrivacyPolicy)}
         />
@@ -104,5 +94,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
-const styles = StyleSheet.create({});

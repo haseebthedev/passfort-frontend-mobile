@@ -5,7 +5,7 @@ import { hp, wp } from "@/utils";
 import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
 import { OnboardingData } from "@/constants";
-import { LayoutStyles, Spacing } from "@/styles";
+import { Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
 
 const Onboarding = () => {
@@ -27,7 +27,7 @@ const Onboarding = () => {
   };
 
   return (
-    <GradientWrapper style={[LayoutStyles.horizontalSpacing]}>
+    <GradientWrapper>
       <View style={styles.container}>
         <Image
           source={OnboardingData[currentIndex].image}

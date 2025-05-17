@@ -5,6 +5,7 @@ import { Canvas, Circle, Path, Skia } from "@shopify/react-native-skia";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { hp, wp } from "@/utils";
 import { colorPalette } from "@/styles";
+import { useTheme } from "@/hooks";
 
 const { width } = Dimensions.get("window");
 
@@ -13,6 +14,8 @@ interface ArcSliderI {
 }
 
 export const ArcSlider = ({ count }: ArcSliderI) => {
+  const { mode } = useTheme();
+
   const strokeWidth = 9;
   const center = width / 2;
   const r = (width - strokeWidth) / 2 - 60;
@@ -28,40 +31,23 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
   const skiaForegroundPath = Skia.Path.MakeFromSVGString(rawForegroundPath);
 
   // const movableCx = useSharedValue(x2);
-  const movableCy = useSharedValue(y2);
   const percentComplete = useSharedValue(0);
 
   useEffect(() => {
     const normalizedCount = count / 8;
     let newTheta;
     if (count >= 7) {
-      newTheta = (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.15;
+      newTheta =
+        (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.15;
     } else {
-      newTheta = (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.07;
+      newTheta =
+        (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.07;
     }
 
     const percent = normalizedCount * 100;
     percentComplete.value = withTiming(percent / 100, {
       duration: 500,
     });
-
-    const newCoords = polar2Canvas(
-      {
-        theta: newTheta,
-        radius: r,
-      },
-      {
-        x: center,
-        y: center,
-      }
-    );
-
-    // movableCx.value = withTiming(newCoords.x, {
-    //   duration: 500,
-    // });
-    // movableCy.value = withTiming(newCoords.y, {
-    //   duration: 500,
-    // });
   }, [count]);
 
   if (!skiaBackgroundPath || !skiaForegroundPath) {
@@ -76,7 +62,11 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
           style="stroke"
           strokeWidth={strokeWidth}
           strokeCap="round"
-          color={colorPalette.primaryBg.primaryText}
+          color={
+            mode === "dark"
+              ? colorPalette.primaryBg.primaryText
+              : colorPalette.primaryBg.primaryWhite
+          }
         />
         <Path
           path={skiaForegroundPath}
@@ -87,7 +77,6 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
           start={0}
           end={percentComplete}
         />
-        {/* <Circle cx={movableCx} cy={movableCy} r={10} color={colorPalette.primaryBg.primaryWhite} style="fill" /> */}
       </Canvas>
     </View>
   );

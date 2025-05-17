@@ -17,9 +17,9 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
-import { useEditProfile } from "@/hooks";
+import { useEditProfile, useTheme } from "@/hooks";
 import { formatDate, hp, wp } from "@/utils";
-import { colorPalette, FormsStyle, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, FormsStyle, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -35,6 +35,7 @@ import {
 const PROFILE_IMAGE_SIZE = wp(35);
 
 const EditProfile = () => {
+  const { theme } = useTheme();
   const { user } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = ["30%"];
@@ -81,7 +82,7 @@ const EditProfile = () => {
   const renderDatePicker = () => (
     <TouchableOpacity
       onPress={() => setDateModalVisible(true)}
-      style={[FormsStyle.formControl, styles.datePicker]}
+      style={[FormsStyle(theme).formControl, styles.datePicker]}
       activeOpacity={1}
     >
       <AppText
@@ -99,7 +100,7 @@ const EditProfile = () => {
   const renderCountryPicker = () => (
     <TouchableOpacity
       onPress={() => setCountryModalVisible((prev: boolean) => !prev)}
-      style={[FormsStyle.formControl, styles.datePicker]}
+      style={[FormsStyle(theme).formControl, styles.datePicker]}
     >
       <AppText
         text={selectedCountry ? String(selectedCountry) : "Select Country"}
@@ -111,7 +112,7 @@ const EditProfile = () => {
 
   return (
     <GestureHandlerRootView>
-      <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+      <GradientWrapper>
         <AppHeader
           title="Edit Profile"
           leftIconName="chevron-back"
@@ -164,11 +165,15 @@ const EditProfile = () => {
             <AppText
               text="Date of Birth"
               type="label"
-              style={FormsStyle.formLabel}
+              style={FormsStyle(theme).formLabel}
             />
             {renderDatePicker()}
 
-            <AppText text="Country" type="label" style={FormsStyle.formLabel} />
+            <AppText
+              text="Country"
+              type="label"
+              style={FormsStyle(theme).formLabel}
+            />
             {renderCountryPicker()}
 
             <AppButton

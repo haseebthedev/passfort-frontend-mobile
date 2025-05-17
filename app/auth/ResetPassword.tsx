@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { hp, wp } from "@/utils";
-import { useResetPassword } from "@/hooks";
+import { useResetPassword, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -14,6 +14,8 @@ import {
 } from "@/components";
 
 const ResetPassword = () => {
+  const { theme } = useTheme();
+
   const { email, authCode } = useLocalSearchParams<{
     email: string;
     authCode: string;
@@ -29,7 +31,7 @@ const ResetPassword = () => {
   } = useResetPassword(email, authCode);
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Reset Password"
         leftIconName="chevron-back"
@@ -89,7 +91,6 @@ const styles = StyleSheet.create({
   subHeading: {
     width: wp(80),
     textAlign: "center",
-    color: colorPalette.primaryBg.secondayGrey,
     marginBottom: hp(2),
   },
   centerContent: {

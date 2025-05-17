@@ -4,6 +4,8 @@ import { AppText } from "./AppText";
 import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, Spacing } from "@/styles";
 import { RippleWrapper } from "./RippleWrapper";
+import { useTheme } from "@/hooks";
+import { Theme } from "@/interfaces";
 
 type Presets = keyof typeof viewPresets;
 
@@ -39,15 +41,16 @@ export function AppButton(props: ButtonProps) {
     ...rest
   } = props;
 
+  const { theme } = useTheme();
+
   const getContainerStyle = () => containerPresets[preset];
 
-  const getViewStyle = () => [
-    viewPresets[preset],
-    style,
-    disabled && { opacity: 0.5 }
-  ];
+  const getViewStyle = () => {
+    const presetStyle = viewPresets[preset](theme);
+    return [presetStyle, style, disabled && { opacity: 0.5 }];
+  };
 
-  const getTextStyle = () => [textPresets[preset], textStyle];
+  const getTextStyle = () => [textPresets[preset](theme), textStyle];
 
   return (
     <RippleWrapper
@@ -112,42 +115,67 @@ const containerPresets = {
 };
 
 const viewPresets = {
-  default: [
-    baseViewStyle,
-    {
-      borderWidth: 1,
-      borderColor: colorPalette.primaryBg.secondaryLightGreen,
-      backgroundColor: colorPalette.primaryBg.secondaryLightGreen,
-    },
-  ] as StyleProp<ViewStyle>,
-  filled: [baseViewStyle, { backgroundColor: colorPalette.primaryBg.secondaryLightGreen }] as StyleProp<ViewStyle>,
-  primaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
-  secondaryLink: [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
-  noUnderline: [
-    { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs, alignSelf: "center" },
-  ] as StyleProp<ViewStyle>,
+  default: (theme: Theme) =>
+    [
+      baseViewStyle,
+      {
+        borderWidth: 1,
+        borderColor: theme.button.default.border,
+        backgroundColor: theme.button.default.background,
+      },
+    ] as StyleProp<ViewStyle>,
+  filled: (theme: Theme) =>
+    [
+      baseViewStyle,
+      { backgroundColor: theme.button.filled.background },
+    ] as StyleProp<ViewStyle>,
+  primaryLink: (theme: Theme) =>
+    [
+      { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs },
+    ] as StyleProp<ViewStyle>,
+  secondaryLink: (theme: Theme) =>
+    [
+      { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs },
+    ] as StyleProp<ViewStyle>,
+  noUnderline: (theme: Theme) =>
+    [
+      {
+        marginHorizontal: Spacing.xs,
+        marginVertical: Spacing.xs,
+        alignSelf: "center",
+      },
+    ] as StyleProp<ViewStyle>,
 };
 
-const textPresets: Record<Presets, StyleProp<TextStyle>> = {
-  default: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
-  filled: [baseTextStyle, { color: colorPalette.primaryBg.borderColor1, fontFamily: AppFont.bold }],
-  primaryLink: [
+const textPresets: Record<Presets, (theme: Theme) => StyleProp<TextStyle>> = {
+  default: (theme) => [
+    baseTextStyle,
+    { color: theme.button.default.text, fontFamily: AppFont.bold },
+  ],
+  filled: (theme) => [
+    baseTextStyle,
+    { color: theme.button.filled.text, fontFamily: AppFont.bold },
+  ],
+  primaryLink: (theme) => [
     baseTextStyle,
     {
       fontFamily: AppFont.regular,
       textDecorationLine: "underline",
-      color: colorPalette.primaryBg.secondaryLightGreen,
+      color: theme.button.primaryLink.text,
       fontSize: Fonts.size.sm,
     },
   ],
-  secondaryLink: [
+  secondaryLink: (theme) => [
     baseTextStyle,
     {
       fontFamily: AppFont.regular,
       textDecorationLine: "underline",
-      color: colorPalette.primaryBg.primaryWhite,
+      color: theme.button.secondaryLink.text,
       fontSize: Fonts.size.sm,
     },
   ],
-  noUnderline: { textDecorationLine: "none", color: colorPalette.primaryBg.primaryWhite },
+  noUnderline: (theme) => ({
+    textDecorationLine: "none",
+    color: theme.button.noUnderline.text,
+  }),
 };

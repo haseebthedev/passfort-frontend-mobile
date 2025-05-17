@@ -2,11 +2,14 @@ import React from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { hp, wp } from "@/utils";
-import { useOtpVerification } from "@/hooks";
+import { useOtpVerification, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
+import { Theme } from "@/interfaces";
 
 const OtpVerification = () => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const { email } = useLocalSearchParams<{ email: string }>();
 
   const {
@@ -26,7 +29,7 @@ const OtpVerification = () => {
   } = useOtpVerification(email);
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="OTP Verification"
         leftIconName="chevron-back"
@@ -182,47 +185,47 @@ const OtpVerification = () => {
 
 export default OtpVerification;
 
-const styles = StyleSheet.create({
-  form: {
-    flex: 1,
-    marginVertical: Spacing.xxl,
-  },
-  head: {
-    alignItems: "center",
-  },
-  subHeading: {
-    width: wp(80),
-    textAlign: "center",
-    color: colorPalette.primaryBg.secondayGrey,
-    marginTop: Spacing.sm,
-  },
-  dontRecieveCodeContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  codeExpireText: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  timerText: {
-    color: colorPalette.primaryBg.primaryLightGreen,
-  },
-  inputFields: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginVertical: Spacing.lg,
-    paddingHorizontal: Spacing.md,
-    width: wp(90),
-  },
-  codeVerifyBlock: {
-    backgroundColor: colorPalette.primaryBg.borderColor2,
-    borderRadius: hp(0.6),
-    width: hp(6),
-    height: hp(6),
-    textAlign: "center",
-    fontSize: hp(2.5),
-    color: colorPalette.primaryBg.primaryLightGreen,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    form: {
+      flex: 1,
+      marginVertical: Spacing.xxl,
+    },
+    head: {
+      alignItems: "center",
+    },
+    subHeading: {
+      width: wp(80),
+      textAlign: "center",
+      marginTop: Spacing.sm,
+    },
+    dontRecieveCodeContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    codeExpireText: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    timerText: {
+      color: colorPalette.primaryBg.primaryLightGreen,
+    },
+    inputFields: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      marginVertical: Spacing.lg,
+      paddingHorizontal: Spacing.md,
+      width: wp(90),
+    },
+    codeVerifyBlock: {
+      borderRadius: hp(0.6),
+      width: hp(6),
+      height: hp(6),
+      textAlign: "center",
+      fontSize: hp(2.5),
+      color: theme.blockInput.textColor,
+      backgroundColor: theme.blockInput.bg,
+    },
+  });

@@ -6,7 +6,7 @@ import { AppHeader, GradientWrapper } from "@/components";
 
 const Notifications = () => {
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Notifications"
         leftIconName="chevron-back"

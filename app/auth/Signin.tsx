@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { useSignin } from "@/hooks";
+import { useSignin, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -29,12 +29,15 @@ const Signin = () => {
     isLoading,
   } = useSignin();
 
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
   if (isLoadingCredentials) {
     return <LoadingIndicator />;
   }
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <KeyboardResponsiveHOC
         containerStyle={styles.container}
         scrollViewStyle={styles.scrollViewStyle}
@@ -122,46 +125,46 @@ const Signin = () => {
 
 export default Signin;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollViewStyle: {
-    flexGrow: 1,
-    paddingTop: Spacing.sm,
-  },
-  title: {
-    paddingVertical: Spacing.md,
-    alignSelf: "center",
-    marginBottom: Spacing.lg,
-  },
-  form: {
-    justifyContent: "space-between",
-  },
-  labelStyle: {
-    color: colorPalette.primaryBg.primaryGrey,
-  },
-  actionGroup: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: Spacing.lg,
-  },
-  linkRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  termsAndConditions: {
-    flexDirection: "row",
-    justifyContent: "center",
-    color: colorPalette.primaryBg.primaryWhite,
-    marginBottom: Spacing.sm,
-  },
-  conditions: {
-    textDecorationLine: "underline",
-  },
-  policy: {
-    textDecorationLine: "underline",
-  },
-});
+const createStyles = (theme: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    scrollViewStyle: {
+      flexGrow: 1,
+      paddingTop: Spacing.sm,
+    },
+    title: {
+      paddingVertical: Spacing.md,
+      alignSelf: "center",
+      marginBottom: Spacing.lg,
+    },
+    form: {
+      justifyContent: "space-between",
+    },
+    labelStyle: {
+      color: theme.label,
+    },
+    actionGroup: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: Spacing.lg,
+    },
+    linkRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    termsAndConditions: {
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: Spacing.sm,
+    },
+    conditions: {
+      textDecorationLine: "underline",
+    },
+    policy: {
+      textDecorationLine: "underline",
+    },
+  });

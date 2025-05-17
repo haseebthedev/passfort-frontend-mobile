@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { hp, wp } from "@/utils";
-import { useForgetPassword } from "@/hooks";
+import { useForgetPassword, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import {
   AppButton,
@@ -12,8 +12,11 @@ import {
   LoadingIndicator,
   TextInput,
 } from "@/components";
+import { Theme } from "@/interfaces";
 
 const ForgetPassword = () => {
+  const { theme } = useTheme();
+
   const {
     isLoading,
     handleChange,
@@ -23,8 +26,10 @@ const ForgetPassword = () => {
     touched,
   } = useForgetPassword();
 
+  const styles = createStyles(theme);
+
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Forget Password"
         leftIconName="chevron-back"
@@ -66,18 +71,18 @@ const ForgetPassword = () => {
 
 export default ForgetPassword;
 
-const styles = StyleSheet.create({
-  form: {
-    flex: 1,
-    marginVertical: hp(6),
-  },
-  subHeading: {
-    width: wp(80),
-    textAlign: "center",
-    color: colorPalette.primaryBg.primaryGrey,
-    marginBottom: Spacing.md,
-  },
-  centerContent: {
-    alignItems: "center",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    form: {
+      flex: 1,
+      marginVertical: hp(6),
+    },
+    subHeading: {
+      width: wp(80),
+      textAlign: "center",
+      marginBottom: Spacing.md,
+    },
+    centerContent: {
+      alignItems: "center",
+    },
+  });

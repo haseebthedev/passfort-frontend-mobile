@@ -1,6 +1,12 @@
 import { colorPalette, Spacing } from "@/styles";
 import React from "react";
-import { StyleProp, StyleSheet, TouchableNativeFeedback, View, ViewStyle } from "react-native";
+import {
+  StyleProp,
+  StyleSheet,
+  TouchableNativeFeedback,
+  View,
+  ViewStyle,
+} from "react-native";
 
 interface RippleWrapperProps {
   onPress?: () => void;

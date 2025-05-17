@@ -14,13 +14,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { hp, wp } from "@/utils";
-import { useBiometricAuth } from "@/hooks";
+import { useBiometricAuth, useTheme } from "@/hooks";
 import { AppLogo, AppText, GradientWrapper } from "@/components";
 import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
 
 const { height } = Dimensions.get("window");
 
 const BiometricAuth = () => {
+  const { theme } = useTheme();
   const { handleBiometricAuth } = useBiometricAuth();
   const translateY = useSharedValue<number>(0);
 
@@ -50,7 +51,7 @@ const BiometricAuth = () => {
 
   return (
     <GestureHandlerRootView>
-      <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+      <GradientWrapper>
         <AppLogo style={styles.appLogo} />
 
         <GestureDetector gesture={swipeUp}>

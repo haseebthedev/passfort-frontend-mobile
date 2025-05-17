@@ -9,11 +9,11 @@ const TIMER: number = 50;
 
 export const useOtpVerification = (email: string) => {
   const { verifyAuthCode } = useAuthStore();
-  
+
   const [timer, setTimer] = useState<number>(TIMER);
   const [disableVerifyBtn, setDisableVerifyBtn] = useState<boolean>(false);
   const [disableResetBtn, setDisableResetBtn] = useState<boolean>(true);
-  
+
   const input1 = useRef<TextInput>(null);
   const input2 = useRef<TextInput>(null);
   const input3 = useRef<TextInput>(null);

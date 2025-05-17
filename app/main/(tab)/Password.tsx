@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { groupByDate, hp } from "@/utils";
 import { usePasswordStore } from "@/store";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { Spacing } from "@/styles";
 import {
   AppHeader,
   AppText,
@@ -16,10 +16,14 @@ import {
   LoadingIndicator,
   PasswordItem,
 } from "@/components";
+import { useTheme } from "@/hooks";
+import { Theme } from "@/interfaces";
 
 const LIMIT: number = 10;
 
 const Password = () => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const {
     getPasswords,
     isLoading,
@@ -88,12 +92,12 @@ const Password = () => {
   }, []);
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader title="Your Passwords" />
       <SectionList
         sections={sections}
         keyExtractor={(item, index) =>
-          item?._id ? item._id.toString() : `item-${index}`
+          item?.id ? item.id.toString() : `item-${index}`
         }
         renderItem={({ item }) => <PasswordItem item={item} />}
         renderSectionHeader={({ section: { title } }) => (
@@ -133,19 +137,20 @@ const Password = () => {
 
 export default Password;
 
-const styles = StyleSheet.create({
-  sectionHeader: {
-    paddingVertical: hp(0.5),
-    paddingHorizontal: Spacing.md,
-    marginBottom: Spacing.sm,
-  },
-  stickyHeader: {
-    backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: Spacing.md,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    sectionHeader: {
+      paddingVertical: hp(0.5),
+      paddingHorizontal: Spacing.md,
+      marginBottom: Spacing.sm,
+    },
+    stickyHeader: {
+      backgroundColor: theme.stickyHeaderBg,
+    },
+    emptyContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: Spacing.md,
+    },
+  });

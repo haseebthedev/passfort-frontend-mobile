@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
   };
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <AppHeader
         title="Privacy Policy"
         leftIconName="chevron-back"
