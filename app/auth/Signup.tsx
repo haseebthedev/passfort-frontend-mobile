@@ -4,33 +4,17 @@ import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { useSignup } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import {
-  AppButton,
-  AppLogo,
-  AppText,
-  GradientWrapper,
-  KeyboardResponsiveHOC,
-  LoadingIndicator,
-  TextInput,
-} from "@/components";
+import { AppButton, AppLogo, AppText, GradientWrapper, KeyboardResponsiveHOC, LoadingIndicator, TextInput } from "@/components";
 
 const Signup = () => {
-  const {
-    handleChange,
-    handleSubmit,
-    setFieldTouched,
-    errors,
-    touched,
-    values,
-    isLoading,
-  } = useSignup();
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, isLoading } = useSignup();
 
   return (
     <GradientWrapper>
-      <KeyboardResponsiveHOC containerStyle={styles.container}>
+      <KeyboardResponsiveHOC>
         <View style={styles.form}>
-          <AppLogo />
-          <View style={styles.inputContainer}>
+          <View>
+            <AppLogo />
             <View style={styles.title}>
               <AppText text="Sign Up" type="title" />
             </View>
@@ -42,9 +26,7 @@ const Signup = () => {
               onChangeText={handleChange("name")}
               onBlur={() => setFieldTouched("name")}
               error={typeof errors.name === "string" ? errors.name : undefined}
-              visible={
-                typeof touched.name === "boolean" ? touched.name : undefined
-              }
+              visible={typeof touched.name === "boolean" ? touched.name : undefined}
             />
             <TextInput
               label="Email Address"
@@ -52,12 +34,8 @@ const Signup = () => {
               value={values.email}
               onChangeText={handleChange("email")}
               onBlur={() => setFieldTouched("email")}
-              error={
-                typeof errors.email === "string" ? errors.email : undefined
-              }
-              visible={
-                typeof touched.email === "boolean" ? touched.email : undefined
-              }
+              error={typeof errors.email === "string" ? errors.email : undefined}
+              visible={typeof touched.email === "boolean" ? touched.email : undefined}
             />
             <TextInput
               label="Password"
@@ -65,51 +43,30 @@ const Signup = () => {
               value={values.password}
               onChangeText={handleChange("password")}
               onBlur={() => setFieldTouched("password")}
-              error={
-                typeof errors.password === "string"
-                  ? errors.password
-                  : undefined
-              }
-              visible={
-                typeof touched.password === "boolean"
-                  ? touched.password
-                  : undefined
-              }
+              error={typeof errors.password === "string" ? errors.password : undefined}
+              visible={typeof touched.password === "boolean" ? touched.password : undefined}
               secureInput={true}
             />
 
             <AppButton
               text={isLoading ? "" : "Sign Up"}
               onPress={handleSubmit}
-              RightAccessory={() =>
-                isLoading && (
-                  <LoadingIndicator
-                    color={colorPalette.gradientBg.darkGreen02}
-                  />
-                )
-              }
+              RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
             />
-
-            <View style={styles.linkRow}>
-              <AppText text="Already have an account?" type="label" />
-              <AppButton
-                text="Sign In"
-                onPress={() => router.push(Screens.Signin)}
-                preset="primaryLink"
-              />
+          </View>
+          <View style={styles.linkRow}>
+            <AppText text="Already have an account?" type="label" />
+            <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
+          </View>
+          <View>
+            <View style={styles.termsAndConditions}>
+              <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
+              <AppText text=" and " type="default" />
+              <AppText text="Privacy policy" style={styles.policy} type="default" />
             </View>
           </View>
         </View>
       </KeyboardResponsiveHOC>
-      <View style={styles.termsAndConditions}>
-        <AppText
-          text="Terms & Conditions"
-          style={styles.conditions}
-          type="default"
-        />
-        <AppText text=" and " type="default" />
-        <AppText text="Privacy policy" style={styles.policy} type="default" />
-      </View>
     </GradientWrapper>
   );
 };
@@ -117,19 +74,14 @@ const Signup = () => {
 export default Signup;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   title: {
     paddingVertical: Spacing.md,
     alignSelf: "center",
   },
   form: {
     paddingTop: Spacing.sm,
+    flex: 1,
     justifyContent: "space-between",
-  },
-  inputContainer: {
-    flexGrow: 1,
   },
   actionGroup: {
     flexDirection: "row",
@@ -140,13 +92,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: Spacing.md,
   },
   termsAndConditions: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     color: colorPalette.primaryBg.primaryWhite,
-    marginBottom: Spacing.sm,
   },
   conditions: {
     textDecorationLine: "underline",
