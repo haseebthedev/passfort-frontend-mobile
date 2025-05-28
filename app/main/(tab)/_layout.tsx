@@ -25,27 +25,21 @@ const TabLayout = () => {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <Entypo size={iconSize} name="home" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Entypo size={iconSize} name="home" color={color} />,
         }}
       />
       <Tabs.Screen
         name="Password"
         options={{
           title: "Password",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons size={iconSize} name="shield" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <MaterialIcons size={iconSize} name="shield" color={color} />,
         }}
       />
       <Tabs.Screen
         name="Profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => (
-            <Ionicons size={iconSize} name="person" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <Ionicons size={iconSize} name="person" color={color} />,
         }}
       />
     </Tabs>
@@ -57,10 +51,7 @@ export default TabLayout;
 const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
     tabBarStyle: {
-      backgroundColor:
-        mode === "dark"
-          ? colorPalette.primaryBg.primaryDarkGreen
-          : colorPalette.primaryBg.lighterGreen,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryDarkGreen : colorPalette.primaryBg.lighterGreen,
       height: hp(8),
       borderTopWidth: 0,
     },

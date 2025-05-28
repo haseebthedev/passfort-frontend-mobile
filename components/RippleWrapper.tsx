@@ -1,12 +1,6 @@
 import { colorPalette, Spacing } from "@/styles";
 import React from "react";
-import {
-  StyleProp,
-  StyleSheet,
-  TouchableNativeFeedback,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, StyleSheet, TouchableNativeFeedback, View, ViewStyle } from "react-native";
 
 interface RippleWrapperProps {
   onPress?: () => void;
@@ -27,11 +21,7 @@ export const RippleWrapper = ({
 }: RippleWrapperProps) => {
   return (
     <View style={[styles.buttonContainer, containerStyle]}>
-      <TouchableNativeFeedback
-        onPress={onPress}
-        background={TouchableNativeFeedback.Ripple(rippleColor, false)}
-        disabled={disabled}
-      >
+      <TouchableNativeFeedback onPress={onPress} background={TouchableNativeFeedback.Ripple(rippleColor, false)} disabled={disabled}>
         <View style={style}>{children}</View>
       </TouchableNativeFeedback>
     </View>

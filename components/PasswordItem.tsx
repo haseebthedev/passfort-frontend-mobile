@@ -16,7 +16,7 @@ interface PasswordItemI {
 export const PasswordItem = ({ item }: PasswordItemI) => {
   const { theme, mode } = useTheme();
 
-  const styles = createStyles(theme);
+  const styles = createStyles(theme, mode);
 
   const onPressItem = () => {
     router.push({
@@ -32,25 +32,16 @@ export const PasswordItem = ({ item }: PasswordItemI) => {
           <AppText
             text={getInitials(item.username ?? "User Name")}
             type="heading"
-            style={
-              mode === "dark"
-                ? { color: colorPalette.primaryBg.primaryWhite }
-                : { color: colorPalette.primaryBg.secondaryLightGreen }
-            }
+            style={mode === "dark" ? { color: colorPalette.primaryBg.primaryWhite } : { color: colorPalette.primaryBg.secondaryLightGreen }}
           />
         </View>
-        <AppText
-          text={item.username ?? "Username"}
-          type="subHeading"
-          style={styles.subHeading}
-          numberOfLines={1}
-        />
+        <AppText text={item.username ?? "Username"} type="subHeading" style={styles.subHeading} numberOfLines={1} />
       </View>
     </RippleWrapper>
   );
 };
 
-const createStyles = (theme: Theme) =>
+const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
     buttonContainer: {
       borderRadius: Spacing.lg,
@@ -67,6 +58,7 @@ const createStyles = (theme: Theme) =>
       paddingVertical: Spacing.xxs,
       paddingHorizontal: Spacing.sm,
       height: hp(8.42),
+      elevation: mode === "light" ? 1 : 0,
     },
     passwordInfoContainer: {
       flexDirection: "row",

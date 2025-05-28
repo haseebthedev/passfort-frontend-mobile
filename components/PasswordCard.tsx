@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { wp } from "@/utils";
+import { hp, wp } from "@/utils";
 import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { PasswordGroup, Theme } from "@/interfaces";
@@ -12,32 +12,22 @@ interface PasswordCardI {
 }
 
 export const PasswordCard = ({ item }: PasswordCardI) => {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const { theme, mode } = useTheme();
+  const styles = createStyles(theme, mode);
   return (
     <RippleWrapper onPress={() => {}}>
       <View style={styles.card}>
         <View style={styles.iconContainer}>
-          {item?.type.icon && (
-            <Image
-              source={{ uri: item?.type.icon }}
-              style={LayoutStyles(theme).cardIcon}
-            />
-          )}
+          {item?.type.icon && <Image source={{ uri: item?.type.icon }} style={LayoutStyles(theme).cardIcon} />}
         </View>
         <AppText text={item.type.title} type="subHeading" numberOfLines={1} />
-        <AppText
-          text={`${item.passwords.length} Passwords`}
-          type="description"
-          style={styles.subTitle}
-          numberOfLines={1}
-        />
+        <AppText text={`${item.passwords.length} Passwords`} type="description" style={styles.subTitle} numberOfLines={1} />
       </View>
     </RippleWrapper>
   );
 };
 
-const createStyles = (theme: Theme) =>
+const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
     card: {
       paddingTop: Spacing.md,
@@ -49,6 +39,7 @@ const createStyles = (theme: Theme) =>
       borderRadius: Spacing.md,
       width: wp(90) / 3.25,
       paddingHorizontal: Spacing.xs,
+      // elevation: mode === "light" ? 1 : 0,
     },
     iconContainer: {
       width: wp(11),

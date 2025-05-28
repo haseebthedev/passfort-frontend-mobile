@@ -13,20 +13,11 @@ interface SettingItemProps {
   onPress?: () => void;
 }
 
-export const SettingItem = ({
-  icon,
-  title,
-  rightComponent,
-  onPress,
-}: SettingItemProps) => {
+export const SettingItem = ({ icon, title, rightComponent, onPress }: SettingItemProps) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   return (
-    <TouchableOpacity
-      style={styles.settingItem}
-      onPress={onPress}
-      disabled={!onPress}
-    >
+    <TouchableOpacity style={styles.settingItem} onPress={onPress} disabled={!onPress}>
       <View style={styles.settingLeft}>
         <Ionicons name={icon} size={iconSize} color={theme.icon} />
         <AppText text={title} />
@@ -46,7 +37,7 @@ const createStyles = (theme: Theme) =>
       borderRadius: wp(4),
       borderWidth: wp(0.1),
       color: theme.text,
-      borderColor: theme.primaryBorder,
+      borderColor: theme.cardsBorder,
       backgroundColor: theme.itemBg,
     },
     settingLeft: {

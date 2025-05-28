@@ -12,18 +12,11 @@ interface SearchInputProps {
   onChangeText: (text: string) => void;
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({
-  placeholder = "Search here",
-  value,
-  onChangeText,
-}) => {
+export const SearchInput: React.FC<SearchInputProps> = ({ placeholder = "Search here", value, onChangeText }) => {
   const { theme, mode } = useTheme();
   const styles = createStyles(theme);
 
-  const Icon_Placeholder_Color =
-    mode === "dark"
-      ? colorPalette.primaryBg.primaryGrey
-      : colorPalette.primaryBg.secondayGrey;
+  const Icon_Placeholder_Color = mode === "dark" ? colorPalette.primaryBg.primaryGrey : colorPalette.primaryBg.secondayGrey;
 
   return (
     <View style={styles.container}>
@@ -48,8 +41,8 @@ const createStyles = (theme: Theme) =>
       backgroundColor: theme.searchBg,
       borderRadius: wp(10),
       paddingHorizontal: Spacing.sm,
-      elevation: 2,
       marginBottom: Spacing.md,
+      elevation: 1,
     },
     input: {
       flex: 1,

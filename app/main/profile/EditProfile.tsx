@@ -71,7 +71,7 @@ const EditProfile = () => {
       <AppText
         text={dateOfBirth ? formatDate(dateOfBirth.toString()) : "Select Date of Birth"}
         type="default"
-        style={dateOfBirth ? styles.selectedDate : styles.placeholder}
+        style={dateOfBirth ? null : styles.placeholder}
       />
     </TouchableOpacity>
   );
@@ -84,7 +84,7 @@ const EditProfile = () => {
       <AppText
         text={selectedCountry ? String(selectedCountry) : "Select Country"}
         type={"default"}
-        style={selectedCountry ? styles.selectedDate : styles.placeholder}
+        style={selectedCountry ? null : styles.placeholder}
       />
     </TouchableOpacity>
   );
