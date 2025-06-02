@@ -95,6 +95,8 @@ const PasswordDetail = () => {
     handleCopyToClipboard,
   } = usePasswordDetail();
 
+  console.log("detail === ", passwordDetail);
+
   const onBackPress = useCallback(() => router.back(), []);
 
   return (

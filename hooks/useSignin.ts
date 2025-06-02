@@ -5,7 +5,7 @@ import { SigninI } from "@/interfaces";
 import { Screens } from "@/enums";
 import { useFormikHook } from "./useFormik";
 import { useAuthStore } from "@/store";
-import { clearCredentials, loadSavedCredentials, saveCredentials, showToast, signinValidationSchema } from "@/utils";
+import { clearCredentials, loadSavedCredentials, saveCredentials, showToast, signinValidationSchema, decryptCredentials } from "@/utils";
 
 export const useSignin = () => {
   const { signin, isLoading, biometricAuth } = useAuthStore();
@@ -20,8 +20,11 @@ export const useSignin = () => {
       const { savedRememberMe } = await loadSavedCredentials();
       if (savedRememberMe === "true") {
         setRememberMe(true);
-        setFieldValue("email", "");
-        setFieldValue("password", "");
+        const decrypted = await decryptCredentials();
+        if (decrypted) {
+          setFieldValue("email", decrypted.email);
+          setFieldValue("password", decrypted.password);
+        }
       }
     } catch (error) {
       console.error("Error loading credentials:", error);

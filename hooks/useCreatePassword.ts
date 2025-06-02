@@ -5,11 +5,7 @@ import { Screens } from "@/enums";
 import { useFormikHook } from "./useFormik";
 import { PasswordI, itemI } from "@/interfaces";
 import { createPasswordValidationSchema, editPasswordValidationSchema } from "@/utils";
-import {
-  useAuthStore,
-  usePasswordCategoryStore,
-  usePasswordStore,
-} from "@/store";
+import { useAuthStore, usePasswordCategoryStore, usePasswordStore } from "@/store";
 
 interface ParsedPasswordItem extends PasswordI {
   id?: string;
@@ -17,25 +13,20 @@ interface ParsedPasswordItem extends PasswordI {
 
 export const useCreatePassword = () => {
   const { passwordItem } = useLocalSearchParams<{ passwordItem: string }>();
-  const parsedPasswordItem: ParsedPasswordItem | null = passwordItem
-    ? JSON.parse(passwordItem)
-    : null;
+  const parsedPasswordItem: ParsedPasswordItem | null = passwordItem ? JSON.parse(passwordItem) : null;
 
   const { user } = useAuthStore();
   const { createPassword, isLoading, updatePassword } = usePasswordStore();
-  const { getPasswordCategories, isLoading: loadingPasswordCategories } =
-    usePasswordCategoryStore();
+  const { getPasswordCategories, isLoading: loadingPasswordCategories } = usePasswordCategoryStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>(parsedPasswordItem?.type?._id ?? "");
-  const [fieldVal, setFieldVal] = useState<any>(
-    {
-      _id: parsedPasswordItem?.type._id ?? "",
-      title: parsedPasswordItem?.type.title ?? "",
-      icon: parsedPasswordItem?.type.icon ?? "",
-      updatedAt: parsedPasswordItem?.type.updatedAt ?? ""
-    }
-  );
+  const [fieldVal, setFieldVal] = useState<any>({
+    _id: parsedPasswordItem?.type._id ?? "",
+    title: parsedPasswordItem?.type.title ?? "",
+    icon: parsedPasswordItem?.type.icon ?? "",
+    updatedAt: parsedPasswordItem?.type.updatedAt ?? "",
+  });
 
   const [dropdownItems, setDropdownItems] = useState<itemI[]>([]);
   const [error, setError] = useState<string>("");
@@ -55,12 +46,7 @@ export const useCreatePassword = () => {
     updatedAt: parsedPasswordItem?.updatedAt ?? "",
   };
 
-  const submit = async ({
-    platform,
-    siteAddress,
-    email,
-    passwordText,
-  }: PasswordI) => {
+  const submit = async ({ platform, siteAddress, email, passwordText }: PasswordI) => {
     Keyboard.dismiss();
     setError("");
 
@@ -96,29 +82,20 @@ export const useCreatePassword = () => {
           passwordText,
         });
       }
-      
+
       resetForm();
       setValue("");
       router.back();
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "An error occurred while saving the password"
-      );
+      setError(err instanceof Error ? err.message : "An error occurred while saving the password");
     }
   };
 
-  const {
-    handleChange,
-    handleSubmit,
-    setFieldTouched,
-    errors,
-    touched,
-    values,
-    setFieldValue,
-    resetForm,
-  } = useFormikHook(submit, parsedPasswordItem ? editPasswordValidationSchema : createPasswordValidationSchema, initialValues);
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, setFieldValue, resetForm } = useFormikHook(
+    submit,
+    parsedPasswordItem ? editPasswordValidationSchema : createPasswordValidationSchema,
+    initialValues
+  );
 
   const onGeneratePasswordPress = () => router.push(Screens.GeneratedPassword);
 

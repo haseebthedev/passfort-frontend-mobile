@@ -8,7 +8,7 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gor
 import { useAuthStore } from "@/store";
 import { useEditProfile, useTheme } from "@/hooks";
 import { formatDate, hp, wp } from "@/utils";
-import { colorPalette, FormsStyle, Spacing, Typography } from "@/styles";
+import { colorPalette, FormsStyle, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,

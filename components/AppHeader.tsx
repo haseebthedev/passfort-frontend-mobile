@@ -1,11 +1,5 @@
 import React, { ReactNode } from "react";
-import {
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { iconSize, LayoutStyles, Spacing } from "@/styles";
@@ -41,16 +35,8 @@ export const AppHeader = ({
     <View style={[LayoutStyles(theme).headerNavContainer, containerStyle]}>
       <View style={styles.leftContainer}>
         {leftIconName && (
-          <RippleWrapper
-            onPress={onLeftIconPress}
-            style={styles.buttonStyle}
-            containerStyle={styles.buttonContainer}
-          >
-            <Ionicons
-              name={leftIconName}
-              style={LayoutStyles(theme).headerIcon}
-              size={iconSize}
-            />
+          <RippleWrapper onPress={onLeftIconPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
+            <Ionicons name={leftIconName} style={LayoutStyles(theme).headerIcon} size={iconSize} />
           </RippleWrapper>
         )}
 
@@ -58,16 +44,8 @@ export const AppHeader = ({
       </View>
 
       {rightIconName && (
-        <RippleWrapper
-          onPress={onRightIconPress}
-          style={styles.buttonStyle}
-          containerStyle={styles.buttonContainer}
-        >
-          <Ionicons
-            name={rightIconName}
-            style={LayoutStyles(theme).headerIcon}
-            size={iconSize}
-          />
+        <RippleWrapper onPress={onRightIconPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
+          <Ionicons name={rightIconName} style={LayoutStyles(theme).headerIcon} size={iconSize} />
         </RippleWrapper>
       )}
 

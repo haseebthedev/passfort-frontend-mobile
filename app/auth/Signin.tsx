@@ -3,8 +3,9 @@ import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { useSignin, useTheme } from "@/hooks";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, LoadingIndicator, TextInput } from "@/components";
+import { Theme } from "@/interfaces";
 
 const Signin = () => {
   const {
@@ -82,7 +83,7 @@ const Signin = () => {
 
 export default Signin;
 
-const createStyles = (theme: any) =>
+const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,

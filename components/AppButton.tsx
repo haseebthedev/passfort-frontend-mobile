@@ -57,9 +57,7 @@ export function AppButton(props: ButtonProps) {
       onPress={disabled ? undefined : onPress}
       style={getViewStyle()}
       rippleColor={
-        preset === "default" || preset === "filled"
-          ? colorPalette.primaryBg.primaryLightGreen
-          : colorPalette.primaryBg.transparent
+        preset === "default" || preset === "filled" ? colorPalette.primaryBg.primaryLightGreen : colorPalette.primaryBg.transparent
       }
       containerStyle={getContainerStyle()}
     >
@@ -124,19 +122,9 @@ const viewPresets = {
         backgroundColor: theme.button.default.background,
       },
     ] as StyleProp<ViewStyle>,
-  filled: (theme: Theme) =>
-    [
-      baseViewStyle,
-      { backgroundColor: theme.button.filled.background },
-    ] as StyleProp<ViewStyle>,
-  primaryLink: (theme: Theme) =>
-    [
-      { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs },
-    ] as StyleProp<ViewStyle>,
-  secondaryLink: (theme: Theme) =>
-    [
-      { marginHorizontal: Spacing.xs, marginVertical: Spacing.xs },
-    ] as StyleProp<ViewStyle>,
+  filled: (theme: Theme) => [baseViewStyle, { backgroundColor: theme.button.filled.background }] as StyleProp<ViewStyle>,
+  primaryLink: (theme: Theme) => [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
+  secondaryLink: (theme: Theme) => [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
   noUnderline: (theme: Theme) =>
     [
       {
@@ -148,14 +136,8 @@ const viewPresets = {
 };
 
 const textPresets: Record<Presets, (theme: Theme) => StyleProp<TextStyle>> = {
-  default: (theme) => [
-    baseTextStyle,
-    { color: theme.button.default.text, fontFamily: AppFont.bold },
-  ],
-  filled: (theme) => [
-    baseTextStyle,
-    { color: theme.button.filled.text, fontFamily: AppFont.bold },
-  ],
+  default: (theme) => [baseTextStyle, { color: theme.button.default.text, fontFamily: AppFont.bold }],
+  filled: (theme) => [baseTextStyle, { color: theme.button.filled.text, fontFamily: AppFont.bold }],
   primaryLink: (theme) => [
     baseTextStyle,
     {

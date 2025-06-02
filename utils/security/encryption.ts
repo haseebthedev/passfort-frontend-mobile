@@ -1,5 +1,6 @@
 import * as Crypto from "expo-crypto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 
 export const CREDENTIALS_KEY = "encrypted_credentials";
 export const REMEMBER_ME_KEY = "remember_me";
@@ -7,21 +8,32 @@ export const REMEMBER_ME_KEY = "remember_me";
 export const encryptCredentials = async (email: string, password: string) => {
   try {
     const combined = `${email}:${password}`;
-    const digest = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      combined
-    );
-    return digest;
+    // Store the credentials securely using SecureStore
+    await SecureStore.setItemAsync(CREDENTIALS_KEY, combined);
+    return true;
   } catch (error) {
     console.error("Encryption error:", error);
     throw error;
   }
 };
 
+export const decryptCredentials = async () => {
+  try {
+    const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
+    if (credentials) {
+      const [email, password] = credentials.split(':');
+      return { email, password };
+    }
+    return null;
+  } catch (error) {
+    console.error("Decryption error:", error);
+    throw error;
+  }
+};
+
 export const saveCredentials = async (email: string, password: string) => {
   try {
-    const encrypted = await encryptCredentials(email, password);
-    await AsyncStorage.setItem(CREDENTIALS_KEY, encrypted);
+    await encryptCredentials(email, password);
     await AsyncStorage.setItem(REMEMBER_ME_KEY, "true");
   } catch (error) {
     console.error("Error saving credentials:", error);
@@ -31,7 +43,7 @@ export const saveCredentials = async (email: string, password: string) => {
 
 export const clearCredentials = async () => {
   try {
-    await AsyncStorage.removeItem(CREDENTIALS_KEY);
+    await SecureStore.deleteItemAsync(CREDENTIALS_KEY);
     await AsyncStorage.setItem(REMEMBER_ME_KEY, "false");
   } catch (error) {
     console.error("Error clearing credentials:", error);
@@ -42,7 +54,7 @@ export const clearCredentials = async () => {
 export const loadSavedCredentials = async () => {
   try {
     const savedRememberMe = await AsyncStorage.getItem(REMEMBER_ME_KEY);
-    const savedCredentials = await AsyncStorage.getItem(CREDENTIALS_KEY);
+    const savedCredentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
     return { savedRememberMe, savedCredentials };
   } catch (error) {
     console.error("Error loading credentials:", error);

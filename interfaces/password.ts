@@ -1,6 +1,6 @@
 import { Theme } from "./theme";
-import { ImageSourcePropType, ViewStyle } from "react-native";
-import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
+import { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
+import { Feather, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 export type ListPagination<T> = {
   docs: T[];
@@ -87,7 +87,7 @@ export interface InfoItemPropsI {
 }
 
 export interface IconButtonPropsI {
-  iconName: string;
+  iconName: keyof typeof Fontisto.glyphMap | keyof typeof MaterialCommunityIcons.glyphMap | keyof typeof Feather.glyphMap;
   IconComponent: typeof Feather | typeof Fontisto | typeof MaterialCommunityIcons;
   onPress: () => void;
   sizeOverride?: number;
@@ -98,13 +98,13 @@ export interface IconButtonPropsI {
 }
 
 export interface PasswordInfoPropsI {
-  passwordDetail: any;
+  passwordDetail: PasswordItemType & { userId?: string };
   theme: Theme;
-  styles: any;
+  styles?: any;
 }
 
 export interface PasswordActionsPropsI {
-  passwordDetail: any;
+  passwordDetail: PasswordItemType & { userId?: string };
   onCopy: () => void;
   onDelete: () => void;
   onEdit: () => void;
