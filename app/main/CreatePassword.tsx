@@ -171,7 +171,7 @@ const createStyles = (theme: Theme, mode: string) =>
     inputStyle: {
       color: theme.text,
       borderColor: theme.primaryBorder,
-      backgroundColor: mode === "dark" ? colorPalette.primaryBg.secondaryLightGreenBg : colorPalette.primaryBg.primaryLighterGreenBg,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.secondaryLightGreenBg : colorPalette.primaryBg.primaryWhite,
     },
     buttonContainer: {
       borderRadius: Spacing.lg,

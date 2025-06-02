@@ -24,7 +24,7 @@ import {
 const PROFILE_IMAGE_SIZE = wp(35);
 
 const EditProfile = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const { user } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = ["30%"];
@@ -65,7 +65,7 @@ const EditProfile = () => {
   const renderDatePicker = () => (
     <TouchableOpacity
       onPress={() => setDateModalVisible(true)}
-      style={[FormsStyle(theme).formControl, styles.datePicker]}
+      style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
       activeOpacity={1}
     >
       <AppText
@@ -79,7 +79,7 @@ const EditProfile = () => {
   const renderCountryPicker = () => (
     <TouchableOpacity
       onPress={() => setCountryModalVisible((prev: boolean) => !prev)}
-      style={[FormsStyle(theme).formControl, styles.datePicker]}
+      style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
     >
       <AppText
         text={selectedCountry ? String(selectedCountry) : "Select Country"}

@@ -42,7 +42,7 @@ const createStyles = (theme: Theme) =>
       borderRadius: wp(10),
       paddingHorizontal: Spacing.sm,
       marginBottom: Spacing.md,
-      elevation: 1,
+      elevation: theme.elevation,
     },
     input: {
       flex: 1,

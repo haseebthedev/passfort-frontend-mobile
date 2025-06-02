@@ -6,46 +6,25 @@ import { Screens } from "@/enums";
 import { capitalize, hp, wp } from "@/utils";
 import { useProfile, useTheme } from "@/hooks";
 import { colorPalette, Spacing } from "@/styles";
-import {
-  AppButton,
-  AppHeader,
-  AppText,
-  GradientWrapper,
-  LoadingIndicator,
-  PasswordCard,
-} from "@/components";
+import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordCard } from "@/components";
 
 const PROFILE_IMAGE_SIZE = wp(26);
 
 const Profile = () => {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
-  const {
-    userInfo,
-    profileImage,
-    groupedPassword,
-    isLoading,
-    handleEditProfile,
-  } = useProfile();
+  const { theme, mode } = useTheme();
+  const styles = createStyles(theme, mode);
+  const { userInfo, profileImage, groupedPassword, isLoading, handleEditProfile } = useProfile();
 
   return (
     <GradientWrapper>
-      <AppHeader
-        title="Profile"
-        rightIconName="settings"
-        onRightIconPress={() => router.push(Screens.Settings)}
-      />
+      <AppHeader title="Profile" rightIconName="settings" onRightIconPress={() => router.push(Screens.Settings)} />
 
       <View style={styles.container}>
         <View style={styles.profilePictureContainer}>
           <Image source={profileImage} style={styles.profilePicture} />
         </View>
         <AppText text={`${userInfo.name}`} type="heading" />
-        <AppButton
-          text="Edit profile"
-          preset="primaryLink"
-          onPress={handleEditProfile}
-        />
+        <AppButton text="Edit profile" preset="primaryLink" onPress={handleEditProfile} />
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -58,11 +37,7 @@ const Profile = () => {
               {isLoading ? (
                 <LoadingIndicator />
               ) : (
-                <AppText
-                  text="No password categories found"
-                  type="subHeading"
-                  style={styles.emptyText}
-                />
+                <AppText text="No password categories found" type="subHeading" style={styles.emptyText} />
               )}
             </View>
           }
@@ -71,16 +46,8 @@ const Profile = () => {
       <View style={styles.personalInfoContainer}>
         {Object.entries(userInfo).map(([key, value]) => (
           <View key={key}>
-            <AppText
-              text={capitalize(key)}
-              type="subHeading"
-              style={styles.infoHeading}
-            />
-            <AppText
-              text={String(value) ?? ""}
-              type="detail"
-              numberOfLines={1}
-            />
+            <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
+            <AppText text={String(value) ?? ""} type="detail" numberOfLines={1} />
           </View>
         ))}
       </View>
@@ -90,7 +57,7 @@ const Profile = () => {
 
 export default Profile;
 
-const createStyles = (theme: Theme) =>
+const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
     container: {
       alignItems: "center",
@@ -117,6 +84,7 @@ const createStyles = (theme: Theme) =>
     passwordCardsContainer: {
       marginVertical: Spacing.md,
       gap: Spacing.md,
+      paddingBottom: Spacing.xxs,
     },
     personalInfoContainer: {
       padding: Spacing.md,
@@ -126,6 +94,7 @@ const createStyles = (theme: Theme) =>
       borderRadius: Spacing.xs,
       marginVertical: Spacing.xs,
       gap: Spacing.md,
+      elevation: theme.elevation,
     },
     infoHeading: {
       color: theme.subHeading,

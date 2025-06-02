@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { AppText } from "./AppText";
 import { wp } from "@/utils";
-import { colorPalette, Spacing, iconSize } from "@/styles";
+import { Spacing, iconSize } from "@/styles";
 import { Theme } from "@/interfaces";
 import { useTheme } from "@/hooks";
 
@@ -14,8 +14,8 @@ interface SettingItemProps {
 }
 
 export const SettingItem = ({ icon, title, rightComponent, onPress }: SettingItemProps) => {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const { theme, mode } = useTheme();
+  const styles = createStyles(theme, mode);
   return (
     <TouchableOpacity style={styles.settingItem} onPress={onPress} disabled={!onPress}>
       <View style={styles.settingLeft}>
@@ -27,7 +27,7 @@ export const SettingItem = ({ icon, title, rightComponent, onPress }: SettingIte
   );
 };
 
-const createStyles = (theme: Theme) =>
+const createStyles = (theme: Theme, mode?: string) =>
   StyleSheet.create({
     settingItem: {
       flexDirection: "row",
@@ -39,6 +39,7 @@ const createStyles = (theme: Theme) =>
       color: theme.text,
       borderColor: theme.cardsBorder,
       backgroundColor: theme.itemBg,
+      elevation: theme.elevation,
     },
     settingLeft: {
       flexDirection: "row",

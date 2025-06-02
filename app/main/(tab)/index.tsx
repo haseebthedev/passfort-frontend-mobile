@@ -17,7 +17,7 @@ interface HeaderComponentI {
 const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
   return (
     <>
-      <View style={styles.passwordCards}>
+      <>
         <View style={styles.passwordsHeader}>
           <View>
             <AppText text="Manage" type="label" style={styles.label} />
@@ -35,7 +35,7 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
           contentContainerStyle={styles.passwordCardsContainer}
           ListEmptyComponent={<AppText text="No passwords found!" type="default" />}
         />
-      </View>
+      </>
       <AppText text="Recently Added" type="primaryHeading" style={styles.heading} />
     </>
   );
@@ -106,10 +106,10 @@ const styles = StyleSheet.create({
     width: wp(17),
     height: wp(17),
   },
-  passwordCards: {},
   passwordCardsContainer: {
     marginBottom: Spacing.lg,
     gap: Spacing.md,
+    paddingBottom: Spacing.xxs,
   },
   heading: {
     marginBottom: Spacing.md,

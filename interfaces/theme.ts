@@ -6,6 +6,8 @@ export interface ButtonColors {
 }
 
 export interface Theme {
+  elevation: number;
+  loadingIndicator: string;
   GradientColors: string[];
   background: string;
   text: string;
@@ -41,5 +43,12 @@ export interface Theme {
     secondaryLink: ButtonColors;
     noUnderline: ButtonColors;
     transparent?: ButtonColors; // optional in dark theme
+  };
+
+  appSwitch: {
+    activeThumbColor: string;
+    inactiveThumbColor: string;
+    activeTrackColor: string;
+    inactiveTrackColor: string;
   };
 }

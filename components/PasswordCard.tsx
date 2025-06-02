@@ -1,10 +1,10 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { hp, wp } from "@/utils";
+import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { PasswordGroup, Theme } from "@/interfaces";
-import { colorPalette, LayoutStyles, Spacing, theme } from "@/styles";
+import { colorPalette, LayoutStyles, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
 interface PasswordCardI {
@@ -15,7 +15,7 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
   const { theme, mode } = useTheme();
   const styles = createStyles(theme, mode);
   return (
-    <RippleWrapper onPress={() => {}}>
+    <RippleWrapper onPress={() => {}} containerStyle={styles.container}>
       <View style={styles.card}>
         <View style={styles.iconContainer}>
           {item?.type.icon && <Image source={{ uri: item?.type.icon }} style={LayoutStyles(theme).cardIcon} />}
@@ -29,6 +29,18 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
 
 const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
+    container: {
+      // Android elevation
+      elevation: theme.elevation,
+      // iOS shadow
+      // shadowColor: "#000",
+      // shadowOffset: {
+      //   width: 0,
+      //   height: 2,
+      // },
+      // shadowOpacity: 0.1,
+      // shadowRadius: 3,
+    },
     card: {
       paddingTop: Spacing.md,
       paddingBottom: Spacing.md,
@@ -39,7 +51,6 @@ const createStyles = (theme: Theme, mode: string) =>
       borderRadius: Spacing.md,
       width: wp(90) / 3.25,
       paddingHorizontal: Spacing.xs,
-      // elevation: mode === "light" ? 1 : 0,
     },
     iconContainer: {
       width: wp(11),
@@ -49,7 +60,7 @@ const createStyles = (theme: Theme, mode: string) =>
       alignItems: "center",
       justifyContent: "center",
       marginBottom: Spacing.xs,
-      elevation: 1,
+      elevation: theme.elevation,
     },
     subTitle: {
       color: colorPalette.primaryBg.secondayGrey,

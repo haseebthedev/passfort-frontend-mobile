@@ -51,7 +51,7 @@ export default TabLayout;
 const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
     tabBarStyle: {
-      backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryDarkGreen : colorPalette.primaryBg.lighterGreen,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryDarkGreen : colorPalette.primaryBg.primaryWhite,
       height: hp(8),
       borderTopWidth: 0,
     },

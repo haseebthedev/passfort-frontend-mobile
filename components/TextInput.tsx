@@ -50,7 +50,7 @@ export const TextInput: React.FC<TextInputI> = ({
       {label && <AppText text={label} type="formLabel" />}
       <View style={styles.inputWrapper}>
         <InputText
-          style={[FormsStyle(theme).formControl, inputStyle]}
+          style={[FormsStyle(theme, mode).formControl, inputStyle]}
           placeholderTextColor={theme.label}
           secureTextEntry={secureInput && !isPasswordVisible}
           {...props}

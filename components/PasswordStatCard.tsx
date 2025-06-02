@@ -12,11 +12,7 @@ interface PasswordStatCardProps {
   onPress: () => void;
 }
 
-export const PasswordStatCard = ({
-  item,
-  isSelected,
-  onPress,
-}: PasswordStatCardProps) => {
+export const PasswordStatCard = ({ item, isSelected, onPress }: PasswordStatCardProps) => {
   const { theme, mode } = useTheme();
   const styles = createStyles(theme, mode);
   return (
@@ -35,13 +31,12 @@ const createStyles = (theme: Theme, mode: string) =>
   StyleSheet.create({
     container: {
       alignItems: "center",
+      borderRadius: hp(2.5),
+      elevation: theme.elevation,
     },
     card: {
       borderWidth: wp(0.2),
-      backgroundColor:
-        mode === "dark"
-          ? colorPalette.primaryBg.primaryText
-          : colorPalette.primaryBg.lightGreen,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryText : colorPalette.primaryBg.primaryWhite,
       borderColor: theme.cardsBorder,
       padding: Spacing.sm,
       borderRadius: hp(2.5),

@@ -6,39 +6,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { PasswordStats_Data } from "@/constants";
 import { useGeneratePassword, useTheme } from "@/hooks";
 import { AppFont, handleCharacterChange, hp, wp } from "@/utils";
-import {
-  colorPalette,
-  getPasswordTypeContainerStyle,
-  getPasswordTypeTextStyle,
-  iconSize,
-  LayoutStyles,
-  Spacing,
-} from "@/styles";
-import {
-  AppHeader,
-  AppText,
-  ArcSlider,
-  GradientWrapper,
-  PasswordStatCard,
-  RippleWrapper,
-  SmallAppButton,
-} from "@/components";
+import { colorPalette, getPasswordTypeContainerStyle, getPasswordTypeTextStyle, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { AppHeader, AppText, ArcSlider, GradientWrapper, PasswordStatCard, RippleWrapper, SmallAppButton } from "@/components";
 import { Theme } from "@/interfaces";
 
 const GeneratedPassword = () => {
   const { theme, mode } = useTheme();
   const styles = createStyles(theme, mode);
 
-  const {
-    count,
-    selectedCard,
-    passwordStats,
-    randomPassword,
-    passwordType,
-    setPasswordStats,
-    handleCardPress,
-    generatePassword,
-  } = useGeneratePassword();
+  const { count, selectedCard, passwordStats, randomPassword, passwordType, setPasswordStats, handleCardPress, generatePassword } =
+    useGeneratePassword();
 
   const copyToClipboard = () => {
     if (randomPassword) {
@@ -49,49 +26,26 @@ const GeneratedPassword = () => {
 
   return (
     <GradientWrapper>
-      <AppHeader
-        title="Generate"
-        leftIconName="chevron-back"
-        onLeftIconPress={() => router.back()}
-      />
+      <AppHeader title="Generate" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
 
       <View style={styles.headingContainer}>
         <AppText text="New Password" type="label" style={styles.heading} />
       </View>
 
-      <View
-        style={[
-          styles.passwordTypeContainer,
-          getPasswordTypeContainerStyle(passwordType),
-        ]}
-      >
-        <AppText
-          text={passwordType}
-          style={getPasswordTypeTextStyle(passwordType)}
-          type="regularSubHeading"
-        />
+      <View style={[styles.passwordTypeContainer, getPasswordTypeContainerStyle(passwordType)]}>
+        <AppText text={passwordType} style={getPasswordTypeTextStyle(passwordType)} type="regularSubHeading" />
       </View>
 
       <ArcSlider count={count} />
 
       <View style={styles.passwordDetails}>
         <AppText
-          text={
-            selectedCard
-              ? passwordStats.find((stat) => stat.id === selectedCard.id)
-                  ?.label || "Select"
-              : "Select"
-          }
+          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.label || "Select" : "Select"}
           style={styles.passwordDetailLabel}
           type="label"
         />
         <AppText
-          text={
-            selectedCard
-              ? passwordStats.find((stat) => stat.id === selectedCard.id)
-                  ?.number || "00"
-              : "00"
-          }
+          text={selectedCard ? passwordStats.find((stat) => stat.id === selectedCard.id)?.number || "00" : "00"}
           type="passwordLength"
         />
 
@@ -100,37 +54,17 @@ const GeneratedPassword = () => {
             containerStyle={styles.arrowButtonContainer}
             style={styles.actionButton}
             disabled={selectedCard ? false : true}
-            onPress={() =>
-              handleCharacterChange(
-                "decrement",
-                selectedCard?.label || "Characters",
-                setPasswordStats
-              )
-            }
+            onPress={() => handleCharacterChange("decrement", selectedCard?.label || "Characters", setPasswordStats)}
           >
-            <Ionicons
-              name="chevron-back"
-              style={LayoutStyles(theme).headerIcon}
-              size={iconSize}
-            />
+            <Ionicons name="chevron-back" style={LayoutStyles(theme).headerIcon} size={iconSize} />
           </RippleWrapper>
           <RippleWrapper
             containerStyle={styles.arrowButtonContainer}
             style={styles.actionButton}
             disabled={selectedCard ? false : true}
-            onPress={() =>
-              handleCharacterChange(
-                "increment",
-                selectedCard?.label || "Characters",
-                setPasswordStats
-              )
-            }
+            onPress={() => handleCharacterChange("increment", selectedCard?.label || "Characters", setPasswordStats)}
           >
-            <Ionicons
-              name="chevron-forward"
-              style={LayoutStyles(theme).headerIcon}
-              size={iconSize}
-            />
+            <Ionicons name="chevron-forward" style={LayoutStyles(theme).headerIcon} size={iconSize} />
           </RippleWrapper>
         </View>
       </View>
@@ -147,11 +81,7 @@ const GeneratedPassword = () => {
           ))}
         </View>
 
-        <AppText
-          text={randomPassword}
-          type="passwordText"
-          style={styles.passwordText}
-        />
+        <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
         <View style={styles.buttonContainer}>
           <SmallAppButton text="Copy" onPress={copyToClipboard} />
           <SmallAppButton text="Generate" onPress={generatePassword} />
@@ -192,10 +122,7 @@ const createStyles = (theme: Theme, mode: string) =>
       borderRadius: wp(10),
       paddingVertical: Spacing.xs,
       paddingHorizontal: Spacing.md,
-      // backgroundColor:
-      //   mode === "dark"
-      //     ? colorPalette.primaryBg.primaryText
-      //     : colorPalette.primaryBg.lightGreen,
+      // backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryText : colorPalette.primaryBg.lightGreen,
       alignSelf: "center",
     },
     sliderContainer: {
@@ -232,10 +159,7 @@ const createStyles = (theme: Theme, mode: string) =>
       justifyContent: "center",
       borderWidth: wp(0.2),
       borderColor: theme.cardsBorder,
-      backgroundColor:
-        mode === "dark"
-          ? colorPalette.primaryBg.primaryText
-          : colorPalette.primaryBg.lightGreen,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryText : colorPalette.primaryBg.primaryWhite,
     },
     passwordInfo: {
       flex: 1,

@@ -58,7 +58,7 @@ const createStyles = (theme: Theme, mode: string) =>
       paddingVertical: Spacing.xxs,
       paddingHorizontal: Spacing.sm,
       height: hp(8.42),
-      elevation: mode === "light" ? 1 : 0,
+      elevation: theme.elevation,
     },
     passwordInfoContainer: {
       flexDirection: "row",
@@ -73,7 +73,7 @@ const createStyles = (theme: Theme, mode: string) =>
       borderRadius: wp(2),
       alignItems: "center",
       justifyContent: "center",
-      elevation: 1,
+      elevation: theme.elevation,
     },
     subHeading: {
       textTransform: "capitalize",

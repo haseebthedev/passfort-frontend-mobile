@@ -142,14 +142,17 @@ const createStyles = (theme: Theme, mode: string) =>
       borderRadius: hp(2),
       padding: Spacing.xs,
       marginTop: Spacing.xs,
+      elevation: theme.elevation,
     },
     innerContainer: {
       borderWidth: wp(0.2),
       borderColor: theme.cardsBorder,
-      backgroundColor: mode === "dark" ? colorPalette.primaryBg.secondaryLightGreenBg : colorPalette.primaryBg.primaryLighterGreenBg,
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.secondaryLightGreenBg : colorPalette.primaryBg.primaryWhite,
       borderRadius: hp(2.1),
       paddingHorizontal: Spacing.md,
       paddingBottom: Spacing.md,
+
+      elevation: theme.elevation,
     },
     infoContainer: {
       marginTop: Spacing.lg,

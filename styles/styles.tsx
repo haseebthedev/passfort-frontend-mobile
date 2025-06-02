@@ -46,9 +46,9 @@ export const colorPalette = {
 
 export const theme: { light: Theme; dark: Theme } = {
   light: {
+    elevation: 1,
+    loadingIndicator: colorPalette.primaryBg.borderColor2,
     GradientColors: [
-      // colorPalette.primaryBg.lighterGreen,
-      // colorPalette.primaryBg.lighterGreen,
       colorPalette.primaryBg.primaryWhite,
       colorPalette.primaryBg.primaryWhite,
       colorPalette.primaryBg.primaryWhite,
@@ -57,12 +57,13 @@ export const theme: { light: Theme; dark: Theme } = {
     background: colorPalette.primaryBg.primaryWhite,
     text: colorPalette.primaryBg.primaryText,
     subHeading: colorPalette.primaryBg.secondayGrey,
-    primaryBorder: colorPalette.primaryBg.primaryLightGreen,
+    primaryBorder: colorPalette.primaryBg.secondayGrey02,
     cardsBorder: colorPalette.primaryBg.secondayGrey02,
     cardBg: colorPalette.primaryBg.lighterGreen02,
     stickyHeaderBg: colorPalette.primaryBg.primaryWhite,
     label: colorPalette.primaryBg.borderColor2,
     itemBg: colorPalette.primaryBg.lighterGreen02,
+
     card: colorPalette.primaryBg.primaryWhite,
     error: colorPalette.primaryBg.primaryRed,
     secondary: colorPalette.primaryBg.secondaryLightGreen,
@@ -104,8 +105,16 @@ export const theme: { light: Theme; dark: Theme } = {
         ripple: colorPalette.primaryBg.transparent,
       },
     },
+    appSwitch: {
+      activeThumbColor: colorPalette.primaryBg.primaryLightGreen,
+      inactiveThumbColor: colorPalette.primaryBg.secondaryLightGreen,
+      activeTrackColor: colorPalette.primaryBg.borderColor2,
+      inactiveTrackColor: colorPalette.primaryBg.secondayGrey02,
+    },
   },
   dark: {
+    elevation: 0,
+    loadingIndicator: colorPalette.primaryBg.primaryWhite,
     GradientColors: [colorPalette.primaryBg.primaryDarkGreen, colorPalette.primaryBg.primaryDarkGreen, "#132617FF", "#1D3D24FF"],
     background: colorPalette.primaryBg.primaryDarkGreen,
     text: colorPalette.primaryBg.primaryWhite,
@@ -159,6 +168,13 @@ export const theme: { light: Theme; dark: Theme } = {
       transparent: {
         ripple: colorPalette.primaryBg.transparent,
       },
+    },
+
+    appSwitch: {
+      activeThumbColor: colorPalette.primaryBg.primaryLightGreen,
+      inactiveThumbColor: colorPalette.primaryBg.secondaryLightGreen,
+      activeTrackColor: colorPalette.primaryBg.borderColor2,
+      inactiveTrackColor: colorPalette.primaryBg.primaryWhite,
     },
   },
 };
@@ -280,7 +296,7 @@ export const Typography = (theme: Theme) =>
 
 export const iconSize = wp(6);
 
-export const FormsStyle = (theme: Theme) =>
+export const FormsStyle = (theme: Theme, mode?: string) =>
   StyleSheet.create({
     formControl: {
       flex: 1,
@@ -292,6 +308,7 @@ export const FormsStyle = (theme: Theme) =>
       borderColor: theme.cardsBorder,
       backgroundColor: theme.itemBg,
       fontFamily: AppFont.regular,
+      elevation: theme.elevation,
     },
     formLabel: {
       marginVertical: Spacing.xs,

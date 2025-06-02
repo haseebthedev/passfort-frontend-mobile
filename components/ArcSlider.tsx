@@ -37,11 +37,9 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
     const normalizedCount = count / 8;
     let newTheta;
     if (count >= 7) {
-      newTheta =
-        (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.15;
+      newTheta = (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.15;
     } else {
-      newTheta =
-        (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.07;
+      newTheta = (3 * Math.PI) / 2 - Math.PI * normalizedCount * (-r / 8) + 0.07;
     }
 
     const percent = normalizedCount * 100;
@@ -62,11 +60,7 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
           style="stroke"
           strokeWidth={strokeWidth}
           strokeCap="round"
-          color={
-            mode === "dark"
-              ? colorPalette.primaryBg.primaryText
-              : colorPalette.primaryBg.primaryWhite
-          }
+          color={mode === "dark" ? colorPalette.primaryBg.primaryText : colorPalette.primaryBg.secondayGrey02}
         />
         <Path
           path={skiaForegroundPath}
