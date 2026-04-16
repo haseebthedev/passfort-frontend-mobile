@@ -40,7 +40,6 @@ const createStyles = (theme: Theme, mode: string) =>
       borderColor: theme.cardsBorder,
       padding: Spacing.sm,
       borderRadius: hp(2.5),
-      height: hp(10),
       width: wp(100) / 3 - Spacing.md,
       alignItems: "center",
       gap: wp(1),

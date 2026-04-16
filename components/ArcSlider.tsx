@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { polar2Canvas } from "react-native-redash";
-import { Canvas, Circle, Path, Skia } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia } from "@shopify/react-native-skia";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { hp, wp } from "@/utils";
-import { colorPalette } from "@/styles";
+import { colorPalette, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
 const { width } = Dimensions.get("window");
 
 interface ArcSliderI {
   count: number;
+  children?: React.ReactNode;
 }
 
-export const ArcSlider = ({ count }: ArcSliderI) => {
+export const ArcSlider = ({ count, children }: ArcSliderI) => {
   const { mode } = useTheme();
 
   const strokeWidth = 9;
@@ -72,22 +72,33 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
           end={percentComplete}
         />
       </Canvas>
+
+      {/* 👇 Overlay Content */}
+      <View style={styles.centerContent}>{children}</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // marginTop: -hp(6),
-    marginRight: hp(20),
     width: wp(92),
+    height: wp(75),
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: Spacing.lg,
   },
   canvas: {
     height: hp(45),
     width: hp(45),
-    transform: [{ rotate: "46deg" }],
+    transform: [{ rotate: "45.5deg" }],
+  },
+  centerContent: {
+    position: "absolute",
+    top: -hp(18),
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -43,46 +43,44 @@ const GeneratedPassword = () => {
 
       {/* Password Type */}
       <View style={[styles.passwordTypeContainer, getPasswordTypeContainerStyle(passwordType)]}>
-        <AppText text={passwordType} style={getPasswordTypeTextStyle(passwordType)} type="regularSubHeading" />
+        <AppText text={passwordType} style={getPasswordTypeTextStyle(passwordType)} type="default" />
       </View>
 
       {/* Slider */}
-      <ArcSlider count={count} />
+      <ArcSlider count={count}>
+        <View style={styles.passwordDetails}>
+          <AppText text={selectedStat?.label || "Select"} style={styles.passwordDetailLabel} type="default" />
+          <AppText text={selectedStat?.number || "00"} type="passwordLength" />
 
-      {/* Center Controls */}
-      <View style={styles.passwordDetails}>
-        <AppText text={selectedStat?.label || "Select"} style={styles.passwordDetailLabel} type="default" />
-        <AppText text={selectedStat?.number || "00"} type="passwordLength" />
-
-        <View style={styles.arrowButtons}>
-          {["decrement", "increment"].map((type) => (
-            <RippleWrapper
-              key={type}
-              containerStyle={styles.arrowButtonContainer}
-              style={styles.actionButton}
-              disabled={!selectedStat}
-              onPress={() => handleChange(type as "increment" | "decrement")}
-            >
-              <Ionicons
-                name={type === "increment" ? "chevron-forward" : "chevron-back"}
-                style={LayoutStyles(theme).headerIcon}
-                size={iconSize}
-              />
-            </RippleWrapper>
-          ))}
+          <View style={styles.arrowButtons}>
+            {["decrement", "increment"].map((type) => (
+              <RippleWrapper
+                key={type}
+                containerStyle={styles.arrowButtonContainer}
+                disabled={!selectedStat}
+                onPress={() => handleChange(type as "increment" | "decrement")}
+              >
+                <Ionicons
+                  name={type === "increment" ? "chevron-forward" : "chevron-back"}
+                  style={LayoutStyles(theme).headerIcon}
+                  size={iconSize}
+                />
+              </RippleWrapper>
+            ))}
+          </View>
         </View>
-      </View>
+      </ArcSlider>
 
-      {/* Bottom Section */}
+      {/* Stats Section */}
       <View style={styles.passwordInfo}>
         <View style={styles.passwordStatCards}>
           {passwordStats.map((item) => (
             <PasswordStatCard key={item.id} item={item} isSelected={item.id === selectedCard?.id} onPress={() => handleCardPress(item)} />
           ))}
         </View>
-
-        <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
       </View>
+
+      <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
 
       {/* Action Buttons */}
 
@@ -125,7 +123,7 @@ const createStyles = (theme: Theme, mode: string) =>
       color: colorPalette.primaryBg.secondayGrey,
     },
     passwordTypeContainer: {
-      marginTop: Spacing.sm,
+      margin: Spacing.sm,
       borderWidth: wp(0.2),
       borderRadius: wp(10),
       paddingVertical: Spacing.xs,
@@ -139,7 +137,7 @@ const createStyles = (theme: Theme, mode: string) =>
       position: "absolute",
       left: 0,
       right: 0,
-      top: hp(27),
+      top: hp(26),
     },
     passwordDetailLabel: {
       fontFamily: AppFont.semiBold,
@@ -149,8 +147,8 @@ const createStyles = (theme: Theme, mode: string) =>
       gap: Spacing.smd,
     },
     arrowButtonContainer: {
-      width: wp(12),
-      height: wp(12),
+      width: wp(10),
+      height: wp(10),
       borderRadius: wp(6),
       alignItems: "center",
       justifyContent: "center",
@@ -159,22 +157,17 @@ const createStyles = (theme: Theme, mode: string) =>
       backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryText : colorPalette.primaryBg.primaryWhite,
     },
     passwordInfo: {
+      flex: 1,
       alignItems: "center",
+      height: hp(10),
     },
     passwordStatCards: {
       flexDirection: "row",
       gap: wp(2.5),
-      marginVertical: Spacing.md,
-      marginBottom: hp(8),
     },
     passwordText: {
       marginBottom: Spacing.smd,
-    },
-    actionButton: {
-      width: wp(12),
-      height: wp(12),
-      alignItems: "center",
-      justifyContent: "center",
+      textAlign: "center",
     },
     buttonContainer: {
       flexDirection: "row",
