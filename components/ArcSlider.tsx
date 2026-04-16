@@ -79,7 +79,7 @@ export const ArcSlider = ({ count }: ArcSliderI) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: -hp(6),
+    // marginTop: -hp(6),
     marginRight: hp(20),
     width: wp(92),
     alignItems: "center",

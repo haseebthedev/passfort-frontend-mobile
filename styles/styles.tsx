@@ -54,6 +54,7 @@ export const theme: { light: Theme; dark: Theme } = {
       colorPalette.primaryBg.primaryWhite,
       colorPalette.primaryBg.primaryWhite,
     ],
+    placeholderText: colorPalette.primaryBg.secondayGrey,
     background: colorPalette.primaryBg.primaryWhite,
     text: colorPalette.primaryBg.primaryText,
     subHeading: colorPalette.primaryBg.secondayGrey,
@@ -116,6 +117,7 @@ export const theme: { light: Theme; dark: Theme } = {
     elevation: 0,
     loadingIndicator: colorPalette.primaryBg.primaryWhite,
     GradientColors: [colorPalette.primaryBg.primaryDarkGreen, colorPalette.primaryBg.primaryDarkGreen, "#132617FF", "#1D3D24FF"],
+    placeholderText: colorPalette.primaryBg.secondayGrey,
     background: colorPalette.primaryBg.primaryDarkGreen,
     text: colorPalette.primaryBg.primaryWhite,
     subHeading: colorPalette.primaryBg.primaryGrey,
@@ -192,6 +194,7 @@ export const Spacing = {
 
 export const Fonts: FontsType = {
   size: {
+    xxs: hp(1.5),
     xs: hp(1.65),
     sm: hp(1.93),
     md: hp(2.2),
@@ -202,6 +205,7 @@ export const Fonts: FontsType = {
     display: hp(3.4),
   },
   weight: {
+    xxs: "200",
     xs: "200",
     sm: "300",
     md: "400",
@@ -215,6 +219,11 @@ export const Fonts: FontsType = {
 
 export const Typography = (theme: Theme) =>
   StyleSheet.create({
+    small: {
+      fontSize: Fonts.size.xs,
+      color: theme.text,
+      fontFamily: AppFont.regular,
+    },
     default: {
       fontSize: Fonts.size.sm,
       color: theme.text,
@@ -232,6 +241,12 @@ export const Typography = (theme: Theme) =>
     },
     label: {
       fontSize: Fonts.size.md,
+      fontWeight: Fonts.weight.lg,
+      letterSpacing: 0.1,
+      color: theme.text,
+    },
+    formLabel: {
+      fontSize: Fonts.size.sm,
       fontWeight: Fonts.weight.lg,
       letterSpacing: 0.1,
       color: theme.text,
@@ -258,7 +273,7 @@ export const Typography = (theme: Theme) =>
       fontFamily: AppFont.semiBold,
     },
     description: {
-      fontSize: Fonts.size.xs,
+      fontSize: Fonts.size.xxs,
       fontFamily: AppFont.regular,
       color: theme.text,
     },
@@ -292,6 +307,11 @@ export const Typography = (theme: Theme) =>
       fontFamily: AppFont.regular,
       color: theme.error,
     },
+    placeholderText: {
+      fontSize: Fonts.size.sm,
+      fontFamily: AppFont.regular,
+      color: theme.placeholderText,
+    },
   });
 
 export const iconSize = wp(6);
@@ -300,7 +320,8 @@ export const FormsStyle = (theme: Theme, mode?: string) =>
   StyleSheet.create({
     formControl: {
       flex: 1,
-      padding: Spacing.sm,
+      paddingHorizontal: Spacing.md,
+      paddingVertical: Spacing.sm,
       gap: Spacing.md,
       borderRadius: wp(4),
       borderWidth: wp(0.1),
@@ -309,9 +330,10 @@ export const FormsStyle = (theme: Theme, mode?: string) =>
       backgroundColor: theme.itemBg,
       fontFamily: AppFont.regular,
       elevation: theme.elevation,
+      fontSize: Fonts.size.xs + hp(0.2),
     },
     formLabel: {
-      marginVertical: Spacing.xs,
+      marginVertical: Spacing.xxs + hp(0.2),
     },
   });
 

@@ -5,7 +5,7 @@ import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import { usePasswordDetail, useTheme } from "@/hooks";
 import { hp, wp } from "@/utils";
 import { colorPalette, Spacing } from "@/styles";
-import { AppHeader, AppText, GradientWrapper, LoadingIndicator, RippleWrapper, SmallAppButton } from "@/components";
+import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, RippleWrapper } from "@/components";
 import { IconButtonPropsI, InfoItemPropsI, PasswordActionsPropsI, PasswordInfoPropsI, Theme } from "@/interfaces";
 
 const iconSize = wp(5.5);
@@ -47,7 +47,7 @@ const PasswordInfo = ({ passwordDetail, theme, styles }: PasswordInfoPropsI) => 
 const PasswordActions = ({ passwordDetail, onCopy, onDelete, onEdit, onShare, theme, mode, styles }: PasswordActionsPropsI) => (
   <View style={styles.passwordActionContainer}>
     {passwordDetail?.passwordText && <AppText text={passwordDetail.passwordText} type="passwordText" numberOfLines={1} />}
-    <SmallAppButton text="Copy" onPress={onCopy} />
+    <AppButton text="Copy" preset="filled" onPress={onCopy} style={styles.actionButton} />
     <View style={styles.buttonsContainer}>
       <IconButton
         iconName="trash-2"
@@ -167,13 +167,16 @@ const createStyles = (theme: Theme, mode: string) =>
       padding: Spacing.lg,
       alignItems: "center",
     },
+    actionButton: {
+      width: wp(40),
+    },
     buttonsContainer: {
       flexDirection: "row",
-      gap: Spacing.lg,
+      gap: Spacing.sm,
     },
     buttonContainer: {
-      width: wp(14),
-      height: wp(14),
+      width: wp(12),
+      height: wp(12),
       borderRadius: wp(7),
       alignItems: "center",
       justifyContent: "center",

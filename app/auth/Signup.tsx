@@ -53,17 +53,16 @@ const Signup = () => {
               onPress={handleSubmit}
               RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
             />
-          </View>
-          <View style={styles.linkRow}>
-            <AppText text="Already have an account?" type="label" />
-            <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
-          </View>
-          <View>
-            <View style={styles.termsAndConditions}>
-              <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
-              <AppText text=" and " type="default" />
-              <AppText text="Privacy policy" style={styles.policy} type="default" />
+            <View style={styles.linkRow}>
+              <AppText text="Already have an account?" type="default" />
+              <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
             </View>
+          </View>
+
+          <View style={styles.termsAndConditions}>
+            <AppText text="Terms & Conditions" style={styles.link} type="small" />
+            <AppText text=" and " type="small" />
+            <AppText text="Privacy policy" style={styles.link} type="small" />
           </View>
         </View>
       </KeyboardResponsiveHOC>
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: Spacing.md,
+    marginTop: Spacing.xs,
   },
   termsAndConditions: {
     flexDirection: "row",
@@ -100,10 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     color: colorPalette.primaryBg.primaryWhite,
   },
-  conditions: {
-    textDecorationLine: "underline",
-  },
-  policy: {
+  link: {
     textDecorationLine: "underline",
   },
 });

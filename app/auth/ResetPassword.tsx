@@ -4,14 +4,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { hp, wp } from "@/utils";
 import { useResetPassword, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import {
-  AppButton,
-  AppHeader,
-  AppText,
-  GradientWrapper,
-  LoadingIndicator,
-  TextInput,
-} from "@/components";
+import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
 
 const ResetPassword = () => {
   const { theme } = useTheme();
@@ -21,35 +14,20 @@ const ResetPassword = () => {
     authCode: string;
   }>();
 
-  const {
-    isLoading,
-    handleChange,
-    handleSubmit,
-    setFieldTouched,
-    errors,
-    touched,
-  } = useResetPassword(email, authCode);
+  const { isLoading, handleChange, handleSubmit, setFieldTouched, errors, touched } = useResetPassword(email, authCode);
 
   return (
     <GradientWrapper>
-      <AppHeader
-        title="Reset Password"
-        leftIconName="chevron-back"
-        onLeftIconPress={() => router.back()}
-      />
+      <AppHeader title="Reset Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
 
       <View style={styles.form}>
         <View style={styles.centerContent}>
           <AppText text="Enter New Password" type="heading" />
-          <AppText
-            text="Your new password must be different from previous password."
-            type="subHeading"
-            style={styles.subHeading}
-          />
+          <AppText text="Your new password must be different from previous password." type="subHeading" style={styles.subHeading} />
         </View>
 
         <TextInput
-          label="Password"
+          label="New Password"
           placeholder="Enter Password"
           secureInput={true}
           onBlur={() => setFieldTouched("newPassword")}
@@ -58,7 +36,7 @@ const ResetPassword = () => {
           visible={touched.newPassword}
         />
         <TextInput
-          label="Confirm Password"
+          label="Confirm New Password"
           placeholder="Enter Confirm Password"
           secureInput={true}
           onBlur={() => setFieldTouched("confirmPassword")}
@@ -67,14 +45,9 @@ const ResetPassword = () => {
           visible={touched.confirmPassword}
         />
         <AppButton
-          preset="filled"
           text={isLoading ? "" : "Continue"}
           onPress={handleSubmit}
-          RightAccessory={() =>
-            isLoading && (
-              <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
-            )
-          }
+          RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
         />
       </View>
     </GradientWrapper>

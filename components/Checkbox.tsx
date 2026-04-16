@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  TouchableWithoutFeedback,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-  View,
-} from "react-native";
+import { TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { colorPalette, iconSize, Spacing } from "@/styles/styles";
@@ -20,13 +13,7 @@ interface CheckboxI {
   labelStyle?: StyleProp<TextStyle>;
 }
 
-export const Checkbox = ({
-  label,
-  checked = false,
-  onChange,
-  containerStyle,
-  labelStyle,
-}: CheckboxI) => {
+export const Checkbox = ({ label, checked = false, onChange, containerStyle, labelStyle }: CheckboxI) => {
   const { theme } = useTheme();
   const [isChecked, setChecked] = useState<boolean>(checked);
 
@@ -46,7 +33,7 @@ export const Checkbox = ({
           style={styles.spacing}
         />
       </TouchableWithoutFeedback>
-      {label && <AppText text={label} style={labelStyle} type="label" />}
+      {label && <AppText text={label} style={labelStyle} type="default" />}
     </View>
   );
 };

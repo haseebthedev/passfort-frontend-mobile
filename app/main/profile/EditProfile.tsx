@@ -7,8 +7,8 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
 import { useEditProfile, useTheme } from "@/hooks";
-import { formatDate, hp, wp } from "@/utils";
-import { colorPalette, FormsStyle, Spacing } from "@/styles";
+import { AppFont, formatDate, hp, wp } from "@/utils";
+import { colorPalette, Fonts, FormsStyle, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -59,7 +59,7 @@ const EditProfile = () => {
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
-    []
+    [],
   );
 
   const renderDatePicker = () => (
@@ -132,7 +132,6 @@ const EditProfile = () => {
             <AppButton
               text={disableSaveButton ? "" : "Save"}
               onPress={handleSubmit}
-              preset="filled"
               disabled={isLoading || disableSaveButton}
               RightAccessory={() => (isLoading || disableSaveButton) && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
             />
@@ -221,7 +220,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   placeholder: {
-    color: colorPalette.primaryBg.primaryGrey,
+    color: colorPalette.primaryBg.secondayGrey,
+    fontFamily: AppFont.regular,
+    fontSize: Fonts.size.xs + hp(0.2),
   },
   selectedDate: {
     color: colorPalette.primaryBg.primaryWhite,

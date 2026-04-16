@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ComponentType, useMemo } from "react";
 import { PressableProps, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { AppText } from "./AppText";
 import { AppFont, hp } from "@/utils";
@@ -7,8 +7,9 @@ import { RippleWrapper } from "./RippleWrapper";
 import { useTheme } from "@/hooks";
 import { Theme } from "@/interfaces";
 
-type Presets = keyof typeof viewPresets;
+/* ================= Types ================= */
 
+type Presets = "default" | "filled" | "primaryLink" | "secondaryLink" | "noUnderline";
 interface ButtonAccessoryProps {
   style: StyleProp<ViewStyle>;
 }
@@ -17,146 +18,167 @@ interface ButtonProps extends PressableProps {
   text: string;
   preset?: Presets;
   style?: StyleProp<ViewStyle>;
-  pressedStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  pressedTextStyle?: StyleProp<TextStyle>;
   RightAccessory?: ComponentType<ButtonAccessoryProps>;
   LeftAccessory?: ComponentType<ButtonAccessoryProps>;
   onPress: () => void;
   disabled?: boolean;
 }
 
-export function AppButton(props: ButtonProps) {
-  const {
-    text,
-    style,
-    pressedStyle,
-    textStyle,
-    pressedTextStyle,
-    RightAccessory,
-    LeftAccessory,
-    onPress,
-    preset = "default",
-    disabled,
-    ...rest
-  } = props;
+/* ================= Component ================= */
 
+export function AppButton({
+  text,
+  style,
+  textStyle,
+  RightAccessory,
+  LeftAccessory,
+  onPress,
+  preset = "default",
+  disabled,
+  ...rest
+}: ButtonProps) {
   const { theme } = useTheme();
 
-  const getContainerStyle = () => containerPresets[preset];
+  const containerStyle = containerPresets[preset];
 
-  const getViewStyle = () => {
-    const presetStyle = viewPresets[preset](theme);
-    return [presetStyle, style, disabled && { opacity: 0.5 }];
-  };
+  const viewStyle = useMemo(() => {
+    return [viewPresets[preset](theme), style, disabled && disabledStyle];
+  }, [preset, theme, style, disabled]);
 
-  const getTextStyle = () => [textPresets[preset](theme), textStyle];
+  const computedTextStyle = useMemo(() => {
+    return [textPresets[preset](theme), textStyle];
+  }, [preset, theme, textStyle]);
+
+  const rippleColor = getRippleColor(preset);
 
   return (
     <RippleWrapper
       onPress={disabled ? undefined : onPress}
-      style={getViewStyle()}
-      rippleColor={
-        preset === "default" || preset === "filled" ? colorPalette.primaryBg.primaryLightGreen : colorPalette.primaryBg.transparent
-      }
-      containerStyle={getContainerStyle()}
+      style={viewStyle}
+      rippleColor={rippleColor}
+      containerStyle={containerStyle}
+      {...rest}
     >
       <>
         {LeftAccessory && <LeftAccessory style={leftAccessoryStyle} />}
-        <AppText text={text} style={getTextStyle()} type="buttonTitle" />
+        <AppText text={text} style={computedTextStyle} type="buttonTitle" />
         {RightAccessory && <RightAccessory style={rightAccessoryStyle} />}
       </>
     </RippleWrapper>
   );
 }
 
+/* ================= Helpers ================= */
+
+const getRippleColor = (preset: Presets) => {
+  const isFilled = preset === "default" || preset === "filled";
+
+  return isFilled ? colorPalette.primaryBg.primaryLightGreen : colorPalette.primaryBg.transparent;
+};
+
+/* ================= Base Styles ================= */
+
 const baseViewStyle: ViewStyle = {
   flexDirection: "row",
-  alignSelf: "stretch",
   borderRadius: hp(2.5),
   justifyContent: "center",
   alignItems: "center",
-  paddingVertical: Spacing.md,
+  padding: Spacing.sm + hp(0.2),
   overflow: "hidden",
 };
 
 const baseTextStyle: TextStyle = {
-  color: colorPalette.primaryBg.primaryDarkGreen,
   textAlign: "center",
   fontFamily: AppFont.bold,
 };
 
-const rightAccessoryStyle: ViewStyle = { marginStart: Spacing.xs, zIndex: 1 };
-const leftAccessoryStyle: ViewStyle = { marginEnd: Spacing.xs, zIndex: 1 };
-
-const containerPresets = {
-  default: {
-    marginVertical: Spacing.md,
-    borderRadius: Spacing.lg,
-  },
-  filled: {
-    marginVertical: Spacing.md,
-    borderRadius: Spacing.lg,
-  },
-  primaryLink: {
-    marginVertical: Spacing.md,
-    borderRadius: Spacing.lg,
-  },
-  secondaryLink: {
-    marginVertical: Spacing.md,
-    borderRadius: Spacing.lg,
-  },
-  noUnderline: {
-    marginVertical: Spacing.md,
-    borderRadius: Spacing.lg,
-  },
+const disabledStyle: ViewStyle = {
+  opacity: 0.5,
 };
 
-const viewPresets = {
-  default: (theme: Theme) =>
-    [
-      baseViewStyle,
-      {
-        borderWidth: 1,
-        borderColor: theme.button.default.border,
-        backgroundColor: theme.button.default.background,
-      },
-    ] as StyleProp<ViewStyle>,
-  filled: (theme: Theme) => [baseViewStyle, { backgroundColor: theme.button.filled.background }] as StyleProp<ViewStyle>,
-  primaryLink: (theme: Theme) => [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
-  secondaryLink: (theme: Theme) => [{ marginHorizontal: Spacing.xs, marginVertical: Spacing.xs }] as StyleProp<ViewStyle>,
-  noUnderline: (theme: Theme) =>
-    [
-      {
-        marginHorizontal: Spacing.xs,
-        marginVertical: Spacing.xs,
-        alignSelf: "center",
-      },
-    ] as StyleProp<ViewStyle>,
+const rightAccessoryStyle: ViewStyle = {
+  marginStart: Spacing.xs,
+  zIndex: 1,
 };
+
+const leftAccessoryStyle: ViewStyle = {
+  marginEnd: Spacing.xs,
+  zIndex: 1,
+};
+
+/* ================= Container Presets ================= */
+
+const containerPresets: Record<Presets, StyleProp<ViewStyle>> = {
+  default: { marginVertical: Spacing.md },
+  filled: { marginVertical: Spacing.md },
+  primaryLink: { marginVertical: Spacing.xxs },
+  secondaryLink: { marginVertical: Spacing.md },
+  noUnderline: { marginVertical: Spacing.md },
+};
+
+/* ================= View Presets ================= */
+
+const viewPresets: Record<Presets, (theme: Theme) => StyleProp<ViewStyle>> = {
+  default: (theme) => ({
+    ...baseViewStyle,
+    borderWidth: 1,
+    borderColor: theme.button.default.border,
+    backgroundColor: theme.button.default.background,
+  }),
+
+  filled: (theme) => ({
+    ...baseViewStyle,
+    backgroundColor: theme.button.filled.background,
+  }),
+
+  primaryLink: () => ({
+    marginHorizontal: Spacing.xs,
+  }),
+
+  secondaryLink: () => ({
+    marginHorizontal: Spacing.xs,
+    marginVertical: Spacing.xs,
+  }),
+
+  noUnderline: () => ({
+    marginHorizontal: Spacing.xs,
+    marginVertical: Spacing.xs,
+    alignSelf: "center",
+  }),
+};
+
+/* ================= Text Presets ================= */
 
 const textPresets: Record<Presets, (theme: Theme) => StyleProp<TextStyle>> = {
-  default: (theme) => [baseTextStyle, { color: theme.button.default.text, fontFamily: AppFont.bold }],
-  filled: (theme) => [baseTextStyle, { color: theme.button.filled.text, fontFamily: AppFont.bold }],
-  primaryLink: (theme) => [
-    baseTextStyle,
-    {
-      fontFamily: AppFont.regular,
-      textDecorationLine: "underline",
-      color: theme.button.primaryLink.text,
-      fontSize: Fonts.size.sm,
-    },
-  ],
-  secondaryLink: (theme) => [
-    baseTextStyle,
-    {
-      fontFamily: AppFont.regular,
-      textDecorationLine: "underline",
-      color: theme.button.secondaryLink.text,
-      fontSize: Fonts.size.sm,
-    },
-  ],
+  default: (theme) => ({
+    ...baseTextStyle,
+    color: theme.button.default.text,
+  }),
+
+  filled: (theme) => ({
+    ...baseTextStyle,
+    color: theme.button.filled.text,
+  }),
+
+  primaryLink: (theme) => ({
+    ...baseTextStyle,
+    fontFamily: AppFont.regular,
+    textDecorationLine: "underline",
+    color: theme.button.primaryLink.text,
+    fontSize: Fonts.size.sm,
+  }),
+
+  secondaryLink: (theme) => ({
+    ...baseTextStyle,
+    fontFamily: AppFont.regular,
+    textDecorationLine: "underline",
+    color: theme.button.secondaryLink.text,
+    fontSize: Fonts.size.sm,
+  }),
+
   noUnderline: (theme) => ({
+    ...baseTextStyle,
     textDecorationLine: "none",
     color: theme.button.noUnderline.text,
   }),

@@ -31,8 +31,8 @@ const Signin = () => {
   return (
     <GradientWrapper>
       <KeyboardResponsiveHOC containerStyle={styles.container} scrollViewStyle={styles.scrollViewStyle}>
-        <AppLogo />
         <View>
+          <AppLogo />
           <AppText text="Sign In" type="title" style={styles.title} />
 
           <TextInput
@@ -65,16 +65,17 @@ const Signin = () => {
             onPress={handleSubmit}
             RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
           />
+
           <View style={styles.linkRow}>
-            <AppText text="Don't have an account?" type="label" />
+            <AppText text="Don't have an account?" type="default" />
             <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="primaryLink" />
           </View>
         </View>
 
         <View style={styles.termsAndConditions}>
-          <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
-          <AppText text=" and " type="default" />
-          <AppText text="Privacy policy" style={styles.policy} type="default" />
+          <AppText text="Terms & Conditions" style={styles.link} type="small" />
+          <AppText text=" and " type="small" />
+          <AppText text="Privacy policy" style={styles.link} type="small" />
         </View>
       </KeyboardResponsiveHOC>
     </GradientWrapper>
@@ -98,27 +99,26 @@ const createStyles = (theme: Theme) =>
       marginBottom: Spacing.lg,
     },
     labelStyle: {
-      color: theme.label,
+      color: theme.placeholderText,
     },
     actionGroup: {
       flexDirection: "row",
-      alignItems: "center",
       justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: Spacing.md,
     },
     linkRow: {
       flexDirection: "row",
-      alignItems: "center",
       justifyContent: "center",
+      alignItems: "center",
+      marginTop: Spacing.xs,
     },
     termsAndConditions: {
       flexDirection: "row",
       justifyContent: "center",
       marginBottom: Spacing.sm,
     },
-    conditions: {
-      textDecorationLine: "underline",
-    },
-    policy: {
+    link: {
       textDecorationLine: "underline",
     },
   });
