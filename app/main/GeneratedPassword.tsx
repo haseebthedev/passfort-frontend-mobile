@@ -51,8 +51,7 @@ const GeneratedPassword = () => {
 
       {/* Center Controls */}
       <View style={styles.passwordDetails}>
-        <AppText text={selectedStat?.label || "Select"} style={styles.passwordDetailLabel} type="label" />
-
+        <AppText text={selectedStat?.label || "Select"} style={styles.passwordDetailLabel} type="default" />
         <AppText text={selectedStat?.number || "00"} type="passwordLength" />
 
         <View style={styles.arrowButtons}>
@@ -85,11 +84,12 @@ const GeneratedPassword = () => {
         <AppText text={randomPassword} type="passwordText" style={styles.passwordText} />
       </View>
 
+      {/* Action Buttons */}
+
       <View style={styles.buttonContainer}>
         <View style={styles.actionButtonContainer}>
           <AppButton text="Copy" preset="filled" onPress={handleCopy} />
         </View>
-
         <View style={styles.actionButtonContainer}>
           <AppButton text="Generate" preset="filled" onPress={generatePassword} />
         </View>

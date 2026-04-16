@@ -56,7 +56,7 @@ const CreatePassword = () => {
       />
       <KeyboardResponsiveHOC containerStyle={styles.mainContainer} scrollViewStyle={styles.scrollViewStyle}>
         <View style={styles.container}>
-          <AppText text="Credentials" type="label" style={styles.heading} />
+          <AppText text="Credentials" type="default" style={styles.heading} />
 
           <View style={styles.infoContainer}>
             <AppText text="Type" type="subHeading" style={styles.infoHeading} />
@@ -161,6 +161,7 @@ const createStyles = (theme: Theme, mode: string) =>
     },
     infoHeading: {
       marginBottom: Spacing.xs,
+      color: colorPalette.primaryBg.secondayGrey,
     },
     infoContainer: {
       marginBottom: Spacing.md,

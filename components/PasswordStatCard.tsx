@@ -18,7 +18,7 @@ export const PasswordStatCard = ({ item, isSelected, onPress }: PasswordStatCard
   return (
     <View style={styles.container}>
       <RippleWrapper style={[styles.card]} onPress={onPress}>
-        <AppText text={item.label} style={styles.label} />
+        <AppText text={item.label} style={styles.label} type="default" />
         <AppText text={item.number} style={styles.length} type="detail" />
       </RippleWrapper>
 
@@ -54,7 +54,6 @@ const createStyles = (theme: Theme, mode: string) =>
     },
     label: {
       color: colorPalette.primaryBg.secondayGrey,
-      fontSize: Fonts.size.sm,
     },
     length: {
       fontFamily: AppFont.semiBold,
