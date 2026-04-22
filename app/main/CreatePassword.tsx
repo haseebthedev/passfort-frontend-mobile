@@ -4,7 +4,8 @@ import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { AppFont, hp, wp } from "@/utils";
 import { useCreatePassword, useTheme } from "@/hooks";
-import { colorPalette, iconSize, Spacing, theme } from "@/styles";
+import { colorPalette, theme } from "@/theme";
+import { iconSize, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,

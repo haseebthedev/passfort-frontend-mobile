@@ -2,7 +2,8 @@ import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppFont, wp } from "@/utils";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { Theme } from "@/interfaces";
 import { useTheme } from "@/hooks";
 

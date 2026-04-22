@@ -7,7 +7,8 @@ import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { BottomSheetHOC } from "./BottomSheetHOC";
 import { AppFont, hp, pickImageFromCamera, pickImageFromLibrary, wp } from "@/utils";
-import { colorPalette, iconSize, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { iconSize, Spacing } from "@/styles";
 
 interface ImagePickerI {
   isVisible: boolean;

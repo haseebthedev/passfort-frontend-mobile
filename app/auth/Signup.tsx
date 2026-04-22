@@ -3,7 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { useSignup } from "@/hooks";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, GradientWrapper, KeyboardResponsiveHOC, LoadingIndicator, TextInput } from "@/components";
 
 const Signup = () => {

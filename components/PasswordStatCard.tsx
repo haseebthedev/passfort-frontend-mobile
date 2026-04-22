@@ -3,7 +3,8 @@ import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { AppFont, hp, wp } from "@/utils";
 import { PasswordStatType, Theme } from "@/interfaces";
-import { colorPalette, Fonts, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Fonts, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
 interface PasswordStatCardProps {

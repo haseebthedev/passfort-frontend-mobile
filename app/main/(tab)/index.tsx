@@ -7,7 +7,8 @@ import { AppFont } from "@/utils";
 import { useAuthStore } from "@/store";
 import { PasswordGroup } from "@/interfaces";
 import { usePasswordManagement, useTheme } from "@/hooks";
-import { colorPalette, Spacing, theme } from "@/styles";
+import { colorPalette, theme } from "@/theme";
+import { Spacing } from "@/styles";
 import {
   AppLogo,
   AppText,

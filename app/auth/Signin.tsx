@@ -3,7 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
 import { useSignin, useTheme } from "@/hooks";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, LoadingIndicator, TextInput } from "@/components";
 import { Theme } from "@/interfaces";
 

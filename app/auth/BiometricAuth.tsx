@@ -16,7 +16,8 @@ import Animated, {
 import { hp, wp } from "@/utils";
 import { useBiometricAuth, useTheme } from "@/hooks";
 import { AppLogo, AppText, GradientWrapper } from "@/components";
-import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { iconSize, LayoutStyles, Spacing } from "@/styles";
 
 const { height } = Dimensions.get("window");
 

@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { AppFont, hp } from "@/utils";
-import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Fonts, iconSize, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 import { Theme } from "@/interfaces";
 

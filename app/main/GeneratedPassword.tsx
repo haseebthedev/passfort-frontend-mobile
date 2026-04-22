@@ -5,7 +5,8 @@ import * as Clipboard from "expo-clipboard";
 import { Ionicons } from "@expo/vector-icons";
 import { useGeneratePassword, useTheme } from "@/hooks";
 import { AppFont, handleCharacterChange, hp, wp } from "@/utils";
-import { colorPalette, getPasswordTypeContainerStyle, getPasswordTypeTextStyle, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { getPasswordTypeContainerStyle, getPasswordTypeTextStyle, iconSize, LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, ArcSlider, GradientWrapper, PasswordStatCard, RippleWrapper } from "@/components";
 import { Theme } from "@/interfaces";
 

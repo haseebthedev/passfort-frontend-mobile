@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
 import { AppFont, wp } from "@/utils";
-import { colorPalette, Typography } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Typography } from "@/styles";
 import { useTheme } from "@/hooks";
 import { Theme } from "@/interfaces";
 

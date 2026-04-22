@@ -2,7 +2,8 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useChangeMasterPassword } from "@/hooks";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { AppButton, AppHeader, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
 
 const ChangeMasterPassword = () => {

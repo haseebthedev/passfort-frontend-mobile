@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
 
-import { colorPalette } from "@/styles";
+import { colorPalette } from "@/theme";
 import { useTheme } from "@/hooks";
 
 interface LoadingIndicatorI {

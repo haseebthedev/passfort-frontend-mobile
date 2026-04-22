@@ -3,7 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { hp, wp } from "@/utils";
 import { useResetPassword, useTheme } from "@/hooks";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { LayoutStyles, Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
 
 const ResetPassword = () => {

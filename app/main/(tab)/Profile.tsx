@@ -5,7 +5,8 @@ import { Theme } from "@/interfaces";
 import { Screens } from "@/enums";
 import { capitalize, hp, wp } from "@/utils";
 import { useProfile, useTheme } from "@/hooks";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordCategory } from "@/components";
 
 const PROFILE_IMAGE_SIZE = wp(26);

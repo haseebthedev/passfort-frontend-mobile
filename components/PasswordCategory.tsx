@@ -4,7 +4,8 @@ import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { PasswordGroup, Theme } from "@/interfaces";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { LayoutStyles, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
 interface PasswordCategoryI {

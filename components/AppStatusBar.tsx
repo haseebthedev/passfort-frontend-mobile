@@ -1,7 +1,7 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { useAuthStore } from "@/store";
-import { colorPalette } from "@/styles";
+import { colorPalette } from "@/theme";
 
 export const AppStatusBar = () => {
   const { isDarkModeEnabled } = useAuthStore();

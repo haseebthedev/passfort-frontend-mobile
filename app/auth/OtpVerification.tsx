@@ -3,7 +3,8 @@ import { View, StyleSheet, TextInput } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { hp, wp } from "@/utils";
 import { useOtpVerification, useTheme } from "@/hooks";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
 import { Theme } from "@/interfaces";
 

@@ -3,7 +3,8 @@ import { StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { wp } from "@/utils";
 import { RippleWrapper } from "./RippleWrapper";
-import { colorPalette, iconSize, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { iconSize, Spacing } from "@/styles";
 
 interface RoundButtonI {
   onPress: () => void;

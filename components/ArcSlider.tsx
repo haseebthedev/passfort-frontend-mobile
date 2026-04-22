@@ -3,7 +3,8 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { Canvas, Path, Skia } from "@shopify/react-native-skia";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { hp, wp } from "@/utils";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
 const { width } = Dimensions.get("window");

@@ -13,7 +13,8 @@ import { Entypo } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { useTheme } from "@/hooks";
 import { ErrorMessage } from "./ErrorMessage";
-import { colorPalette, FormsStyle, iconSize, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { FormsStyle, iconSize, Spacing } from "@/styles";
 
 interface TextInputI extends TextInputProps {
   label?: string;
@@ -50,7 +51,7 @@ export const TextInput: React.FC<TextInputI> = ({
       {label && <AppText text={label} type="formLabel" />}
       <View style={styles.inputWrapper}>
         <InputText
-          style={[FormsStyle(theme, mode).formControl, inputStyle]}
+          style={[FormsStyle(theme).formControl, inputStyle]}
           placeholderTextColor={theme.placeholderText}
           secureTextEntry={secureInput && !isPasswordVisible}
           {...props}

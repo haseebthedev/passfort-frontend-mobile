@@ -8,7 +8,8 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gor
 import { useAuthStore } from "@/store";
 import { useEditProfile, useTheme } from "@/hooks";
 import { AppFont, formatDate, hp, wp } from "@/utils";
-import { colorPalette, Fonts, FormsStyle, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Fonts, FormsStyle, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -24,7 +25,7 @@ import {
 const PROFILE_IMAGE_SIZE = wp(35);
 
 const EditProfile = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const { user } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = ["30%"];
@@ -65,7 +66,7 @@ const EditProfile = () => {
   const renderDatePicker = () => (
     <TouchableOpacity
       onPress={() => setDateModalVisible(true)}
-      style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
+      style={[FormsStyle(theme).formControl, styles.datePicker]}
       activeOpacity={1}
     >
       <AppText
@@ -78,7 +79,7 @@ const EditProfile = () => {
   const renderCountryPicker = () => (
     <TouchableOpacity
       onPress={() => setCountryModalVisible((prev: boolean) => !prev)}
-      style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
+      style={[FormsStyle(theme).formControl, styles.datePicker]}
     >
       <AppText text={selectedCountry ? String(selectedCountry) : "Select Country"} type={selectedCountry ? "default" : "placeholderText"} />
     </TouchableOpacity>

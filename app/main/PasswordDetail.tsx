@@ -4,7 +4,8 @@ import { router } from "expo-router";
 import { Feather, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import { usePasswordDetail, useTheme } from "@/hooks";
 import { hp, wp } from "@/utils";
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, RippleWrapper } from "@/components";
 import { IconButtonPropsI, InfoItemPropsI, PasswordActionsPropsI, PasswordInfoPropsI, Theme } from "@/interfaces";
 
