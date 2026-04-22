@@ -11,6 +11,8 @@ export const colorPalette = {
     secondayGrey: "#949494",
     secondayGrey02: "#E1E0E0FF",
 
+    lightBg: "#F3F3F3",
+
     borderColor1: "#1A291D",
     borderColor2: "#2C5235",
     swipeButtonBg: "#274C2F",
@@ -47,10 +49,10 @@ export const theme: { light: Theme; dark: Theme } = {
     elevation: 1,
     loadingIndicator: colorPalette.primaryBg.borderColor2,
     GradientColors: [
-      colorPalette.primaryBg.primaryWhite,
-      colorPalette.primaryBg.primaryWhite,
-      colorPalette.primaryBg.primaryWhite,
-      colorPalette.primaryBg.primaryWhite,
+      colorPalette.primaryBg.lightBg,
+      colorPalette.primaryBg.lightBg,
+      colorPalette.primaryBg.lightBg,
+      colorPalette.primaryBg.lightBg,
     ],
     placeholderText: colorPalette.primaryBg.secondayGrey,
     background: colorPalette.primaryBg.primaryWhite,
@@ -59,7 +61,7 @@ export const theme: { light: Theme; dark: Theme } = {
     primaryBorder: colorPalette.primaryBg.secondayGrey02,
     cardsBorder: colorPalette.primaryBg.secondayGrey02,
     cardBg: colorPalette.primaryBg.lighterGreen02,
-    stickyHeaderBg: colorPalette.primaryBg.primaryWhite,
+    stickyHeaderBg: colorPalette.primaryBg.lightBg,
     label: colorPalette.primaryBg.borderColor2,
     itemBg: colorPalette.primaryBg.lighterGreen02,
     card: colorPalette.primaryBg.primaryWhite,
