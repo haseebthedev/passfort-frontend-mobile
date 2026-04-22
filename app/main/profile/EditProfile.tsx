@@ -70,8 +70,7 @@ const EditProfile = () => {
     >
       <AppText
         text={dateOfBirth ? formatDate(dateOfBirth.toString()) : "Select Date of Birth"}
-        type="default"
-        style={dateOfBirth ? null : styles.placeholder}
+        type={dateOfBirth ? "default" : "placeholderText"}
       />
     </TouchableOpacity>
   );
@@ -81,11 +80,7 @@ const EditProfile = () => {
       onPress={() => setCountryModalVisible((prev: boolean) => !prev)}
       style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
     >
-      <AppText
-        text={selectedCountry ? String(selectedCountry) : "Select Country"}
-        type={"default"}
-        style={selectedCountry ? null : styles.placeholder}
-      />
+      <AppText text={selectedCountry ? String(selectedCountry) : "Select Country"} type={selectedCountry ? "default" : "placeholderText"} />
     </TouchableOpacity>
   );
 
@@ -218,11 +213,6 @@ const styles = StyleSheet.create({
   datePicker: {
     paddingVertical: Spacing.md,
     marginBottom: Spacing.sm,
-  },
-  placeholder: {
-    color: colorPalette.primaryBg.secondayGrey,
-    fontFamily: AppFont.regular,
-    fontSize: Fonts.size.xs + hp(0.2),
   },
   selectedDate: {
     color: colorPalette.primaryBg.primaryWhite,

@@ -1,6 +1,15 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { EditProfileI, ForgetPasswordI, ResetPasswordParamI, SigninI, SignupI, UserI, VerifyOtpI } from "@/interfaces";
+import {
+  ChangeMasterPasswordI,
+  EditProfileI,
+  ForgetPasswordI,
+  ResetPasswordParamI,
+  SigninI,
+  SignupI,
+  UserI,
+  VerifyOtpI,
+} from "@/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AxiosInstance from "@/services/api";
 import { showToast } from "@/utils/toastService";
@@ -25,6 +34,7 @@ type Action = {
   editProfile: (body: EditProfileI) => Promise<string>;
   forgetPassword: (body: ForgetPasswordI) => Promise<void>;
   resetPassword: (body: ResetPasswordParamI) => Promise<void>;
+  changeMasterPassword: (body: ChangeMasterPasswordI) => Promise<void>;
   verifyAuthCode: (body: VerifyOtpI) => Promise<void>;
   reset: () => void;
 };
@@ -165,6 +175,23 @@ const useAuthStore = create<Store & Action>()(
           }
         },
 
+        changeMasterPassword: async (body: ChangeMasterPasswordI) => {
+          set({ isLoading: true });
+          try {
+            await AxiosInstance.post("/user/change-password", body);
+            set({ isLoading: false });
+          } catch (error: any) {
+            const errorMessage = error.response?.data?.message || "Something went wrong";
+            set({
+              isLoading: false,
+              error: errorMessage,
+            });
+            showToast({ type: "error", text1: errorMessage });
+
+            throw new Error(errorMessage);
+          }
+        },
+
         reset: () => set({ user: null, error: null }),
       }),
 
@@ -175,9 +202,9 @@ const useAuthStore = create<Store & Action>()(
           setItem: (name, value) => AsyncStorage.setItem(name, JSON.stringify(value)),
           removeItem: (name) => AsyncStorage.removeItem(name),
         },
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 export { useAuthStore };
