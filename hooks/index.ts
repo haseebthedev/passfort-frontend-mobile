@@ -18,3 +18,5 @@ export * from "./useEditProfile";
 export * from "./usePrivacyPolicy";
 export * from "./useGeneratePassword";
 export * from "./useCreatePassword";
+
+export * from "./useChangeMasterPassword";

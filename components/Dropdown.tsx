@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker, { ItemType, ValueType } from "react-native-dropdown-picker";
 import { AppFont, wp } from "@/utils";
-import { colorPalette, theme } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Typography } from "@/styles";
 import { useTheme } from "@/hooks";
 import { Theme } from "@/interfaces";
 
@@ -74,7 +75,7 @@ const createStyles = (theme: Theme, mode: string) =>
       elevation: theme.elevation,
     },
     placeholderStyle: {
-      color: mode === "dark" ? colorPalette.primaryBg.primaryGrey : colorPalette.primaryBg.primaryDarkGreen,
+      ...Typography(theme).placeholderText,
     },
     labelStyle: {
       fontFamily: AppFont.medium,

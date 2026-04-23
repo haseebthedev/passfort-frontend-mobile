@@ -13,8 +13,8 @@ export const AppLogo = ({ style }: AppLogoI) => {
 
 const styles = StyleSheet.create({
   logo: {
-    width: wp(30),
-    height: wp(30),
+    width: wp(40),
+    height: wp(40),
     alignSelf: "center",
   },
 });

@@ -9,6 +9,7 @@ const MainLayout = () => {
     >
       <Stack.Screen name="(tab)" />
       <Stack.Screen name="profile/EditProfile" />
+      <Stack.Screen name="profile/PrivacyPolicy" />
       <Stack.Screen name="Settings" />
       <Stack.Screen name="PasswordDetail" />
       <Stack.Screen name="CreatePassword" />

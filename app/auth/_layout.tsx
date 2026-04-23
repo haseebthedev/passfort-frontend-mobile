@@ -11,6 +11,7 @@ const AuthLayout = () => {
       <Stack.Screen name="ForgetPassword" />
       <Stack.Screen name="OtpVerification" />
       <Stack.Screen name="ResetPassword" />
+      <Stack.Screen name="ChangeMasterPassword" />
     </Stack>
   );
 };

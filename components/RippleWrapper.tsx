@@ -1,4 +1,5 @@
-import { colorPalette, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import React from "react";
 import { StyleProp, StyleSheet, TouchableNativeFeedback, View, ViewStyle } from "react-native";
 

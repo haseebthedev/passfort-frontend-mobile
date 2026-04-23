@@ -7,8 +7,9 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import { useAuthStore } from "@/store";
 import { useEditProfile, useTheme } from "@/hooks";
-import { formatDate, hp, wp } from "@/utils";
-import { colorPalette, FormsStyle, Spacing } from "@/styles";
+import { AppFont, formatDate, hp, wp } from "@/utils";
+import { colorPalette } from "@/theme";
+import { Fonts, FormsStyle, Spacing } from "@/styles";
 import {
   AppButton,
   AppHeader,
@@ -24,7 +25,7 @@ import {
 const PROFILE_IMAGE_SIZE = wp(35);
 
 const EditProfile = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const { user } = useAuthStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = ["30%"];
@@ -59,19 +60,18 @@ const EditProfile = () => {
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
-    []
+    [],
   );
 
   const renderDatePicker = () => (
     <TouchableOpacity
       onPress={() => setDateModalVisible(true)}
-      style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
+      style={[FormsStyle(theme).formControl, styles.datePicker]}
       activeOpacity={1}
     >
       <AppText
         text={dateOfBirth ? formatDate(dateOfBirth.toString()) : "Select Date of Birth"}
-        type="default"
-        style={dateOfBirth ? null : styles.placeholder}
+        type={dateOfBirth ? "default" : "placeholderText"}
       />
     </TouchableOpacity>
   );
@@ -79,13 +79,9 @@ const EditProfile = () => {
   const renderCountryPicker = () => (
     <TouchableOpacity
       onPress={() => setCountryModalVisible((prev: boolean) => !prev)}
-      style={[FormsStyle(theme, mode).formControl, styles.datePicker]}
+      style={[FormsStyle(theme).formControl, styles.datePicker]}
     >
-      <AppText
-        text={selectedCountry ? String(selectedCountry) : "Select Country"}
-        type={"default"}
-        style={selectedCountry ? null : styles.placeholder}
-      />
+      <AppText text={selectedCountry ? String(selectedCountry) : "Select Country"} type={selectedCountry ? "default" : "placeholderText"} />
     </TouchableOpacity>
   );
 
@@ -132,7 +128,6 @@ const EditProfile = () => {
             <AppButton
               text={disableSaveButton ? "" : "Save"}
               onPress={handleSubmit}
-              preset="filled"
               disabled={isLoading || disableSaveButton}
               RightAccessory={() => (isLoading || disableSaveButton) && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
             />
@@ -219,9 +214,6 @@ const styles = StyleSheet.create({
   datePicker: {
     paddingVertical: Spacing.md,
     marginBottom: Spacing.sm,
-  },
-  placeholder: {
-    color: colorPalette.primaryBg.primaryGrey,
   },
   selectedDate: {
     color: colorPalette.primaryBg.primaryWhite,

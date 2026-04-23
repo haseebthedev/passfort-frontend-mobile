@@ -5,7 +5,8 @@ import { AppText } from "./AppText";
 import { AppButton } from "./AppButton";
 import { AppFont, hp, wp } from "@/utils";
 import { BottomSheetHOC } from "./BottomSheetHOC";
-import { colorPalette, iconSize, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { iconSize, Spacing } from "@/styles";
 import { RippleWrapper } from "./RippleWrapper";
 import { MaterialIcons } from "@expo/vector-icons";
 

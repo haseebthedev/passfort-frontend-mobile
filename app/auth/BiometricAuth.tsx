@@ -1,44 +1,55 @@
-import React from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import Animated, {
-  interpolate,
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import { hp, wp } from "@/utils";
 import { useBiometricAuth, useTheme } from "@/hooks";
-import { AppLogo, AppText, GradientWrapper } from "@/components";
-import { colorPalette, iconSize, LayoutStyles, Spacing } from "@/styles";
+import { AppLogo, AppText, BiometricAuthModal, GradientWrapper } from "@/components";
+import { colorPalette } from "@/theme";
+import { iconSize, Spacing } from "@/styles";
 
 const { height } = Dimensions.get("window");
 
 const BiometricAuth = () => {
-  const { theme } = useTheme();
-  const { handleBiometricAuth } = useBiometricAuth();
+  const { handleBiometricAuth, isBiometricDone } = useBiometricAuth();
   const translateY = useSharedValue<number>(0);
+  const hasTriggered = useSharedValue<boolean>(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["40%"], []);
+
+  const openModal = () => {
+    setIsModalVisible(true);
+    bottomSheetRef.current?.snapToIndex(0);
+  };
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
+    [],
+  );
 
   const swipeUp = Gesture.Pan()
     .onBegin(() => {
       translateY.value = withTiming(0);
+      hasTriggered.value = false;
     })
     .onChange((event) => {
       if (event.translationY > 0) {
         translateY.value = withTiming(0);
       } else if (event.translationY > -height / 4) {
         translateY.value = event.translationY;
-        runOnJS(handleBiometricAuth)();
+        if (!hasTriggered.value) {
+          hasTriggered.value = true;
+          runOnJS(openModal)();
+        }
       }
     })
     .onFinalize(() => {
-      translateY.value = 0;
+      translateY.value = withTiming(0);
+      hasTriggered.value = false;
     });
 
   const animatedSwipeupStyle = useAnimatedStyle(() => {
@@ -57,15 +68,20 @@ const BiometricAuth = () => {
         <GestureDetector gesture={swipeUp}>
           <Animated.View style={[styles.innerContainer, animatedSwipeupStyle]}>
             <View style={styles.circleContainer}>
-              <AntDesign
-                name="arrowup"
-                size={iconSize}
-                style={styles.iconStyle}
-              />
+              <AntDesign name="arrowup" size={iconSize} style={styles.iconStyle} />
             </View>
             <AppText text="Swipe up to sign in" />
           </Animated.View>
         </GestureDetector>
+
+        <BiometricAuthModal
+          isVisible={isModalVisible}
+          isBiometricDone={isBiometricDone}
+          snapPoints={snapPoints}
+          bottomSheetRef={bottomSheetRef}
+          renderBackdrop={renderBackdrop}
+          handleBiometricAuth={handleBiometricAuth}
+        />
       </GradientWrapper>
     </GestureHandlerRootView>
   );

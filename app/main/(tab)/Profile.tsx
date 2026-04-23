@@ -5,8 +5,9 @@ import { Theme } from "@/interfaces";
 import { Screens } from "@/enums";
 import { capitalize, hp, wp } from "@/utils";
 import { useProfile, useTheme } from "@/hooks";
-import { colorPalette, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordCard } from "@/components";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
+import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, PasswordCategory } from "@/components";
 
 const PROFILE_IMAGE_SIZE = wp(26);
 
@@ -30,7 +31,7 @@ const Profile = () => {
           showsHorizontalScrollIndicator={false}
           data={groupedPassword ?? []}
           keyExtractor={(item) => item._id.toString()}
-          renderItem={({ item }) => <PasswordCard item={item} />}
+          renderItem={({ item }) => <PasswordCategory item={item} />}
           contentContainerStyle={styles.passwordCardsContainer}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
@@ -47,7 +48,7 @@ const Profile = () => {
         {Object.entries(userInfo).map(([key, value]) => (
           <View key={key}>
             <AppText text={capitalize(key)} type="subHeading" style={styles.infoHeading} />
-            <AppText text={String(value) ?? ""} type="detail" numberOfLines={1} />
+            <AppText text={String(value) ?? "N/A"} type="detail" numberOfLines={1} />
           </View>
         ))}
       </View>
@@ -83,8 +84,7 @@ const createStyles = (theme: Theme, mode: string) =>
     },
     passwordCardsContainer: {
       marginVertical: Spacing.md,
-      gap: Spacing.md,
-      paddingBottom: Spacing.xxs,
+      gap: Spacing.sm,
     },
     personalInfoContainer: {
       padding: Spacing.md,
@@ -99,7 +99,6 @@ const createStyles = (theme: Theme, mode: string) =>
     infoHeading: {
       color: theme.subHeading,
       marginBottom: Spacing.xxs,
-      fontWeight: "500",
     },
     loadingContainer: {
       height: wp(30),

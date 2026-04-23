@@ -1,182 +1,82 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { hp, wp } from "@/utils";
 import { useOtpVerification, useTheme } from "@/hooks";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
 import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
 import { Theme } from "@/interfaces";
+
+const OTP_LENGTH = 6;
 
 const OtpVerification = () => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const { email } = useLocalSearchParams<{ email: string }>();
 
-  const {
-    timer,
-    otp,
-    setOtp,
-    disableVerifyBtn,
-    disableResetBtn,
-    input1,
-    input2,
-    input3,
-    input4,
-    input5,
-    input6,
-    onPressVerifyHandler,
-    onPressResendCodeHandler,
-  } = useOtpVerification(email);
+  const { timer, otp, setOtp, disableVerifyBtn, disableResetBtn, onPressVerifyHandler, onPressResendCodeHandler } =
+    useOtpVerification(email);
+
+  // refs array
+  const inputsRef = useRef<Array<TextInput | null>>([]);
+
+  const handleChange = (text: string, index: number) => {
+    const newOtp = { ...otp, [index + 1]: text };
+    setOtp(newOtp);
+
+    if (text && index < OTP_LENGTH - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyPress = (e: any, index: number) => {
+    if (e.nativeEvent.key === "Backspace") {
+      if (!otp[index + 1] && index > 0) {
+        inputsRef.current[index - 1]?.focus();
+      }
+    }
+  };
 
   return (
     <GradientWrapper>
-      <AppHeader
-        title="OTP Verification"
-        leftIconName="chevron-back"
-        onLeftIconPress={() => router.back()}
-      />
+      <AppHeader title="OTP Verification" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
 
       <View style={styles.form}>
         <View style={styles.head}>
           <AppText text="Get Your Code" type="heading" />
-          <AppText
-            text="Please enter the 6 digit code that send to your email address."
-            type="subHeading"
-            style={styles.subHeading}
-          />
+          <AppText text="Please enter the 6 digit code that sent to your email address." type="subHeading" style={styles.subHeading} />
         </View>
 
+        {/* OTP Inputs */}
         <View style={styles.inputFields}>
-          <TextInput
-            ref={input1}
-            value={otp["1"]}
-            keyboardType="number-pad"
-            maxLength={1}
-            style={styles.codeVerifyBlock}
-            selectTextOnFocus
-            onFocus={() => input1.current?.focus()}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 1: text });
-              text && input2.current?.focus();
-            }}
-          />
-          <TextInput
-            ref={input2}
-            value={otp["2"]}
-            keyboardType="number-pad"
-            maxLength={1}
-            style={styles.codeVerifyBlock}
-            selectTextOnFocus
-            onFocus={() => input2.current?.focus()}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 2: text });
-              text ? input3.current?.focus() : input1.current?.focus();
-            }}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === "Backspace") {
-                input1.current?.clear();
-                input1.current?.focus();
-              }
-            }}
-          />
-          <TextInput
-            ref={input3}
-            value={otp["3"]}
-            keyboardType="number-pad"
-            maxLength={1}
-            style={styles.codeVerifyBlock}
-            selectTextOnFocus
-            onFocus={() => input3.current?.focus()}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 3: text });
-              text ? input4.current?.focus() : input2.current?.focus();
-            }}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === "Backspace") {
-                input2.current?.clear();
-                input2.current?.focus();
-              }
-            }}
-          />
-          <TextInput
-            ref={input4}
-            value={otp["4"]}
-            keyboardType="number-pad"
-            maxLength={1}
-            style={styles.codeVerifyBlock}
-            selectTextOnFocus
-            onFocus={() => input4.current?.focus()}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 4: text });
-              text ? input5.current?.focus() : input3.current?.focus();
-            }}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === "Backspace") {
-                input3.current?.clear();
-                input3.current?.focus();
-              }
-            }}
-          />
-          <TextInput
-            ref={input5}
-            value={otp["5"]}
-            keyboardType="number-pad"
-            maxLength={1}
-            style={styles.codeVerifyBlock}
-            selectTextOnFocus
-            onFocus={() => input5.current?.focus()}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 5: text });
-              text ? input6.current?.focus() : input4.current?.focus();
-            }}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === "Backspace") {
-                input4.current?.clear();
-                input4.current?.focus();
-              }
-            }}
-          />
-          <TextInput
-            ref={input6}
-            value={otp["6"]}
-            keyboardType="number-pad"
-            maxLength={1}
-            style={styles.codeVerifyBlock}
-            selectTextOnFocus
-            onFocus={() => input6.current?.focus()}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 6: text });
-              !text ? input5.current?.focus() : input6.current?.blur();
-            }}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === "Backspace") {
-                input5.current?.clear();
-                input5.current?.focus();
-              }
-            }}
-          />
+          {Array.from({ length: OTP_LENGTH }).map((_, index) => (
+            <TextInput
+              key={index}
+              ref={(ref) => {
+                inputsRef.current[index] = ref;
+              }}
+              value={otp[String(index + 1)]}
+              keyboardType="number-pad"
+              maxLength={1}
+              style={styles.codeVerifyBlock}
+              selectTextOnFocus
+              onChangeText={(text) => handleChange(text, index)}
+              onKeyPress={(e) => handleKeyPress(e, index)}
+            />
+          ))}
         </View>
 
         <View style={styles.codeExpireText}>
           <AppText text="Code expires in " />
-          <AppText text={"00 : " + timer} style={styles.timerText} />
+          <AppText text={`00 : ${timer}`} style={styles.timerText} />
         </View>
 
-        <AppButton
-          preset="filled"
-          text="Verify"
-          onPress={onPressVerifyHandler}
-          disabled={disableVerifyBtn}
-        />
+        <AppButton text="Verify" onPress={onPressVerifyHandler} disabled={disableVerifyBtn} />
 
         <View style={styles.dontRecieveCodeContainer}>
-          <AppText text="If you don't receive code!" type="default" />
-          <AppButton
-            preset="primaryLink"
-            text="Resend"
-            onPress={onPressResendCodeHandler}
-            disabled={disableResetBtn}
-          />
+          <AppText text="If you don't receive code!" />
+          <AppButton preset="primaryLink" text="Resend" onPress={onPressResendCodeHandler} disabled={disableResetBtn} />
         </View>
       </View>
     </GradientWrapper>
@@ -218,6 +118,7 @@ const createStyles = (theme: Theme) =>
       marginVertical: Spacing.lg,
       paddingHorizontal: Spacing.md,
       width: wp(90),
+      gap: Spacing.sm,
     },
     codeVerifyBlock: {
       borderRadius: hp(0.6),

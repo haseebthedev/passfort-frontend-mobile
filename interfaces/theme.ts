@@ -9,6 +9,7 @@ export interface Theme {
   elevation: number;
   loadingIndicator: string;
   GradientColors: string[];
+  placeholderText: string;
   background: string;
   text: string;
   subHeading: string;

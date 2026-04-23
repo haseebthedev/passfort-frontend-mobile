@@ -4,14 +4,15 @@ import { wp } from "@/utils";
 import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { PasswordGroup, Theme } from "@/interfaces";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { LayoutStyles, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
-interface PasswordCardI {
+interface PasswordCategoryI {
   item: PasswordGroup;
 }
 
-export const PasswordCard = ({ item }: PasswordCardI) => {
+export const PasswordCategory = ({ item }: PasswordCategoryI) => {
   const { theme, mode } = useTheme();
   const styles = createStyles(theme, mode);
   return (
@@ -20,7 +21,7 @@ export const PasswordCard = ({ item }: PasswordCardI) => {
         <View style={styles.iconContainer}>
           {item?.type.icon && <Image source={{ uri: item?.type.icon }} style={LayoutStyles(theme).cardIcon} />}
         </View>
-        <AppText text={item.type.title} type="subHeading" numberOfLines={1} />
+        <AppText text={item.type.title} type="default" numberOfLines={1} />
         <AppText text={`${item.passwords.length} Passwords`} type="description" style={styles.subTitle} numberOfLines={1} />
       </View>
     </RippleWrapper>
@@ -51,6 +52,8 @@ const createStyles = (theme: Theme, mode: string) =>
       borderRadius: Spacing.md,
       width: wp(90) / 3.25,
       paddingHorizontal: Spacing.xs,
+
+      gap: Spacing.xxs,
     },
     iconContainer: {
       width: wp(11),
@@ -59,11 +62,9 @@ const createStyles = (theme: Theme, mode: string) =>
       borderRadius: wp(7),
       alignItems: "center",
       justifyContent: "center",
-      marginBottom: Spacing.xs,
       elevation: theme.elevation,
     },
     subTitle: {
       color: colorPalette.primaryBg.secondayGrey,
-      paddingTop: Spacing.xxs,
     },
   });

@@ -8,6 +8,10 @@ import email from "./icons/email.png";
 import stream from "./icons/stream.png";
 import shopping from "./icons/shopping.png";
 
+import users from "./icons/users.svg";
+import wallet from "./icons/wallet.svg";
+import app from "./icons/apps.svg";
+
 import profilePicture from "./images/Profile10.png";
 
 import protectDataImage from "./images/protectData.png";
@@ -28,4 +32,7 @@ export {
   email,
   stream,
   shopping,
+  users,
+  wallet,
+  app,
 };

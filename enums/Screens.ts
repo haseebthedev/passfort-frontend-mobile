@@ -6,12 +6,13 @@ export enum Screens {
   ForgetPassword = "/auth/ForgetPassword",
   OtpVerification = "/auth/OtpVerification",
   ResetPassword = "/auth/ResetPassword",
+  ChangeMasterPassword = "/auth/ChangeMasterPassword",
 
   // Main App Screens
   Home = "/main/(tab)/",
   Password = "/main/(tab)/Password",
   Profile = "/main/(tab)/Profile",
-  
+
   // Other Screens
   CreatePassword = "/main/CreatePassword",
   GeneratedPassword = "/main/GeneratedPassword",

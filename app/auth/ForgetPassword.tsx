@@ -1,49 +1,28 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { hp, wp } from "@/utils";
-import { useForgetPassword, useTheme } from "@/hooks";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import {
-  AppButton,
-  AppHeader,
-  AppText,
-  GradientWrapper,
-  LoadingIndicator,
-  TextInput,
-} from "@/components";
 import { Theme } from "@/interfaces";
+import { hp, wp } from "@/utils";
+import { colorPalette } from "@/theme";
+import { Spacing } from "@/styles";
+import { useForgetPassword, useTheme } from "@/hooks";
+import { AppButton, AppHeader, AppText, GradientWrapper, LoadingIndicator, TextInput } from "@/components";
 
 const ForgetPassword = () => {
   const { theme } = useTheme();
 
-  const {
-    isLoading,
-    handleChange,
-    handleSubmit,
-    setFieldTouched,
-    errors,
-    touched,
-  } = useForgetPassword();
+  const { isLoading, handleChange, handleSubmit, setFieldTouched, errors, touched } = useForgetPassword();
 
   const styles = createStyles(theme);
 
   return (
     <GradientWrapper>
-      <AppHeader
-        title="Forget Password"
-        leftIconName="chevron-back"
-        onLeftIconPress={() => router.back()}
-      />
+      <AppHeader title="Forget Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
 
       <View style={styles.form}>
         <View style={styles.centerContent}>
           <AppText text="Recover Your Account" type="heading" />
-          <AppText
-            text="Enter the email address associated with your account."
-            type="subHeading"
-            style={[styles.subHeading]}
-          />
+          <AppText text="Enter the email address associated with your account." type="subHeading" style={[styles.subHeading]} />
         </View>
 
         <TextInput
@@ -56,13 +35,8 @@ const ForgetPassword = () => {
         />
         <AppButton
           text={isLoading ? "" : "Recover Password"}
-          preset="filled"
           onPress={handleSubmit}
-          RightAccessory={() =>
-            isLoading && (
-              <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
-            )
-          }
+          RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
         />
       </View>
     </GradientWrapper>

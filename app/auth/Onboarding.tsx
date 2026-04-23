@@ -29,30 +29,13 @@ const Onboarding = () => {
   return (
     <GradientWrapper>
       <View style={styles.container}>
-        <Image
-          source={OnboardingData[currentIndex].image}
-          style={styles.image}
-        />
-        <AppText
-          text={OnboardingData[currentIndex].title}
-          type="primaryTitle"
-        />
-        <AppText
-          text={OnboardingData[currentIndex].subtitle}
-          type="label"
-          style={styles.textStyle}
-        />
+        <Image source={OnboardingData[currentIndex].image} style={styles.image} />
+        <AppText text={OnboardingData[currentIndex].title} type="title" />
+        <AppText text={OnboardingData[currentIndex].subtitle} type="default" style={styles.textStyle} />
       </View>
 
-      <View style={styles.actionButtons}>
-        <AppButton
-          text={
-            currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"
-          }
-          onPress={handleNext}
-        />
-        <AppButton text="Skip" onPress={handleSkip} preset="secondaryLink" />
-      </View>
+      <AppButton text={currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"} onPress={handleNext} />
+      <AppButton text="Skip" onPress={handleSkip} preset="secondaryLink" />
     </GradientWrapper>
   );
 };
@@ -72,9 +55,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: Spacing.sm,
     marginBottom: hp(3.6),
-  },
-  actionButtons: {
-    gap: Spacing.xl,
   },
 });
 

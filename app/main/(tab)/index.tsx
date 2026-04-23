@@ -6,9 +6,19 @@ import { Screens } from "@/enums";
 import { AppFont } from "@/utils";
 import { useAuthStore } from "@/store";
 import { PasswordGroup } from "@/interfaces";
-import { usePasswordManagement } from "@/hooks";
-import { colorPalette, Spacing } from "@/styles";
-import { AppLogo, AppText, GradientWrapper, LoadingIndicator, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
+import { usePasswordManagement, useTheme } from "@/hooks";
+import { colorPalette, theme } from "@/theme";
+import { Spacing } from "@/styles";
+import {
+  AppLogo,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  PasswordCategory,
+  PasswordItem,
+  RoundButton,
+  SearchInput,
+} from "@/components";
 
 interface HeaderComponentI {
   groupedPassword: PasswordGroup[];
@@ -30,10 +40,10 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           data={groupedPassword ?? []}
-          renderItem={({ item }) => <PasswordCard item={item} />}
+          renderItem={({ item }) => <PasswordCategory item={item} />}
           keyExtractor={(item) => item._id.toString()}
-          contentContainerStyle={styles.passwordCardsContainer}
-          ListEmptyComponent={<AppText text="No passwords found!" type="default" />}
+          contentContainerStyle={styles.passwordCategories}
+          ListEmptyComponent={<AppText text="No Categories Found!" type="default" />}
         />
       </>
       <AppText text="Recently Added" type="primaryHeading" style={styles.heading} />
@@ -42,6 +52,8 @@ const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
 });
 
 const Home = () => {
+  const { theme } = useTheme();
+
   const { user } = useAuthStore();
   const { groupedPassword, searchText, setSearchText, state, isLoading, recentPasswords, handleRefresh } = usePasswordManagement();
 
@@ -61,11 +73,19 @@ const Home = () => {
         data={recentPasswords ?? []}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <PasswordItem item={item} />}
-        // keyExtractor={(item) => item._id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => <HeaderComponent groupedPassword={groupedPassword} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            {isLoading ? <LoadingIndicator /> : !state.listRefreshing ? <AppText text="No passwords found!" type="default" /> : null}
+            {isLoading ? (
+              <LoadingIndicator />
+            ) : !state.listRefreshing ? (
+              <AppText
+                text="Your most recently created items will appear here for easy access."
+                type="placeholderText"
+                style={{ textAlign: "center" }}
+              />
+            ) : null}
           </View>
         }
         refreshing={state.listRefreshing}
@@ -106,7 +126,7 @@ const styles = StyleSheet.create({
     width: wp(17),
     height: wp(17),
   },
-  passwordCardsContainer: {
+  passwordCategories: {
     marginBottom: Spacing.lg,
     gap: Spacing.md,
     paddingBottom: Spacing.xxs,
@@ -119,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: Spacing.md,
+    // marginTop: Spacing.md,
   },
   recentPasswordsContainer: {
     marginBottom: Spacing.lg,

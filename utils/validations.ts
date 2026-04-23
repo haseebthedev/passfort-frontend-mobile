@@ -6,10 +6,7 @@ export const signupValidationSchema = yup.object().shape({
   password: yup
     .string()
     .required("Password is required!")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, and a  Number "
-    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/, "Must Contain 8 Characters, One Uppercase, One Lowercase, and a  Number ")
     .min(8)
     .label("Password"),
 });
@@ -19,10 +16,7 @@ export const signinValidationSchema = yup.object().shape({
   password: yup
     .string()
     .required("Password is required!")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number "
-    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/, "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number ")
     .min(8)
     .label("Password"),
 });
@@ -52,10 +46,7 @@ export const createPasswordValidationSchema = yup.object().shape({
   passwordText: yup
     .string()
     .required("Password is required!")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number "
-    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/, "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number ")
     .min(8)
     .label("passwordText"),
 });
@@ -69,27 +60,29 @@ export const editPasswordValidationSchema = yup.object().shape({
     .nullable()
     .label("Type"),
   platform: yup.string().min(3).label("Platform"),
-  siteAddress: yup
-    .string()
-    .url("Please enter a valid URL starting with http:// or https://")
-    .label("Site Address"),
+  siteAddress: yup.string().url("Please enter a valid URL starting with http:// or https://").label("Site Address"),
   email: yup.string().label("Email Address"),
   passwordText: yup
     .string()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number"
-    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/, "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number")
     .min(8)
     .label("Password"),
 });
-
 
 export const forgotPasswordValidation = yup.object().shape({
   email: yup.string().required("Email is required!").email(),
 });
 
 export const newPasswordValidation = yup.object().shape({
+  newPassword: yup.string().required("New Password is required!").min(8, "Minimum 8 characters"),
+  confirmPassword: yup
+    .string()
+    .equals([yup.ref("newPassword"), null], "Passwords does not match!")
+    .required("Confirm new password is required!"),
+});
+
+export const newMasterPasswordValidation = yup.object().shape({
+  currentPassword: yup.string().required("Current Password is required!"),
   newPassword: yup.string().required("New Password is required!").min(8, "Minimum 8 characters"),
   confirmPassword: yup
     .string()

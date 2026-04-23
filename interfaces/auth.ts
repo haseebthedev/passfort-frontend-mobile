@@ -30,9 +30,10 @@ export type ResetPasswordI = {
 };
 
 export type ResetPasswordParamI = {
-  email: string,
-  authCode: string,
+  email?: string;
+  authCode?: string;
   newPassword: string;
+  isVerified?: boolean;
 };
 
 export interface EditProfileI {
@@ -47,3 +48,8 @@ export interface VerifyOtpI {
   email: string;
   authCode: string;
 }
+
+export type ChangeMasterPasswordI = {
+  oldPassword: string;
+  newPassword: string;
+};

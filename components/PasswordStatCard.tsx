@@ -3,7 +3,8 @@ import { AppText } from "./AppText";
 import { RippleWrapper } from "./RippleWrapper";
 import { AppFont, hp, wp } from "@/utils";
 import { PasswordStatType, Theme } from "@/interfaces";
-import { colorPalette, Fonts, Spacing } from "@/styles";
+import { colorPalette } from "@/theme";
+import { Fonts, Spacing } from "@/styles";
 import { useTheme } from "@/hooks";
 
 interface PasswordStatCardProps {
@@ -18,7 +19,7 @@ export const PasswordStatCard = ({ item, isSelected, onPress }: PasswordStatCard
   return (
     <View style={styles.container}>
       <RippleWrapper style={[styles.card]} onPress={onPress}>
-        <AppText text={item.label} style={styles.label} />
+        <AppText text={item.label} style={styles.label} type="default" />
         <AppText text={item.number} style={styles.length} type="detail" />
       </RippleWrapper>
 
@@ -40,7 +41,6 @@ const createStyles = (theme: Theme, mode: string) =>
       borderColor: theme.cardsBorder,
       padding: Spacing.sm,
       borderRadius: hp(2.5),
-      height: hp(10),
       width: wp(100) / 3 - Spacing.md,
       alignItems: "center",
       gap: wp(1),
@@ -54,7 +54,6 @@ const createStyles = (theme: Theme, mode: string) =>
     },
     label: {
       color: colorPalette.primaryBg.secondayGrey,
-      fontSize: Fonts.size.sm,
     },
     length: {
       fontFamily: AppFont.semiBold,
