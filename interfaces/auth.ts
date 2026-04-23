@@ -1,17 +1,17 @@
-export type UserI = {
-  id: string;
-  email: string;
-  name: string;
-  picture: string | null;
-  location: string | null;
-  isFirstSignIn: boolean;
-  isLogin?: boolean;
-};
+import { TranslationLanguageCodeMap } from "react-native-country-picker-modal";
 
-export type UserInfoI = {
-  name: string;
+export type UserI = {
+  id?: string;
   email: string;
-  number: string;
+  name: string;
+  profilePicture?: string | null;
+  location?: string | null;
+  isFirstSignIn?: boolean;
+  isEmailVerified?: boolean;
+  dateOfBirth?: string | null;
+  city?: string | null;
+  country?: string | null;
+  number?: string;
 };
 
 export interface SignupI {
@@ -29,16 +29,21 @@ export type ResetPasswordI = {
   confirmPassword: string;
 };
 
+export type ResetPasswordParamI = {
+  email: string,
+  authCode: string,
+  newPassword: string;
+};
+
 export interface EditProfileI {
-  name: string;
-  email: string;
-  phoneNumber?: string;
+  profilePicture?: string;
+  name?: string;
+  dateOfBirth?: string | Date;
+  country?: string | TranslationLanguageCodeMap;
+  biometricEnabled?: boolean;
 }
 
-export interface CreatePasswordI {
-  type: string;
-  platform: string;
-  siteAddress?: string;
-  email?: string;
-  password: string;
+export interface VerifyOtpI {
+  email: string;
+  authCode: string;
 }

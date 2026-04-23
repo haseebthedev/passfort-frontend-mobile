@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { loadFonts } from "@/utils";
 import { useAuthStore } from "@/store";
 import { LoadingIndicator } from "@/components";
+import Toast from "react-native-toast-message";
 
 const RootLayout = () => {
   const { user } = useAuthStore();
@@ -20,24 +21,16 @@ const RootLayout = () => {
     return <LoadingIndicator />;
   }
 
-  if (user?.isLogin) {
-    return (
-      <Stack initialRouteName="(tab)" screenOptions={{ headerShown: false, animation: "ios" }}>
-        <Stack.Screen name="(tab)" />
-        <Stack.Screen name="profile/EditProfile" />
-        <Stack.Screen name="Settings" />
-        <Stack.Screen name="PasswordDetail" />
-        <Stack.Screen name="CreatePassword" />
-        <Stack.Screen name="GeneratedPassword" />
-      </Stack>
-    );
-  } else {
-    return (
+  return (
+    <>
       <Stack screenOptions={{ headerShown: false, animation: "ios" }}>
+        <Stack.Screen name="index" />
         <Stack.Screen name="auth" />
+        <Stack.Screen name="main" />
       </Stack>
-    );
-  }
+      <Toast position="bottom" />
+    </>
+  );
 };
 
 export default RootLayout;

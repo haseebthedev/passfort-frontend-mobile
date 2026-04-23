@@ -29,27 +29,27 @@ export const signinValidationSchema = yup.object().shape({
 
 export const editProfileValidationSchema = yup.object().shape({
   name: yup.string().min(3).required("Name is required!").label("Name"),
-  email: yup.string().required("Email address is required!").email("Please enter a valid email").label("Email Address"),
-  phoneNumber: yup
-    .string()
+  DOB: yup
+    .date()
+    .nullable()
+    .max(new Date(), "Date of Birth cannot be in the future")
     .optional()
-    .matches(
-      /^\+?[\d\s()-]{7,15}$/,
-      "Phone number must be between 7 and 15 digits, and can include spaces, dashes, or parentheses."
-    )
-    .label("Phone Number"),
+    .typeError("Invalid date format (YYYY-MM-DD)"),
+  country: yup.string().min(3).optional().label("Country"),
 });
 
 export const createPasswordValidationSchema = yup.object().shape({
-  type: yup.string().min(3).required("Type is required!").label("Type"),
-  platform: yup.string().min(3).required("Platform is required!").label("Platform"),
+  type: yup.object().shape({
+    _id: yup.string().required("Please select a type.").label("Type"),
+  }),
+  platform: yup.string().optional().min(3).label("Platform"),
   siteAddress: yup
     .string()
-    .optional()
+    .required("Site Address is required!")
     .url("Please enter a valid URL starting with http:// or https://")
     .label("Site Address"),
-  email: yup.string().optional().email("Please enter a valid email").label("Email Address"),
-  password: yup
+  email: yup.string().optional().label("Email Address"),
+  passwordText: yup
     .string()
     .required("Password is required!")
     .matches(
@@ -57,8 +57,33 @@ export const createPasswordValidationSchema = yup.object().shape({
       "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number "
     )
     .min(8)
+    .label("passwordText"),
+});
+
+export const editPasswordValidationSchema = yup.object().shape({
+  type: yup
+    .object()
+    .shape({
+      _id: yup.string().label("Type"),
+    })
+    .nullable()
+    .label("Type"),
+  platform: yup.string().min(3).label("Platform"),
+  siteAddress: yup
+    .string()
+    .url("Please enter a valid URL starting with http:// or https://")
+    .label("Site Address"),
+  email: yup.string().label("Email Address"),
+  passwordText: yup
+    .string()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, and a Number"
+    )
+    .min(8)
     .label("Password"),
 });
+
 
 export const forgotPasswordValidation = yup.object().shape({
   email: yup.string().required("Email is required!").email(),

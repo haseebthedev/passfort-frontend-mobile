@@ -1,57 +1,93 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import * as ImagePicker from "expo-image-picker";
 import * as SplashScreen from "expo-splash-screen";
+import * as LocalAuthentication from "expo-local-authentication";
 import { Screens } from "@/enums";
+import { useAuthStore } from "@/store";
 import { passfortIcon } from "@/assets";
-import { loadFonts, wp } from "@/utils";
 import { GradientWrapper, LoadingIndicator } from "@/components";
+import { loadFonts, requestImagePickerPermission, wp } from "@/utils";
 
 export default function Index() {
   const router = useRouter();
-  const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
-  const [imagePickerLoaded, setImagePickerLoaded] = useState<boolean>(false);
-
-  const requestPermissions = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      alert("Sorry, we need media library permissions to make this work!");
-    } else {
-      setImagePickerLoaded(true);
-    }
-  };
+  const { user, firstTimeUser, biometricAuth: biometricEnabled } = useAuthStore();
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [imagePickerLoaded, setImagePickerLoaded] = useState(false);
 
   const redirectUser = async () => {
-    if (fontsLoaded) {
-      setTimeout(() => {
+    if (!fontsLoaded) return;
+
+    // Not signed in
+    if (!user) {
+      if (firstTimeUser) {
+        router.push(Screens.Onboarding);
+      } else {
+        console.log("ok", biometricEnabled);
         router.push(Screens.Signin);
-      }, 10000);
+      }
+      return;
+    }
+
+    if (biometricEnabled) {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      const enrolled = await LocalAuthentication.isEnrolledAsync();
+
+      if (compatible && enrolled) {
+        const result = await LocalAuthentication.authenticateAsync({
+          promptMessage: "Authenticate to unlock Passfort",
+          fallbackLabel: "Use Passcode",
+          cancelLabel: "Cancel",
+        });
+
+        if (result.success) {
+          router.push(Screens.Home);
+        } else {
+          Alert.alert("Authentication Failed", "Please try again or sign in again.");
+          router.push(Screens.Signin);
+        }
+      } else {
+        Alert.alert("Biometric not available", "Fallback to password login.");
+        router.push(Screens.Signin);
+      }
+    } else {
+      // Signed in but biometric not enabled
+      router.push(Screens.Home);
     }
   };
 
   useEffect(() => {
-    async function prepare() {
+    const prepare = async () => {
       try {
         await loadFonts();
         setFontsLoaded(true);
         await SplashScreen.preventAutoHideAsync();
-        if (fontsLoaded) {
-          redirectUser();
-        }
       } catch (e) {
         console.warn(e);
       } finally {
         await SplashScreen.hideAsync();
       }
-    }
+    };
 
     prepare();
-  }, [router, fontsLoaded]);
+  }, []);
 
   useEffect(() => {
-    requestPermissions();
+    const handlePermissions = async () => {
+      const granted = await requestImagePickerPermission();
+      if (granted) {
+        setImagePickerLoaded(true);
+      }
+    };
+
+    handlePermissions();
   }, []);
+
+  useEffect(() => {
+    if (fontsLoaded && imagePickerLoaded) {
+      redirectUser();
+    }
+  }, [fontsLoaded, imagePickerLoaded]);
 
   if (!fontsLoaded && !imagePickerLoaded) {
     return <LoadingIndicator />;

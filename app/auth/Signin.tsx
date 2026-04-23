@@ -1,59 +1,39 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { SigninI } from "@/interfaces";
-import { useAuthStore } from "@/store";
-import { useFormikHook } from "@/hooks";
-import { signinValidationSchema } from "@/utils";
-import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
+import { useSignin, useTheme } from "@/hooks";
+import { colorPalette, Spacing } from "@/styles";
+import { AppButton, AppLogo, AppText, Checkbox, GradientWrapper, KeyboardResponsiveHOC, LoadingIndicator, TextInput } from "@/components";
+import { Theme } from "@/interfaces";
 
 const Signin = () => {
-  const { login, user } = useAuthStore();
+  const {
+    rememberMe,
+    setRememberMe,
+    isLoadingCredentials,
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+    isLoading,
+  } = useSignin();
 
-  const validationSchema = signinValidationSchema;
-  const initialValues: SigninI = { email: "", password: "" };
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
-  const submit = async ({ email, password }: SigninI) => {
-    try {
-      Keyboard.dismiss();
-      login({
-        id: "123",
-        email,
-        name: "John Doe",
-        picture: "https://via.placeholder.com/150",
-        location: "New York, USA",
-        isFirstSignIn: false,
-        isLogin: true,
-      });
-
-      if (user?.isFirstSignIn) {
-        router.push(Screens.Onboarding);
-      } else if (user?.isLogin && !user?.isFirstSignIn) {
-        router.push(Screens.BiometricAuth);
-      } else {
-        router.push(Screens.BiometricAuth);
-      }
-    } catch (err) {
-      console.log("error === ", err);
-    }
-  };
-
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  if (isLoadingCredentials) {
+    return <LoadingIndicator />;
+  }
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
+    <GradientWrapper>
       <KeyboardResponsiveHOC containerStyle={styles.container} scrollViewStyle={styles.scrollViewStyle}>
         <AppLogo />
-        <View style={styles.form}>
-          <View style={styles.title}>
-            <AppText text="Sign In" type="title" />
-          </View>
+        <View>
+          <AppText text="Sign In" type="title" style={styles.title} />
 
           <TextInput
             label="Email Address"
@@ -76,74 +56,69 @@ const Signin = () => {
           />
 
           <View style={styles.actionGroup}>
-            <Checkbox label="Remember me" labelStyle={styles.labelStyle} />
-            <AppButton
-              text="Forget Password?"
-              onPress={() => router.push(Screens.ForgetPassword)}
-              preset="primaryLink"
-            />
+            <Checkbox label="Remember me" labelStyle={styles.labelStyle} checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} />
+            <AppButton text="Forget Password?" onPress={() => router.push(Screens.ForgetPassword)} preset="primaryLink" />
           </View>
 
-          <AppButton text="Sign In" onPress={handleSubmit} />
-
+          <AppButton
+            text={isLoading ? "" : "Sign In"}
+            onPress={handleSubmit}
+            RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+          />
           <View style={styles.linkRow}>
-            <AppText text="Don’t have an account?" type="label" />
+            <AppText text="Don't have an account?" type="label" />
             <AppButton text="Sign Up" onPress={() => router.push(Screens.Signup)} preset="primaryLink" />
           </View>
         </View>
+
+        <View style={styles.termsAndConditions}>
+          <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
+          <AppText text=" and " type="default" />
+          <AppText text="Privacy policy" style={styles.policy} type="default" />
+        </View>
       </KeyboardResponsiveHOC>
-      <View style={styles.termsAndConditions}>
-        <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
-        <AppText text=" and " type="default" />
-        <AppText text="Privacy policy" style={styles.policy} type="default" />
-      </View>
     </GradientWrapper>
   );
 };
 
 export default Signin;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollViewStyle: {
-    flexGrow: 1,
-    paddingTop: Spacing.sm,
-  },
-  title: {
-    paddingVertical: Spacing.md,
-    alignSelf: "center",
-    marginBottom: Spacing.lg,
-  },
-  form: {
-    justifyContent: "space-between",
-  },
-  labelStyle: {
-    color: colorPalette.primaryBg.primaryGrey,
-  },
-  actionGroup: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: Spacing.lg,
-  },
-  linkRow: {
-    // marginTop: Spacing.xs,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  termsAndConditions: {
-    flexDirection: "row",
-    justifyContent: "center",
-    color: colorPalette.primaryBg.primaryWhite,
-    marginBottom: Spacing.sm,
-  },
-  conditions: {
-    textDecorationLine: "underline",
-  },
-  policy: {
-    textDecorationLine: "underline",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    scrollViewStyle: {
+      flexGrow: 1,
+      paddingTop: Spacing.sm,
+    },
+    title: {
+      paddingVertical: Spacing.md,
+      alignSelf: "center",
+      marginBottom: Spacing.lg,
+    },
+    labelStyle: {
+      color: theme.label,
+    },
+    actionGroup: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    linkRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    termsAndConditions: {
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: Spacing.sm,
+    },
+    conditions: {
+      textDecorationLine: "underline",
+    },
+    policy: {
+      textDecorationLine: "underline",
+    },
+  });

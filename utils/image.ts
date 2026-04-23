@@ -1,6 +1,7 @@
 import BottomSheet from "@gorhom/bottom-sheet";
 import * as ImagePicker from "expo-image-picker";
 import { ImageSourcePropType } from "react-native";
+import { showToast } from "./toastService";
 
 export const pickImageFromLibrary = async (
   bottomSheetRef: React.RefObject<BottomSheet>,
@@ -19,7 +20,10 @@ export const pickImageFromLibrary = async (
       setProfileImage({ uri: result.assets[0].uri });
       setSelectedImage(result.assets[0]);
     } else {
-      console.log("No image selected.");
+      showToast({
+        type: "error",
+        text1: `No image selected.`,
+      });
     }
   } catch (error) {
     console.error("Error picking image:", error);
@@ -43,7 +47,10 @@ export const pickImageFromCamera = async (
       setProfileImage({ uri: result.assets[0].uri });
       setSelectedImage(result.assets[0]);
     } else {
-      console.log("No image captured.");
+      showToast({
+        type: "error",
+        text1: `"No image captured.`,
+      });
     }
   } catch (error) {
     console.error("Error capturing image:", error);

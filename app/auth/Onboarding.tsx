@@ -3,33 +3,54 @@ import { Image, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import { hp, wp } from "@/utils";
 import { Screens } from "@/enums";
+import { useAuthStore } from "@/store";
 import { OnboardingData } from "@/constants";
-import { LayoutStyles, Spacing } from "@/styles";
+import { Spacing } from "@/styles";
 import { AppButton, AppText, GradientWrapper } from "@/components";
 
 const Onboarding = () => {
+  const { setFirstTimeUser } = useAuthStore();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const handleNext = () => {
     if (currentIndex < OnboardingData.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.push(Screens.Home);
+      setFirstTimeUser(false);
+      router.push(Screens.Signin);
     }
   };
 
-  const handleSkip = () => router.push(Screens.Home);
+  const handleSkip = () => {
+    setFirstTimeUser(false);
+    router.push(Screens.Signin);
+  };
 
   return (
-    <GradientWrapper style={[LayoutStyles.horizontalSpacing]}>
+    <GradientWrapper>
       <View style={styles.container}>
-        <Image source={OnboardingData[currentIndex].image} style={styles.image} />
-        <AppText text={OnboardingData[currentIndex].title} type="primaryTitle" />
-        <AppText text={OnboardingData[currentIndex].subtitle} type="label" style={styles.textStyle} />
+        <Image
+          source={OnboardingData[currentIndex].image}
+          style={styles.image}
+        />
+        <AppText
+          text={OnboardingData[currentIndex].title}
+          type="primaryTitle"
+        />
+        <AppText
+          text={OnboardingData[currentIndex].subtitle}
+          type="label"
+          style={styles.textStyle}
+        />
       </View>
 
       <View style={styles.actionButtons}>
-        <AppButton text={currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"} onPress={handleNext} />
+        <AppButton
+          text={
+            currentIndex < OnboardingData.length - 1 ? "Next" : "Get Started"
+          }
+          onPress={handleNext}
+        />
         <AppButton text="Skip" onPress={handleSkip} preset="secondaryLink" />
       </View>
     </GradientWrapper>

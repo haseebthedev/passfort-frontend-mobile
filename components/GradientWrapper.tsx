@@ -1,8 +1,10 @@
 import React, { ReactNode } from "react";
-import { SafeAreaView, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { colorPalette, GradientColors, LayoutStyles } from "@/styles";
-import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AppStatusBar } from "./AppStatusBar";
+import { LayoutStyles } from "@/styles";
+import { useTheme } from "@/hooks";
 
 interface GradientWrapperI {
   children: ReactNode;
@@ -10,20 +12,30 @@ interface GradientWrapperI {
 }
 
 export const GradientWrapper = ({ children, style }: GradientWrapperI) => {
+  const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
+
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
-      <StatusBar backgroundColor={colorPalette.primaryBg.primaryDarkGreen} />
+    <View style={[styles.safeAreaContainer, { paddingTop: insets.top }]}>
+      <AppStatusBar />
       <LinearGradient
-        colors={GradientColors}
-        style={[LayoutStyles.pageContainer, style]}
+        colors={theme.GradientColors}
+        style={[
+          LayoutStyles(theme).pageContainer,
+          LayoutStyles(theme).horizontalSpacing,
+          ,
+          style,
+        ]}
         locations={[0.53, 0.653, 0.8, 1]}
       >
         {children}
       </LinearGradient>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeAreaContainer: { flex: 1 },
+  safeAreaContainer: {
+    flex: 1,
+  },
 });

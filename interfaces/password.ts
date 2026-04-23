@@ -1,22 +1,72 @@
-import { ImageSourcePropType } from "react-native";
+import { Theme } from "./theme";
+import { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
+import { Feather, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
-export type PasswordCardType = {
-  id: string;
-  icon?: ImageSourcePropType;
-  title: string;
-  subtitle: string;
+export type ListPagination<T> = {
+  docs: T[];
+  totalDocs?: number;
+  limit?: number;
+  page: number;
+  totalPages?: number;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
+  listRefreshing?: boolean;
 };
+
+export type PasswordCategoryType = {
+  icon?: string;
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export interface PasswordI {
+  type: {
+    _id: string;
+    icon?: string;
+    title: string;
+    updatedAt?: string;
+  };
+  platform?: string;
+  siteAddress?: string;
+  email?: string;
+  username?: string;
+  passwordText: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface PasswordGroup {
+  _id: string;
+  passwords: PasswordI[];
+  type: PasswordCategoryType;
+}
+
+export interface PasswordsResponse {
+  result: PasswordGroup[];
+}
+
+export interface updatePasswordI {
+  type?: string;
+  platform?: string;
+  siteAddress?: string;
+  username?: string;
+  passwordText?: string;
+}
 
 export type PasswordItemType = {
   id: string;
-  type: "Social" | "App" | "Wallet" | "Shopping" | "Streaming" | "Banking";
+  type: PasswordCategoryType;
   username?: string;
   email?: string;
-  address?: string;
+  siteAddress?: string;
   platform?: string;
-  passwordText: string;
+  passwordText?: string;
   icon?: ImageSourcePropType;
-  date: string | Date;
+  date?: string | Date;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 };
 
 export type PasswordStatType = {
@@ -26,3 +76,40 @@ export type PasswordStatType = {
 };
 
 export type PasswordType = "WEAK" | "MODERATE" | "STRONG";
+
+// password detail screen's related types
+
+export interface InfoItemPropsI {
+  label: string;
+  value?: string;
+  theme: Theme;
+  style: ViewStyle;
+}
+
+export interface IconButtonPropsI {
+  iconName: keyof typeof Fontisto.glyphMap | keyof typeof MaterialCommunityIcons.glyphMap | keyof typeof Feather.glyphMap;
+  IconComponent: typeof Feather | typeof Fontisto | typeof MaterialCommunityIcons;
+  onPress: () => void;
+  sizeOverride?: number;
+  theme: Theme;
+  mode: string;
+  buttonStyle: ViewStyle;
+  containerStyle: ViewStyle;
+}
+
+export interface PasswordInfoPropsI {
+  passwordDetail: PasswordItemType & { userId?: string };
+  theme: Theme;
+  styles?: any;
+}
+
+export interface PasswordActionsPropsI {
+  passwordDetail: PasswordItemType & { userId?: string };
+  onCopy: () => void;
+  onDelete: () => void;
+  onEdit: () => void;
+  onShare: () => void;
+  theme: Theme;
+  mode: string;
+  styles: any;
+}

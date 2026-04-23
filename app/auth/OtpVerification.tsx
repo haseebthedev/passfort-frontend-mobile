@@ -1,60 +1,46 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Keyboard, TextInput } from "react-native";
-import { router } from "expo-router";
+import React from "react";
+import { View, StyleSheet, TextInput } from "react-native";
+import { useLocalSearchParams, router } from "expo-router";
 import { hp, wp } from "@/utils";
-import { Screens } from "@/enums";
+import { useOtpVerification, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, TextInput as TextInputField } from "@/components";
+import { AppButton, AppHeader, AppText, GradientWrapper } from "@/components";
+import { Theme } from "@/interfaces";
 
 const OtpVerification = () => {
-  const TIMER: number = 30;
-  const [timer, setTimer] = useState<number>(TIMER);
-  const [otpDisableBtn, setOptDisableBtn] = useState<boolean>(false);
-  const [disableResetBtn, setDisableResetBtn] = useState<boolean>(true);
-  const input1 = useRef<TextInput>(null);
-  const input2 = useRef<TextInput>(null);
-  const input3 = useRef<TextInput>(null);
-  const input4 = useRef<TextInput>(null);
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+  const { email } = useLocalSearchParams<{ email: string }>();
 
-  const [otp, setOtp] = useState({
-    1: "",
-    2: "",
-    3: "",
-    4: "",
-  });
-
-  const onPressVerifyHandler = () => {
-    Keyboard.dismiss();
-    let verificationCode = Object.values(otp).join("");
-    console.log("verification code: ", verificationCode);
-    router.push(Screens.ResetPassword);
-  };
-
-  const onPressResendCodeHandler = () => {
-    setTimer(TIMER);
-  };
-
-  useEffect(() => {
-    let counter: NodeJS.Timer | undefined;
-    if (timer === 0) {
-      clearInterval(counter);
-      setOptDisableBtn(true);
-    } else {
-      counter = setInterval(() => setTimer((prev) => prev - 1), 1000);
-      setOptDisableBtn(false);
-    }
-    return () => clearInterval(counter);
-  }, [timer]);
+  const {
+    timer,
+    otp,
+    setOtp,
+    disableVerifyBtn,
+    disableResetBtn,
+    input1,
+    input2,
+    input3,
+    input4,
+    input5,
+    input6,
+    onPressVerifyHandler,
+    onPressResendCodeHandler,
+  } = useOtpVerification(email);
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="OTP Verification" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+    <GradientWrapper>
+      <AppHeader
+        title="OTP Verification"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+      />
 
       <View style={styles.form}>
         <View style={styles.head}>
           <AppText text="Get Your Code" type="heading" />
           <AppText
-            text="Please enter the 4 digit code that send to your email address."
+            text="Please enter the 6 digit code that send to your email address."
             type="subHeading"
             style={styles.subHeading}
           />
@@ -122,12 +108,50 @@ const OtpVerification = () => {
             onFocus={() => input4.current?.focus()}
             onChangeText={(text) => {
               setOtp({ ...otp, 4: text });
-              !text ? input3.current?.focus() : input4.current?.blur();
+              text ? input5.current?.focus() : input3.current?.focus();
             }}
             onKeyPress={({ nativeEvent }) => {
               if (nativeEvent.key === "Backspace") {
                 input3.current?.clear();
                 input3.current?.focus();
+              }
+            }}
+          />
+          <TextInput
+            ref={input5}
+            value={otp["5"]}
+            keyboardType="number-pad"
+            maxLength={1}
+            style={styles.codeVerifyBlock}
+            selectTextOnFocus
+            onFocus={() => input5.current?.focus()}
+            onChangeText={(text) => {
+              setOtp({ ...otp, 5: text });
+              text ? input6.current?.focus() : input4.current?.focus();
+            }}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === "Backspace") {
+                input4.current?.clear();
+                input4.current?.focus();
+              }
+            }}
+          />
+          <TextInput
+            ref={input6}
+            value={otp["6"]}
+            keyboardType="number-pad"
+            maxLength={1}
+            style={styles.codeVerifyBlock}
+            selectTextOnFocus
+            onFocus={() => input6.current?.focus()}
+            onChangeText={(text) => {
+              setOtp({ ...otp, 6: text });
+              !text ? input5.current?.focus() : input6.current?.blur();
+            }}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === "Backspace") {
+                input5.current?.clear();
+                input5.current?.focus();
               }
             }}
           />
@@ -138,11 +162,21 @@ const OtpVerification = () => {
           <AppText text={"00 : " + timer} style={styles.timerText} />
         </View>
 
-        <AppButton preset="filled" text="Verify" onPress={onPressVerifyHandler} />
+        <AppButton
+          preset="filled"
+          text="Verify"
+          onPress={onPressVerifyHandler}
+          disabled={disableVerifyBtn}
+        />
 
         <View style={styles.dontRecieveCodeContainer}>
           <AppText text="If you don't receive code!" type="default" />
-          <AppButton preset="primaryLink" text="Resend" onPress={onPressResendCodeHandler} disabled={disableResetBtn} />
+          <AppButton
+            preset="primaryLink"
+            text="Resend"
+            onPress={onPressResendCodeHandler}
+            disabled={disableResetBtn}
+          />
         </View>
       </View>
     </GradientWrapper>
@@ -151,46 +185,47 @@ const OtpVerification = () => {
 
 export default OtpVerification;
 
-const styles = StyleSheet.create({
-  form: {
-    flex: 1,
-    marginVertical: Spacing.xxl,
-  },
-  head: {
-    alignItems: "center",
-  },
-  subHeading: {
-    width: wp(80),
-    textAlign: "center",
-    color: colorPalette.primaryBg.secondayGrey,
-    marginTop: Spacing.sm,
-  },
-  dontRecieveCodeContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  codeExpireText: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  timerText: {
-    color: colorPalette.primaryBg.primaryLightGreen,
-  },
-  inputFields: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginVertical: Spacing.lg,
-    paddingHorizontal: Spacing.xl,
-  },
-  codeVerifyBlock: {
-    backgroundColor: colorPalette.primaryBg.borderColor2,
-    borderRadius: hp(0.6),
-    width: hp(7),
-    height: hp(7),
-    textAlign: "center",
-    fontSize: hp(3),
-    color: colorPalette.primaryBg.primaryLightGreen,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    form: {
+      flex: 1,
+      marginVertical: Spacing.xxl,
+    },
+    head: {
+      alignItems: "center",
+    },
+    subHeading: {
+      width: wp(80),
+      textAlign: "center",
+      marginTop: Spacing.sm,
+    },
+    dontRecieveCodeContainer: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    codeExpireText: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    timerText: {
+      color: colorPalette.primaryBg.primaryLightGreen,
+    },
+    inputFields: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      marginVertical: Spacing.lg,
+      paddingHorizontal: Spacing.md,
+      width: wp(90),
+    },
+    codeVerifyBlock: {
+      borderRadius: hp(0.6),
+      width: hp(6),
+      height: hp(6),
+      textAlign: "center",
+      fontSize: hp(2.5),
+      color: theme.blockInput.textColor,
+      backgroundColor: theme.blockInput.bg,
+    },
+  });

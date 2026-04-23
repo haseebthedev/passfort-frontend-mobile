@@ -4,14 +4,19 @@ import { Tabs } from "expo-router";
 import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { AppFont, hp } from "@/utils";
 import { colorPalette, Fonts, iconSize, Spacing } from "@/styles";
+import { useTheme } from "@/hooks";
+import { Theme } from "@/interfaces";
 
 const TabLayout = () => {
+  const { theme, mode } = useTheme();
+  const styles = createStyles(theme, mode);
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colorPalette.primaryBg.secondaryLightGreen,
-        tabBarInactiveTintColor: colorPalette.primaryBg.primaryGrey,
+        tabBarActiveTintColor: theme.tabBar.tabBarActiveTintColor,
+        tabBarInactiveTintColor: theme.tabBar.tabBarInactiveTintColor,
         tabBarStyle: styles.tabBarStyle,
         tabBarShowLabel: false,
       }}
@@ -43,15 +48,16 @@ const TabLayout = () => {
 
 export default TabLayout;
 
-const styles = StyleSheet.create({
-  tabBarStyle: {
-    backgroundColor: colorPalette.primaryBg.primaryDarkGreen,
-    height: hp(8),
-    borderTopWidth: 0,
-  },
-  tabBarLabelStyle: {
-    marginBottom: Spacing.sm,
-    fontSize: Fonts.size.sm,
-    fontFamily: AppFont.regular,
-  },
-});
+const createStyles = (theme: Theme, mode: string) =>
+  StyleSheet.create({
+    tabBarStyle: {
+      backgroundColor: mode === "dark" ? colorPalette.primaryBg.primaryDarkGreen : colorPalette.primaryBg.primaryWhite,
+      height: hp(8),
+      borderTopWidth: 0,
+    },
+    tabBarLabelStyle: {
+      marginBottom: Spacing.sm,
+      fontSize: Fonts.size.sm,
+      fontFamily: AppFont.regular,
+    },
+  });

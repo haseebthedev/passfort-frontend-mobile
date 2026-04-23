@@ -1,31 +1,40 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { Screens } from "@/enums";
-import { useFormikHook } from "@/hooks";
-import { ForgetPasswordI } from "@/interfaces";
-import { forgotPasswordValidation, hp, wp } from "@/utils";
+import { hp, wp } from "@/utils";
+import { useForgetPassword, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, TextInput } from "@/components";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  TextInput,
+} from "@/components";
+import { Theme } from "@/interfaces";
 
 const ForgetPassword = () => {
-  const validationSchema = forgotPasswordValidation;
-  const initialValues: ForgetPasswordI = { email: "" };
+  const { theme } = useTheme();
 
-  const submit = async ({ email }: ForgetPasswordI) => {
-    Keyboard.dismiss();
-    console.log("email: ", email);
-    router.push(Screens.OtpVerification);
-  };
+  const {
+    isLoading,
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+  } = useForgetPassword();
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const styles = createStyles(theme);
+
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Forget Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+    <GradientWrapper>
+      <AppHeader
+        title="Forget Password"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+      />
 
       <View style={styles.form}>
         <View style={styles.centerContent}>
@@ -45,7 +54,16 @@ const ForgetPassword = () => {
           error={errors.email}
           visible={touched.email}
         />
-        <AppButton text={"Recover Password"} preset="filled" onPress={handleSubmit} />
+        <AppButton
+          text={isLoading ? "" : "Recover Password"}
+          preset="filled"
+          onPress={handleSubmit}
+          RightAccessory={() =>
+            isLoading && (
+              <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
+            )
+          }
+        />
       </View>
     </GradientWrapper>
   );
@@ -53,18 +71,18 @@ const ForgetPassword = () => {
 
 export default ForgetPassword;
 
-const styles = StyleSheet.create({
-  form: {
-    flex: 1,
-    marginVertical: hp(6),
-  },
-  subHeading: {
-    width: wp(80),
-    textAlign: "center",
-    color: colorPalette.primaryBg.primaryGrey,
-    marginBottom: Spacing.md,
-  },
-  centerContent: {
-    alignItems: "center",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    form: {
+      flex: 1,
+      marginVertical: hp(6),
+    },
+    subHeading: {
+      width: wp(80),
+      textAlign: "center",
+      marginBottom: Spacing.md,
+    },
+    centerContent: {
+      alignItems: "center",
+    },
+  });

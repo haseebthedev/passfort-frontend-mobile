@@ -1,36 +1,23 @@
-import React, { useState } from "react";
+import React, { memo } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { router } from "expo-router";
 import { wp } from "@/utils";
 import { Screens } from "@/enums";
 import { AppFont } from "@/utils";
 import { useAuthStore } from "@/store";
+import { PasswordGroup } from "@/interfaces";
+import { usePasswordManagement } from "@/hooks";
 import { colorPalette, Spacing } from "@/styles";
-import { PasswordCard_Data, PasswordItem_Data } from "@/constants";
-import { AppLogo, AppText, GradientWrapper, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
+import { AppLogo, AppText, GradientWrapper, LoadingIndicator, PasswordCard, PasswordItem, RoundButton, SearchInput } from "@/components";
 
-const HeaderComponent = () => {
-  const { user } = useAuthStore();
-  const [searchText, setSearchText] = useState<string>("");
+interface HeaderComponentI {
+  groupedPassword: PasswordGroup[];
+}
 
+const HeaderComponent = memo(({ groupedPassword }: HeaderComponentI) => {
   return (
-    <View>
-      <View style={styles.greetingContainer}>
-        <View>
-          <AppText
-            text={`Hello ${user?.name ?? "Username"}`}
-            type="heading"
-            numberOfLines={1}
-            style={styles.username}
-          />
-          <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
-        </View>
-        <AppLogo style={styles.appLogo} />
-      </View>
-
-      <SearchInput value={searchText} onChangeText={setSearchText} />
-
-      <View style={styles.passwordCards}>
+    <>
+      <>
         <View style={styles.passwordsHeader}>
           <View>
             <AppText text="Manage" type="label" style={styles.label} />
@@ -38,30 +25,51 @@ const HeaderComponent = () => {
           </View>
           <RoundButton iconName="plus" onPress={() => router.push(Screens.CreatePassword)} />
         </View>
+
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={PasswordCard_Data}
+          data={groupedPassword ?? []}
           renderItem={({ item }) => <PasswordCard item={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item._id.toString()}
           contentContainerStyle={styles.passwordCardsContainer}
+          ListEmptyComponent={<AppText text="No passwords found!" type="default" />}
         />
-      </View>
+      </>
       <AppText text="Recently Added" type="primaryHeading" style={styles.heading} />
-    </View>
+    </>
   );
-};
+});
 
 const Home = () => {
+  const { user } = useAuthStore();
+  const { groupedPassword, searchText, setSearchText, state, isLoading, recentPasswords, handleRefresh } = usePasswordManagement();
+
   return (
     <GradientWrapper>
+      <View style={styles.greetingContainer}>
+        <View>
+          <AppText text={`Hello ${user?.name ?? "Username"}`} type="heading" numberOfLines={1} style={styles.username} />
+          <AppText text="Welcome to Password Manager" type="regularSubHeading" style={styles.welcomeText} />
+        </View>
+        <AppLogo style={styles.appLogo} />
+      </View>
+
+      <SearchInput value={searchText} onChangeText={setSearchText} />
+
       <FlatList
-        data={PasswordItem_Data}
+        data={recentPasswords ?? []}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <PasswordItem item={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={() => <HeaderComponent />}
-        contentContainerStyle={styles.passwordItemsContainer}
+        // keyExtractor={(item) => item._id.toString()}
+        ListHeaderComponent={() => <HeaderComponent groupedPassword={groupedPassword} />}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            {isLoading ? <LoadingIndicator /> : !state.listRefreshing ? <AppText text="No passwords found!" type="default" /> : null}
+          </View>
+        }
+        refreshing={state.listRefreshing}
+        onRefresh={handleRefresh}
       />
     </GradientWrapper>
   );
@@ -92,23 +100,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    // marginTop: Spacing.lg,
     marginBottom: Spacing.md,
   },
   appLogo: {
     width: wp(17),
     height: wp(17),
   },
-  passwordCards: {},
   passwordCardsContainer: {
     marginBottom: Spacing.lg,
     gap: Spacing.md,
+    paddingBottom: Spacing.xxs,
   },
   heading: {
     marginBottom: Spacing.md,
     fontFamily: AppFont.semiBold,
   },
-  passwordItemsContainer: {
-    paddingHorizontal: Spacing.md,
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Spacing.md,
+  },
+  recentPasswordsContainer: {
+    marginBottom: Spacing.lg,
+  },
+  recentPasswordsList: {
+    gap: Spacing.md,
   },
 });

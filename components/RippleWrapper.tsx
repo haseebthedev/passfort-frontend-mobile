@@ -21,11 +21,7 @@ export const RippleWrapper = ({
 }: RippleWrapperProps) => {
   return (
     <View style={[styles.buttonContainer, containerStyle]}>
-      <TouchableNativeFeedback
-        onPress={onPress}
-        background={TouchableNativeFeedback.Ripple(rippleColor, false)}
-        disabled={disabled}
-      >
+      <TouchableNativeFeedback onPress={onPress} background={TouchableNativeFeedback.Ripple(rippleColor, false)} disabled={disabled}>
         <View style={style}>{children}</View>
       </TouchableNativeFeedback>
     </View>

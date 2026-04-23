@@ -1,39 +1,20 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Screens } from "@/enums";
-import { SignupI } from "@/interfaces";
-import { useFormikHook } from "@/hooks";
-import { signupValidationSchema } from "@/utils";
+import { useSignup } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppLogo, AppText, GradientWrapper, KeyboardResponsiveHOC, TextInput } from "@/components";
+import { AppButton, AppLogo, AppText, GradientWrapper, KeyboardResponsiveHOC, LoadingIndicator, TextInput } from "@/components";
 
 const Signup = () => {
-  const validationSchema = signupValidationSchema;
-  const initialValues: SignupI = { name: "", email: "", password: "" };
-
-  const submit = async ({ name, email, password }: SignupI) => {
-    try {
-      Keyboard.dismiss();
-      console.log(name, email, password);
-      router.push(Screens.Signin);
-    } catch (err) {
-      console.log("error === ", err);
-    }
-  };
-
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values, isLoading } = useSignup();
 
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <KeyboardResponsiveHOC containerStyle={styles.container}>
+    <GradientWrapper>
+      <KeyboardResponsiveHOC>
         <View style={styles.form}>
-          <AppLogo />
-          <View style={styles.inputContainer}>
+          <View>
+            <AppLogo />
             <View style={styles.title}>
               <AppText text="Sign Up" type="title" />
             </View>
@@ -67,20 +48,25 @@ const Signup = () => {
               secureInput={true}
             />
 
-            <AppButton text="Sign Up" onPress={handleSubmit} />
-
-            <View style={styles.linkRow}>
-              <AppText text="Already have an account?" type="label" />
-              <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
+            <AppButton
+              text={isLoading ? "" : "Sign Up"}
+              onPress={handleSubmit}
+              RightAccessory={() => isLoading && <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />}
+            />
+          </View>
+          <View style={styles.linkRow}>
+            <AppText text="Already have an account?" type="label" />
+            <AppButton text="Sign In" onPress={() => router.push(Screens.Signin)} preset="primaryLink" />
+          </View>
+          <View>
+            <View style={styles.termsAndConditions}>
+              <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
+              <AppText text=" and " type="default" />
+              <AppText text="Privacy policy" style={styles.policy} type="default" />
             </View>
           </View>
         </View>
       </KeyboardResponsiveHOC>
-      <View style={styles.termsAndConditions}>
-        <AppText text="Terms & Conditions" style={styles.conditions} type="default" />
-        <AppText text=" and " type="default" />
-        <AppText text="Privacy policy" style={styles.policy} type="default" />
-      </View>
     </GradientWrapper>
   );
 };
@@ -88,37 +74,31 @@ const Signup = () => {
 export default Signup;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   title: {
     paddingVertical: Spacing.md,
     alignSelf: "center",
   },
   form: {
     paddingTop: Spacing.sm,
+    flex: 1,
     justifyContent: "space-between",
-  },
-  inputContainer: {
-    flexGrow: 1,
   },
   actionGroup: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-
   linkRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: Spacing.md,
   },
   termsAndConditions: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     color: colorPalette.primaryBg.primaryWhite,
-    marginBottom: Spacing.sm,
   },
   conditions: {
     textDecorationLine: "underline",

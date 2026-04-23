@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { TouchableWithoutFeedback, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
+import {
+  TouchableWithoutFeedback,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  View,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AppText } from "./AppText";
 import { colorPalette, iconSize, Spacing } from "@/styles/styles";
+import { useTheme } from "@/hooks";
 
 interface CheckboxI {
   label?: string;
@@ -12,7 +20,14 @@ interface CheckboxI {
   labelStyle?: StyleProp<TextStyle>;
 }
 
-export const Checkbox = ({ label, checked = false, onChange, containerStyle, labelStyle }: CheckboxI) => {
+export const Checkbox = ({
+  label,
+  checked = false,
+  onChange,
+  containerStyle,
+  labelStyle,
+}: CheckboxI) => {
+  const { theme } = useTheme();
   const [isChecked, setChecked] = useState<boolean>(checked);
 
   const handlePress = () => {
@@ -27,7 +42,7 @@ export const Checkbox = ({ label, checked = false, onChange, containerStyle, lab
         <MaterialIcons
           name={isChecked ? "check-box" : "check-box-outline-blank"}
           size={iconSize}
-          color={isChecked ? colorPalette.primaryBg.secondaryLightGreen : colorPalette.primaryBg.primaryGrey}
+          color={isChecked ? theme.checkedIcon : theme.notCheckedIcon}
           style={styles.spacing}
         />
       </TouchableWithoutFeedback>

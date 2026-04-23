@@ -5,6 +5,7 @@ import { AppText } from "./AppText";
 import { iconSize, LayoutStyles, Spacing } from "@/styles";
 import { RippleWrapper } from "./RippleWrapper";
 import { wp } from "@/utils";
+import { useTheme } from "@/hooks";
 
 interface AppHeaderI {
   title?: string;
@@ -29,12 +30,13 @@ export const AppHeader = ({
   rightAccessory,
   leftAccessory,
 }: AppHeaderI) => {
+  const { theme } = useTheme();
   return (
-    <View style={[LayoutStyles.headerNavContainer, containerStyle]}>
+    <View style={[LayoutStyles(theme).headerNavContainer, containerStyle]}>
       <View style={styles.leftContainer}>
         {leftIconName && (
           <RippleWrapper onPress={onLeftIconPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
-            <Ionicons name={leftIconName} style={LayoutStyles.headerIcon} size={iconSize} />
+            <Ionicons name={leftIconName} style={LayoutStyles(theme).headerIcon} size={iconSize} />
           </RippleWrapper>
         )}
 
@@ -43,7 +45,7 @@ export const AppHeader = ({
 
       {rightIconName && (
         <RippleWrapper onPress={onRightIconPress} style={styles.buttonStyle} containerStyle={styles.buttonContainer}>
-          <Ionicons name={rightIconName} style={LayoutStyles.headerIcon} size={iconSize} />
+          <Ionicons name={rightIconName} style={LayoutStyles(theme).headerIcon} size={iconSize} />
         </RippleWrapper>
       )}
 

@@ -1,31 +1,42 @@
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
-import { router } from "expo-router";
-import { Screens } from "@/enums";
-import { useFormikHook } from "@/hooks";
-import { ResetPasswordI } from "@/interfaces";
-import { hp, newPasswordValidation, wp } from "@/utils";
+import { View, StyleSheet } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import { hp, wp } from "@/utils";
+import { useResetPassword, useTheme } from "@/hooks";
 import { colorPalette, LayoutStyles, Spacing } from "@/styles";
-import { AppButton, AppHeader, AppText, GradientWrapper, TextInput } from "@/components";
+import {
+  AppButton,
+  AppHeader,
+  AppText,
+  GradientWrapper,
+  LoadingIndicator,
+  TextInput,
+} from "@/components";
 
 const ResetPassword = () => {
-  const validationSchema = newPasswordValidation;
-  const initialValues: ResetPasswordI = { newPassword: "", confirmPassword: "" };
+  const { theme } = useTheme();
 
-  const submit = ({ newPassword, confirmPassword }: ResetPasswordI) => {
-    Keyboard.dismiss();
-    console.log("passwords: ", newPassword, confirmPassword);
-    router.push(Screens.Signin);
-  };
+  const { email, authCode } = useLocalSearchParams<{
+    email: string;
+    authCode: string;
+  }>();
 
-  const { handleChange, handleSubmit, setFieldTouched, errors, touched, values } = useFormikHook(
-    submit,
-    validationSchema,
-    initialValues
-  );
+  const {
+    isLoading,
+    handleChange,
+    handleSubmit,
+    setFieldTouched,
+    errors,
+    touched,
+  } = useResetPassword(email, authCode);
+
   return (
-    <GradientWrapper style={LayoutStyles.horizontalSpacing}>
-      <AppHeader title="Reset Password" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
+    <GradientWrapper>
+      <AppHeader
+        title="Reset Password"
+        leftIconName="chevron-back"
+        onLeftIconPress={() => router.back()}
+      />
 
       <View style={styles.form}>
         <View style={styles.centerContent}>
@@ -55,7 +66,16 @@ const ResetPassword = () => {
           error={errors.confirmPassword}
           visible={touched.confirmPassword}
         />
-        <AppButton preset="filled" text="Continue" onPress={handleSubmit} />
+        <AppButton
+          preset="filled"
+          text={isLoading ? "" : "Continue"}
+          onPress={handleSubmit}
+          RightAccessory={() =>
+            isLoading && (
+              <LoadingIndicator color={colorPalette.gradientBg.darkGreen02} />
+            )
+          }
+        />
       </View>
     </GradientWrapper>
   );
@@ -71,7 +91,6 @@ const styles = StyleSheet.create({
   subHeading: {
     width: wp(80),
     textAlign: "center",
-    color: colorPalette.primaryBg.secondayGrey,
     marginBottom: hp(2),
   },
   centerContent: {
