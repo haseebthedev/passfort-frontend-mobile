@@ -5,25 +5,21 @@ import { useAuthStore } from "@/store/auth/auth.store";
 
 export const handleBiometricToggle = async (value: boolean) => {
   const setBiometricAuth = useAuthStore.getState().setBiometricAuth;
-  
+
   if (value) {
     const compatible = await LocalAuthentication.hasHardwareAsync();
     if (!compatible) {
-      Alert.alert(
-        "Not Supported",
-        "Your device doesn't support biometric authentication",
-        [{ text: "OK", onPress: () => setBiometricAuth(false) }]
-      );
+      Alert.alert("Not Supported", "Your device doesn't support biometric authentication", [
+        { text: "OK", onPress: () => setBiometricAuth(false) },
+      ]);
       return;
     }
 
     const enrolled = await LocalAuthentication.isEnrolledAsync();
     if (!enrolled) {
-      Alert.alert(
-        "Not Set Up",
-        "Please set up biometric authentication in your device settings first",
-        [{ text: "OK", onPress: () => setBiometricAuth(false) }]
-      );
+      Alert.alert("Not Set Up", "Please set up biometric authentication in your device settings first", [
+        { text: "OK", onPress: () => setBiometricAuth(false) },
+      ]);
       return;
     }
 

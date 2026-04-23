@@ -12,3 +12,8 @@ declare module "*.webp" {
   const value: number;
   export = value;
 }
+
+declare module "*.svg" {
+  const content: string;
+  export default content;
+}

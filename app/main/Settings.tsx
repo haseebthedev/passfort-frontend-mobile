@@ -5,6 +5,7 @@ import { Screens } from "@/enums";
 import { useSettings, useTheme } from "@/hooks";
 import { useAuthStore } from "@/store";
 import { AppButton, AppHeader, AppSwitch, GradientWrapper, SettingItem, SettingsSection } from "@/components";
+import { ScrollView } from "react-native";
 
 type IconName = ComponentProps<typeof Ionicons>["name"];
 
@@ -90,21 +91,23 @@ const Settings = () => {
     <GradientWrapper>
       <AppHeader title="Settings" leftIconName="chevron-back" onLeftIconPress={() => router.back()} />
 
-      {sections.map((section) => (
-        <SettingsSection key={section.title} title={section.title}>
-          {section.data.map((item, index) => (
-            <SettingItem
-              key={`${item.title}-${index}`}
-              icon={item.icon}
-              title={item.title}
-              onPress={item.onPress}
-              rightComponent={item.renderRight ? item.renderRight() : <Ionicons name="chevron-forward" size={24} color={theme.icon} />}
-            />
-          ))}
-        </SettingsSection>
-      ))}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {sections.map((section) => (
+          <SettingsSection key={section.title} title={section.title}>
+            {section.data.map((item, index) => (
+              <SettingItem
+                key={`${item.title}-${index}`}
+                icon={item.icon}
+                title={item.title}
+                onPress={item.onPress}
+                rightComponent={item.renderRight ? item.renderRight() : <Ionicons name="chevron-forward" size={24} color={theme.icon} />}
+              />
+            ))}
+          </SettingsSection>
+        ))}
 
-      <AppButton text="Logout" onPress={onLogoutPress} />
+        <AppButton text="Logout" onPress={onLogoutPress} />
+      </ScrollView>
     </GradientWrapper>
   );
 };

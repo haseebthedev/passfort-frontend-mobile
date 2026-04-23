@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Image, Alert } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import * as LocalAuthentication from "expo-local-authentication";
 import { Screens } from "@/enums";
 import { useAuthStore } from "@/store";
 import { passfortIcon } from "@/assets";
@@ -18,40 +17,18 @@ export default function Index() {
   const redirectUser = async () => {
     if (!fontsLoaded) return;
 
-    // Not signed in
     if (!user) {
       if (firstTimeUser) {
         router.push(Screens.Onboarding);
       } else {
-        console.log("ok", biometricEnabled);
         router.push(Screens.Signin);
       }
       return;
     }
 
     if (biometricEnabled) {
-      const compatible = await LocalAuthentication.hasHardwareAsync();
-      const enrolled = await LocalAuthentication.isEnrolledAsync();
-
-      if (compatible && enrolled) {
-        const result = await LocalAuthentication.authenticateAsync({
-          promptMessage: "Authenticate to unlock Passfort",
-          fallbackLabel: "Use Passcode",
-          cancelLabel: "Cancel",
-        });
-
-        if (result.success) {
-          router.push(Screens.Home);
-        } else {
-          Alert.alert("Authentication Failed", "Please try again or sign in again.");
-          router.push(Screens.Signin);
-        }
-      } else {
-        Alert.alert("Biometric not available", "Fallback to password login.");
-        router.push(Screens.Signin);
-      }
+      router.push(Screens.BiometricAuth);
     } else {
-      // Signed in but biometric not enabled
       router.push(Screens.Home);
     }
   };
